@@ -1,0 +1,554 @@
+id,code,name,parent_id/id,type,user_type/id,reconcile
+CMO,CMO,Chart of Account – CMO,,View,account.data_account_account_type_root_view,FALSE
+BS,BS,Statement of Financial Position,CMO,View,account.data_account_account_type_view,FALSE
+10,10,สินทรัพย์,BS,View,account.data_account_account_type_view,FALSE
+110,110,สินทรัพย์หมุนเวียน,10,View,account.data_account_account_type_view,FALSE
+120,120,สินทรัพย์ไม่หมุนเวียน,10,View,account.data_account_account_type_view,FALSE
+111,111,เงินสดและรายการเทียบเท่าเงินสด,110,View,account.data_account_account_type_view,FALSE
+112,112,ลูกหนี้การค้า,110,View,account.data_account_account_type_view,FALSE
+113,113,สินทรัพย์หมุนเวียนอื่น,110,View,account.data_account_account_type_view,FALSE
+1102,1102,เงินสดย่อย,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103,1103,ธ.กรุงเทพ กระแสรายวัน # 203-302438-7สาขาลาดพร้าว 44,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-02,1103-02,ธนารคารกรุงเทพกระแสรายวัน #203-3-04471-6,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-03,1103-03,ธนาคารกรุงเทพ - กระแสรายวัน # 2033048881,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-05,1103-05,ธ.กรุงเทพฯกระแสรายวัน- แจ้งวัฒนะ#233-3-018147,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-06,1103-06,ธ.กรุงเทพ กระแสรายวัน ลาดพร้าว44#203-3-05135-6,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-07,1103-07,ธ.กรุงเทพ -C/A สาขา ไซเบอร์เวิร์ดทาวน์# 019-3-500139,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-08,1103-08,ธ.กรุงเทพ C/A- ไซเบอร์เวิลด์ <IFS>#0193500733,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-09,1103-09,ธ.ยูโอบี - C/A (ถนนศรีวรา) #797-363-031-1,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-10,1103-10,ธ.กรุงไทย C/A (สาขาอโศก) # 0156057999,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-11,1103-11,ธ.กรุงเทพ - C/A (เกษตร นวมินทร์) #039-3-50352-9,111,Liquidity,account.data_account_account_type_asset,FALSE
+1103-12,1103-12,ธ.ทหารไทย C/A (สาขาเดอะคริสตัล พาร์ค)#258-1-00239-7,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104,1104,ธ.กรุงเทพ - สะสมทรัพย์# 2030281832-สาขาลาดพร้าว 44,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-02,1104-02,ธนาคารกรุงเทพฝากประจำ #2032100170,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-03,1104-03,ธนาคารเอเชียสะสมทรัพย์ # 097-2-12561-0,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-04,1104-04,ธนาคารกรุงเทพสะสมทรัพย์ #203-077022-2,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-05,1104-05,ธ.กรุงเทพ- S/V สาขา ไซเบอร์เวิร์ดทาวน์# 019-7-00949-1,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-06,1104-06,ธ.กรุงเทพ- S/V สาขาลาดพร้าว 44 # 203-418575-7,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-07,1104-07,ธ.เพื่อการเกษตร&สหกรณ์(ธกส) -S/V(ลาดพร้าว101) # 020022321694,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-08,1104-08,ธนาคารยูโอบี - S/V(ถนนศรีวรา) #797-163-468-9,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-09,1104-09,ธ.กรุงเทพ S/A (เกษตร นวมินทร์) #039-7-06852-9,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-10,1104-10,ธ.ทหารไทย S/A (เดอะคริสตัล พาร์ค) #258-2-05074-2,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-12,1104-12,ธ.กรุงเทพ S/A (สาขา เกษตร- นวมินทร์) # 039-7-08524-2,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-13,1104-13,ธนาคารยูโอบี - S/V(ถนนศรีวรา) #797-164-156-1,111,Liquidity,account.data_account_account_type_asset,FALSE
+1105,1105,ธ.กรุงศรีอยุธยา-กระแสรายวัน #001-0-11603-5-สาขาเพลินจิต,111,Liquidity,account.data_account_account_type_asset,FALSE
+1105-1,1105-1,ธนาคารกรุงศรีอยุธยา - ค่าบริจาค # 169-001883-6,111,Liquidity,account.data_account_account_type_asset,FALSE
+1105-2,1105-2,ธนาคารกรุงศรีอยุธยา - ค่าลงทะเบียน # 169-001885-1,111,Liquidity,account.data_account_account_type_asset,FALSE
+1106,1106,ธ.กรุงศรีอยุธยา - สะสมทรัพย์,111,Liquidity,account.data_account_account_type_asset,FALSE
+1106-1,1106-1,ธนาคารกรุงศรีอยุธยา - ค่าบริจาค # 169-147181-5,111,Liquidity,account.data_account_account_type_asset,FALSE
+1106-2,1106-2,ธนาคากรุงศรีอยุธยา - ค่าลงทะเบียน # 169-147180-7,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107,1107,เงินฝากธนาคารอื่นๆ,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-1,1107-1,ธ.นครหลวงไทย-ออมทรัพย # 001-2-88566-0-สาขาสำนักเพชรบุรี,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-2,1107-2,ธ.ไทยธนาคาร-กระแสรายวัน #021-3-02546-7-สำนักลาดพร้าว(2109),111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-3,1107-3,ธ.ธนชาต-ออมทรัพย์-สาขาย่อยเดอะมอลล์ 2 รามคำแหง#0262004060,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-4,1107-4,ธ.ธนชาต-กระแสรายวัน-สาขาย่อยเดอะมอลล์ 2 รามคำแหง#0263000190,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-5,1107-5,ธนาคารทหารไทย - รามคำแหง 184-2-03606-1,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-6,1107-6,ธนาคารทหารไทย -เงินบริจาคสร้างใบไม้ต้นบรมโพธิฯ-184-2-03607-9,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-7,1107-7,ธ.EXIM BANK-กระแสรายวัน # 001-1-02553-7,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-8,1107-8,ธ.ไทยเครดิต เพื่อรายย่อย จำกัด (มหาชน)-ฝากประจำ777-3-00573-1,111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-9,1107-9,ธ.สินเอเชีย จำกัด (มหาชน) -(กระแสรายวัน),111,Liquidity,account.data_account_account_type_asset,FALSE
+1107-9-1,1107-9-1,ธ.สินเอเชีย จำกัด ( มหาชน) - เงินฝากติดภาระค้ำประกัน,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-01,1104-01,ธ.กรุงเทพ- ฝากประจำ 3 เดือน# 2032092666,111,Liquidity,account.data_account_account_type_asset,FALSE
+1104-11,1104-11,ธ.กรุงไทย S/A ( สาขาปทุมวัน) # 008-0-25818-2,111,Liquidity,account.data_account_account_type_asset,FALSE
+1108,1108,เช็คค้างรับ,113,Regular,account.data_account_account_type_asset,FALSE
+1109-0001,1109-0001,ลูกหนี้การค้า - PM,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0002,1109-0002,ลูกหนี้การค้า - The Eyes,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0003,1109-0003,ลูกหนี้การค้า- Exposition Technology,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0004,1109-0004,กิจการร่วมค้า ดรีม บอกซ์ และ ซีเอ็ม ออร์กาไนเซอร์,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0005,1109-0005,ลูกหนี้การค้า - JV CMO - TEE ENTAINMENT,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0006,1109-0006,ลูกหนี้การค้า - Thoth Media,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0007,1109-0007,ลูกหนี้การค้า - JV CMO - BELINK,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0008,1109-0008,ลูกหนี้การค้า - Momentum S,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0009,1109-0009,ลูกหนี้การค้า - Muse Corporation,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0010,1109-0010,ลูกหนี้การค้า - Setup Solution,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0011,1109-0011,ลูกหนี้การค้า - CMO T1 Asia Corporation,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0012,1109-0012,ลูกหนี้การค้า - CMO Show Corp,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-0013,1109-0013,ลูกหนี้การค้า - IMAGINIA,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-OTH,1109-OTH,ลูกหนี้การค้าอื่น,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-Unbill,1109-Unbill,ลูกหนี้การค้า - ยังไม่มีInv.,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-X001,1109-X001,ค่าเผื่อหนี้สงสัยจะสูญ,112,Receivable,account.data_account_account_type_receivable,TRUE
+1109-X002,1109-X002,ค่าเผื่อหนี้สงสัยจะสูญ - ลูกหนี้บริษัทในเครือ,112,Receivable,account.data_account_account_type_receivable,TRUE
+1110,1110,ลูกหนี้อื่น,113,Regular,account.data_account_account_type_asset,FALSE
+1110-1,1110-1,ลูกหนี้อื้น - บริษัทในเครือ,113,Regular,account.data_account_account_type_asset,FALSE
+1110-2,1110-2,ลูกหนี้อื่น - กรมวิชาการเกษตร,113,Regular,account.data_account_account_type_asset,FALSE
+1110-3,1110-3,ค่าเผื่อหนี้สงสัยจะสูญ - ลูกหนี้อื่นบริษัทในเครือ,113,Regular,account.data_account_account_type_asset,FALSE
+1111,1111,ลูกหนี้เงินกู้ยืมบริษัทในเครือ,113,Regular,account.data_account_account_type_asset,FALSE
+1111-1,1111-1,ค่าเผื่อหนี้สงสัยจะสูญ - ลูกหนี้เงินกู้บริษัทในเครือ,113,Regular,account.data_account_account_type_asset,FALSE
+1112,1112,ลูกหนี้เงินยืมพนักงาน,113,Regular,account.data_account_account_type_asset,FALSE
+1113,1113,เงินทดรองจ่ายล่วงหน้า- Employee,113,Regular,account.data_account_account_type_asset,FALSE
+1113-1,1113-1,เงินล่วงหน้า - ทีมExhibition,113,Regular,account.data_account_account_type_asset,FALSE
+1113-2,1113-2,เงินล่วงหน้า - Bayon CM,113,Regular,account.data_account_account_type_asset,FALSE
+1113-3,1113-3,ค่าเผื่อหนี้สงสัยจะสูญ - เงินล่วงหน้าพนักงาน,113,Regular,account.data_account_account_type_asset,FALSE
+1114,1114,ลูกหนี้กรมสรรพากร,113,Regular,account.data_account_account_type_asset,FALSE
+114,114,งานระหว่างทำและวัสดุคงเหลือ,110,View,account.data_account_account_type_view,FALSE
+1115,1115,สินค้าคงเหลือ,114,Regular,account.data_account_account_type_asset,FALSE
+1116-01,1116-01,ต้นทุนงานระหว่างทำ - ค่าตกแต่ง,114,Regular,account.data_account_account_type_asset,FALSE
+1116-03,1116-03,ต้นทุนงานระหว่างทำ - ค่าบริการเช่าอุปกรณ์,114,Regular,account.data_account_account_type_asset,FALSE
+1116-04,1116-04,ต้นทุนงานระหว่างทำ - ค่าจัดการแสดง,114,Regular,account.data_account_account_type_asset,FALSE
+1116-05,1116-05,ต้นทุนงานระหว่างทำ - ค่าจัดการแสดงเสียง,114,Regular,account.data_account_account_type_asset,FALSE
+1116-06,1116-06,ต้นทุนงานระหว่างทำ - ค่าใช้จ่ายในการดำเนินงาน,114,Regular,account.data_account_account_type_asset,FALSE
+1116-09,1116-09,ต้นทุนงานระหว่างทำ - ค่าจัดทำซาวน์โปรดักส์ชั่น,114,Regular,account.data_account_account_type_asset,FALSE
+1116-12,1116-12,ต้นทุนงานระหว่างทำ - ค่าบริการอื่น ๆ,114,Regular,account.data_account_account_type_asset,FALSE
+1116-13,1116-13,ต้นทุนงานระหว่างทำ - ค่าประสานงาน,114,Regular,account.data_account_account_type_asset,FALSE
+1116-14,1116-14,ต้นทุนงานระหว่างทำ - ค่าพาหนะ,114,Regular,account.data_account_account_type_asset,FALSE
+1116-14-1,1116-14-1,ต้นทุนงานระหว่างทำ - ค่า TAXI,114,Regular,account.data_account_account_type_asset,FALSE
+1116-14-2,1116-14-2,ต้นทุนงานระหว่างทำ - ค่าทางด่วน,114,Regular,account.data_account_account_type_asset,FALSE
+1116-14-3,1116-14-3,ต้นทุนงานระหว่างทำ - ค่าตั๋วเครื่องบิน,114,Regular,account.data_account_account_type_asset,FALSE
+1116-15,1116-15,ต้นทุนงานระหว่างทำ - ค่าถ่ายภาพ,114,Regular,account.data_account_account_type_asset,FALSE
+1116-16,1116-16,ต้นทุนงานระหว่างทำ - ค่าจ้าง Staff,114,Regular,account.data_account_account_type_asset,FALSE
+1116-19,1116-19,ต้นทุนงานระหว่างทำ - ค่าอาหารเครื่องดื่ม,114,Regular,account.data_account_account_type_asset,FALSE
+1116-21,1116-21,ต้นทุนงานระหว่างทำ - Multimedia Presentation,114,Regular,account.data_account_account_type_asset,FALSE
+1116-23,1116-23,ต้นทุนงานระหว่างทำ - ค่าเช่าสถานที่,114,Regular,account.data_account_account_type_asset,FALSE
+1116-24,1116-24,ต้นทุนงานระหว่างทำ - โฆษณาประชาสัมพันธ์(ยกเลิก),114,Regular,account.data_account_account_type_asset,FALSE
+1116-25,1116-25,ต้นทุนงานระหว่างทำ - ค่าเช่า Walkie - Talkie,114,Regular,account.data_account_account_type_asset,FALSE
+1116-26,1116-26,ต้นทุนงานระหว่างทำ - ค่าเช่าเครื่องปั่นไฟ,114,Regular,account.data_account_account_type_asset,FALSE
+1116-31,1116-31,ต้นทุนงานระหว่างทำ - Printing,114,Regular,account.data_account_account_type_asset,FALSE
+1116-32,1116-32,ต้นทุนงานระหว่างทำ - Graphic & Inkjet,114,Regular,account.data_account_account_type_asset,FALSE
+1116-33,1116-33,ต้นทุนงานระหว่างทำ - Accommodations,114,Regular,account.data_account_account_type_asset,FALSE
+1116-34,1116-34,ต้นทุนงานระหว่างทำ - ค่าขนส่ง,114,Regular,account.data_account_account_type_asset,FALSE
+1116-36,1116-36,ต้นทุนงานระหว่างทำ - ค่าบริการเกี่ยวกับไฟฟ้า,114,Regular,account.data_account_account_type_asset,FALSE
+1116-37,1116-37,ต้นทุนงานระหว่างทำ - ค่าโฆษณาประชาสัมพันธ์,114,Regular,account.data_account_account_type_asset,FALSE
+1116-38,1116-38,ต้นทุนงานระหว่างทำ - ภาษีซื้อไม่ขอคืน(5034-1),114,Regular,account.data_account_account_type_asset,FALSE
+1116-39,1116-39,ต้นทุนงานระหว่างทำ - ภาษีซื้อไม่ขอคืน(5034-2),114,Regular,account.data_account_account_type_asset,FALSE
+1117,1117,วัสดุ-แว่นสามมิติ,114,Regular,account.data_account_account_type_asset,FALSE
+1118,1118,วัสดุ-เม้าท์เวส,114,Regular,account.data_account_account_type_asset,FALSE
+1119,1119,วัสดุ-สไลด์เทรย์,114,Regular,account.data_account_account_type_asset,FALSE
+1120,1120,วัสดุ-ฟิล์ม,114,Regular,account.data_account_account_type_asset,FALSE
+1121,1121,วัสดุ-น้ำยาล้างฟิล์ม สไลด์,114,Regular,account.data_account_account_type_asset,FALSE
+1122,1122,วัสดุ-วีดีโอเทป,114,Regular,account.data_account_account_type_asset,FALSE
+1123,1123,วัสดุ-เทปคาสเซ็ท,114,Regular,account.data_account_account_type_asset,FALSE
+1124,1124,วัสดุ-เทปมาสเตอร์,114,Regular,account.data_account_account_type_asset,FALSE
+1125,1125,วัสดุ-เทปโครเมี่ยม,114,Regular,account.data_account_account_type_asset,FALSE
+1126,1126,วัสดุ-แผ่นซีดี,114,Regular,account.data_account_account_type_asset,FALSE
+1127,1127,วัสดุ-เทปรีล,114,Regular,account.data_account_account_type_asset,FALSE
+1128,1128,วัสดุ-ไส้สไลด์,114,Regular,account.data_account_account_type_asset,FALSE
+1129,1129,วัสดุ-อื่นๆ,114,Regular,account.data_account_account_type_asset,FALSE
+1130,1130,เงินมัดจำอื่น,113,Regular,account.data_account_account_type_asset,FALSE
+1130-1,1130-1,เงินมัดจำ-ค่าค้ำประกันพื้นที่,113,Regular,account.data_account_account_type_asset,FALSE
+1131,1131,ค่าใช้จ่ายล่วงหน้าเบี้ยสำหรับพนักงาน,113,Regular,account.data_account_account_type_asset,FALSE
+1131-1,1131-1,ดอกเบี้ยสัญญาเช่าการเงินรอตัดบัญชี,113,Regular,account.data_account_account_type_asset,FALSE
+1131-2,1131-2,ดอกเบี้ยลูกหนี้เช่าซื้อที่ถึงกำหนดภายใน 1 ปี,113,Regular,account.data_account_account_type_asset,FALSE
+1132,1132,คชจ.ล่วงหน้าเบี้ยประกันอื่น,113,Regular,account.data_account_account_type_asset,FALSE
+1133,1133,ค่าใช้จ่ายจ่ายล่วงหน้าอื่น,113,Regular,account.data_account_account_type_asset,FALSE
+1133-01,1133-01,ดอกเบี้ยจ่ายล่วงหน้า,113,Regular,account.data_account_account_type_asset,FALSE
+1133-02,1133-02,ดอกเบี้ยจ่ายล่วงหน้า Factoring,113,Regular,account.data_account_account_type_asset,FALSE
+1134,1134,ค่าเช่าลิสซิ่งจ่ายล่วงหน้า,113,Regular,account.data_account_account_type_asset,FALSE
+1134-1,1134-1,ค่าใช้จ่ายล่วงหน้า - ตั๋วเครื่องบิน,113,Regular,account.data_account_account_type_asset,FALSE
+1135,1135,รายได้ค้างรับ,113,Regular,account.data_account_account_type_asset,FALSE
+1136,1136,ภาษีซื้อ,113,Regular,account.data_account_account_type_input_tax,FALSE
+1136-1,1136-1,ภาษีซื้อ- ขาดเอกสารTax Inv.,113,Regular,account.data_account_account_type_asset,FALSE
+1136-2,1136-2,ภาษีซื้อไม่ถึงกำหนด,113,Regular,account.data_account_account_type_asset,FALSE
+1138,1138,ลูกหนี้ค่าหุ้นสามัญ,113,Regular,account.data_account_account_type_asset,FALSE
+1139,1139,ตั๋วเงินรับ,113,Regular,account.data_account_account_type_asset,FALSE
+1139-1,1139-1,เงินประกันสิทธิโอนเรียกร้อง,113,Regular,account.data_account_account_type_asset,FALSE
+1140,1140,ดอกเบี้ยค้างรับ,113,Regular,account.data_account_account_type_asset,FALSE
+1140-1,1140-1,ดอกเบี้ยค้างรับ-บริษัทที่เกี่ยวข้องกัน,113,Regular,account.data_account_account_type_asset,FALSE
+1140-2,1140-2,ค่าเผื่อหนี้สงสัยจะสูญ - ดอกเบี้ยค้างรับ,113,Regular,account.data_account_account_type_asset,FALSE
+1140-3,1140-3,ค่าเผื่อหนี้สงสัยจะสูญ - ด/บค้างรับบริษัทที่เกี่ยวข้องกัน,113,Regular,account.data_account_account_type_asset,FALSE
+1141,1141,ค่าสิทธิในการจัดงานประกวด,113,Regular,account.data_account_account_type_asset,FALSE
+1141-1,1141-1,ค่าสิทธิในการจัดงานประกวดตัดจำหน่ายสะสม,113,Regular,account.data_account_account_type_asset,FALSE
+1141-2,1141-2,ค่าเผื่อการด้อยค่า - ค่าสิทธิ์,113,Regular,account.data_account_account_type_asset,FALSE
+121,121,สินทรัพย์ไม่หมุนเวียนอื่น,120,View,account.data_account_account_type_view,FALSE
+1137,1137,ภาษีเงินได้นิติบุคคลหักณที่จ่ายปีปัจบัน,121,Regular,account.data_account_account_type_asset,FALSE
+1137-1,1137-1,ภาษีเงินได้นิติบุคคลหักณที่จ่ายยกมา,121,Regular,account.data_account_account_type_asset,FALSE
+122,122,ที่ดินอาคารและอุปกรณ์ - สุทธิ,120,View,account.data_account_account_type_view,FALSE
+1201,1201,ที่ดิน,122,Regular,account.data_account_account_type_asset,FALSE
+1201-1,1201-1,ที่ดินติดกับอาคาร,122,Regular,account.data_account_account_type_asset,FALSE
+1201-2,1201-2,งานระหว่างก่อสร้าง,122,Regular,account.data_account_account_type_asset,FALSE
+1201-3,1201-3,ที่ดินติดอาคาร-ส่วนที่ตีราคาใหม่,122,Regular,account.data_account_account_type_asset,FALSE
+1202,1202,อาคารและส่วนปรับปรุงอาคารเก่า,122,Regular,account.data_account_account_type_asset,FALSE
+1203,1203,ค่าเสื่อมราคาสะสม-อาคารส่วนปรับปรุงเก่า,122,Regular,account.data_account_account_type_asset,FALSE
+1204,1204,อาคารและส่วนปรับปรุงใหม่,122,Regular,account.data_account_account_type_asset,FALSE
+1205,1205,ค่าเสื่อมราคาสะสม -อาคารส่วนปรับปรุงใหม่,122,Regular,account.data_account_account_type_asset,FALSE
+1206,1206,ส่วนปรับปรุงอาคารเช่า,122,Regular,account.data_account_account_type_asset,FALSE
+1207,1207,ค่าเสื่อมราคาสะสม-ส่วนปรับปรุงอาคารเช่า,122,Regular,account.data_account_account_type_asset,FALSE
+1208,1208,อาคารและส่วนตกแต่งอาคารใหม่,122,Regular,account.data_account_account_type_asset,FALSE
+1209,1209,ค่าเสื่อมสะสม - อาคารและส่วนตกแต่งอาคาร,122,Regular,account.data_account_account_type_asset,FALSE
+1210,1210,อุปกรณ์ดำเนินงาน,122,Regular,account.data_account_account_type_asset,FALSE
+1211,1211,ค่าเสื่อมราคา-สะสมอุปกรณ์ดำเนินงาน,122,Regular,account.data_account_account_type_asset,FALSE
+1211-1,1211-1,ค่าเผื่อผลขาดทุนจากการด้อยค่า,122,Regular,account.data_account_account_type_asset,FALSE
+1212,1212,เครื่องใช้สำนักงาน,122,Regular,account.data_account_account_type_asset,FALSE
+1213,1213,ค่าเสื่อมราคาสะสม-เครื่องตกแต่ง,122,Regular,account.data_account_account_type_asset,FALSE
+1214,1214,ยานพาหนะ,122,Regular,account.data_account_account_type_asset,FALSE
+1215,1215,ค่าเสื่มราคาสะสม-ยานพาหนะ,122,Regular,account.data_account_account_type_asset,FALSE
+1216,1216,อุปกรณ์ - UTILITY,122,Regular,account.data_account_account_type_asset,FALSE
+1217,1217,ค่าเสือมราคาสาะสม - อุปกรณ์ UTILITY,122,Regular,account.data_account_account_type_asset,FALSE
+1300,1300,สินทรัพย์อืน,121,Regular,account.data_account_account_type_asset,FALSE
+1301,1301,"เงินประกันค่าไฟฟ้า,ค่าโทรศัพท์",121,Regular,account.data_account_account_type_asset,FALSE
+1302,1302,เงินประกันเสียหายสำนักงาน,121,Regular,account.data_account_account_type_asset,FALSE
+1303,1303,เงินประกันค่าเช่าสำนักงาน,121,Regular,account.data_account_account_type_asset,FALSE
+1304,1304,ค่าใช้จ่ายจัดตั้งบริษัทรอตัดจ่าย,121,Regular,account.data_account_account_type_asset,FALSE
+1305,1305,ลูกหนี้เงินยืมกรรมการ,121,Regular,account.data_account_account_type_asset,FALSE
+1306,1306,เงินลงทุน,121,Regular,account.data_account_account_type_asset,FALSE
+1306-1,1306-1,ค่าเผื่อด้อยค่า - เงินลงทุน,121,Regular,account.data_account_account_type_asset,FALSE
+1307,1307,ส่วนเกินมูลค่าเงินลงทุน,121,Regular,account.data_account_account_type_asset,FALSE
+1308,1308,ส่วนลดมูลค่าเงินลงทุน,121,Regular,account.data_account_account_type_asset,FALSE
+1309,1309,ลูกหนี้ผู้ถือหุ้น,121,Regular,account.data_account_account_type_asset,FALSE
+1310,1310,ตั๋วเงินคลัง,121,Regular,account.data_account_account_type_asset,FALSE
+1311,1311,ลูกหนี้สัญญาเช่าการเงิน(เช่าซื้อ),121,Regular,account.data_account_account_type_asset,FALSE
+1311-1,1311-1,ลูกหนี้สัญญาเช่าการเงินถึงกำหนดภายใน 1 ปี                   ,113,Regular,account.data_account_account_type_asset,FALSE
+1400,1400,สินทรัพย์ภาษีเงินได้รอการตัดบัญชี,121,Regular,account.data_account_account_type_asset,FALSE
+20,20,หนี้สิน,BS,View,account.data_account_account_type_view,FALSE
+210,210,หนี้สินหมุนเวียน,20,View,account.data_account_account_type_view,
+220,220,หนี้สินไม่หมุนเวียน,20,View,account.data_account_account_type_view,
+211,211,เจ้าหนี้การค้า,210,View,account.data_account_account_type_view,FALSE
+212,212,หนี้สินหมุนเวียนอื่น,210,View,account.data_account_account_type_view,FALSE
+221,221,หนี้สินไม่หมุนเวียนอื่น,220,View,account.data_account_account_type_view,FALSE
+2101,2101,เงินเบิกเกินบัญชี,212,Regular,account.data_account_account_type_liability,FALSE
+2102,2102,เจ้าหนี้การค้า,211,Payable,account.data_account_account_type_payable,TRUE
+2102-01,2102-01,เจ้าหนี้การค้า - PM,211,Payable,account.data_account_account_type_payable,TRUE
+2102-02,2102-02,เจ้าหนี้การค้า - The Eyes,211,Payable,account.data_account_account_type_payable,TRUE
+2102-03,2102-03,เจ้าหนี้การค้า - CMEX,211,Payable,account.data_account_account_type_payable,TRUE
+2102-04,2102-04,เจ้าหนี้การค้า - A-Link,211,Payable,account.data_account_account_type_payable,TRUE
+2102-05,2102-05,เจ้าหนี้การค้า - BAYON CM,211,Payable,account.data_account_account_type_payable,TRUE
+2102-06,2102-06,เจ้าหนี้การค้า - Exposition Technology,211,Payable,account.data_account_account_type_payable,TRUE
+2102-07,2102-07,เจ้าหนี้การค้า - Max Evolution,211,Payable,account.data_account_account_type_payable,TRUE
+2102-08,2102-08,เจ้าหนี้การค้า - Thoth Media,211,Payable,account.data_account_account_type_payable,TRUE
+2102-09,2102-09,เจ้าหนี้การค้า - JV CMO- BELINK,211,Payable,account.data_account_account_type_payable,TRUE
+2102-10,2102-10,เจ้าหนี้การค้า - Muse Corporation,211,Payable,account.data_account_account_type_payable,TRUE
+2102-11,2102-11,เจ้าหนี้การค้า - CMO Show Corp,211,Payable,account.data_account_account_type_payable,TRUE
+2103,2103,เจ้าหนี้อื่น,212,Regular,account.data_account_account_type_liability,FALSE
+2103-1,2103-1,เจ้าหนี้ตามสัญญาเช่าการเงินที่ครบกำหนดหนึ่งปี,212,Regular,account.data_account_account_type_liability,FALSE
+2103-2,2103-2,เจ้าหนี้อื่น - บริษัทที่เกี่ยวข้องกัน,212,Regular,account.data_account_account_type_liability,FALSE
+2103-3,2103-3,เจ้าหนี้ - ทรัพย์สิน,211,Payable,account.data_account_account_type_payable,TRUE
+2103-4,2103-4,เจ้าหนี้อื่น- ภาษีซื้อรอชำระ,212,Regular,account.data_account_account_type_liability,FALSE
+2103-5,2103-5,เจ้าหนี้อื่นๆ- Employee,211,Payable,account.data_account_account_type_payable,TRUE
+2104,2104,เจ้าหนี้สัญญาเช่าการเงินระยะยาว,221,Regular,account.data_account_account_type_liability,FALSE
+2104-1,2104-1,เจ้าหนี้ตามสัญญาเช่าซื้อ,221,Regular,account.data_account_account_type_liability,FALSE
+2104-2,2104-2,เจ้าหนี้สัญญาเช่าซื้อที่ครบกำหนดใน 1 ปี,212,Regular,account.data_account_account_type_liability,FALSE
+2105,2105,เจ้าหนี้กรมสรรพากร,212,Regular,account.data_account_account_type_liability,FALSE
+2106,2106,เงินกู้ยืมบริษัทในเครือ,212,Regular,account.data_account_account_type_liability,FALSE
+2106-1,2106-1,ดอกเบี้ยค้างจ่าย- Loan บริษัทในเครือ,212,Regular,account.data_account_account_type_liability,FALSE
+2107,2107,เงินกู้ยืมระสั้น,212,Regular,account.data_account_account_type_liability,FALSE
+2107-1,2107-1,ดอกเบี้ยค้างจ่าย-เงินกู้ยืมระยะสั้น,212,Regular,account.data_account_account_type_liability,FALSE
+2108,2108,เงินกู้ยืมอื่น,212,Regular,account.data_account_account_type_liability,FALSE
+2109,2109,เงินมัดจำรับ,212,Regular,account.data_account_account_type_liability,FALSE
+2109-01,2109-01,รายได้ยังไม่รับรู้เป็นรายได้,212,Regular,account.data_account_account_type_liability,FALSE
+2109-06,2109-06,รายได้ยังไม่เป็นรายได้- ดำเนินงาน,212,Regular,account.data_account_account_type_liability,FALSE
+2109-12,2109-12,รายได้ยังไม่เป็นรายได้ - บริการอื่น,212,Regular,account.data_account_account_type_liability,FALSE
+2109-23,2109-23,รายได้ยังไม่เป็นรายได้ - ค่าบริการสถานที่,212,Regular,account.data_account_account_type_liability,FALSE
+2109-24,2109-24,รายได้ยังไม่เป็นรายได้ - ค่าประชาสัมพันธ์,212,Regular,account.data_account_account_type_liability,FALSE
+2109-25,2109-25,รายได้ยังไม่เป็นรายได้- อุปกรณ์ไฟฟ้า,212,Regular,account.data_account_account_type_liability,FALSE
+2109-26,2109-26,รายได้ยังไม่เป็นรายได้- บริการส่วนกลาง,212,Regular,account.data_account_account_type_liability,FALSE
+2109-27,2109-27,รายได้ยังไม่เป็นรายได้- ติดตั้งโทรศัพท์,212,Regular,account.data_account_account_type_liability,FALSE
+2109-28,2109-28,"รายได้ยังไม่เป็นรายได้- บริการจ่ายน้ำ,น้ำทิ้ง",212,Regular,account.data_account_account_type_liability,FALSE
+2109-29,2109-29,รายได้ยังไม่เป็นรายได้- ติดตั้งบูธ,212,Regular,account.data_account_account_type_liability,FALSE
+2109-31,2109-31,รายได้ยังไม่เป็นรายได้- ค่าไฟรื้อถอน,212,Regular,account.data_account_account_type_liability,FALSE
+2109-37,2109-37,รายได้ยังไม่เป็นรายได้- ประชาสัมพันธ์,212,Regular,account.data_account_account_type_liability,FALSE
+2110,2110,เช็คลงวันที่ล่วงหน้า,212,Regular,account.data_account_account_type_liability,FALSE
+2110-1,2110-1,เช็ค ธ.กรุงเทพ C/A ค้างจ่าย,212,Regular,account.data_account_account_type_liability,FALSE
+2111,2111,ค่าใช้จ่ายค้างจ่าย,211,Payable,account.data_account_account_type_payable,TRUE
+2111-1,2111-1,ค่าใช้จ่ายค้างจ่ายบริษัทที่เกี่ยวข้องกัน,211,Payable,account.data_account_account_type_payable,TRUE
+2112,2112,รายได้รับล่วงหน้า,212,Regular,account.data_account_account_type_liability,FALSE
+2112-01,2112-01,รายได้รับล่วงหน้า - ค่าบริการตกแต่ง,212,Regular,account.data_account_account_type_liability,FALSE
+2112-03,2112-03,รายได้รับล่วงหน้า - ค่าบริการเช่าอุปกรณ์,212,Regular,account.data_account_account_type_liability,FALSE
+2112-04,2112-04,รายได้รับล่วงหน้า - ค่าจัดการแสดง,212,Regular,account.data_account_account_type_liability,FALSE
+2112-05,2112-05,รายได้รับล่วงหน้า - ค่าแสดงแสงเสียง,212,Regular,account.data_account_account_type_liability,FALSE
+2112-06,2112-06,รายได้รับล่วงหน้า - ค่าบริการดำเนินงาน,212,Regular,account.data_account_account_type_liability,FALSE
+2112-09,2112-09,รายได้รับล่วงหน้า - ค่าบริการจัดทำซาวน์โปรดักส์ชั่น,212,Regular,account.data_account_account_type_liability,FALSE
+2112-12,2112-12,รายได้รับล่วงหน้า - ค่าบริการอื่น,212,Regular,account.data_account_account_type_liability,FALSE
+2112-15,2112-15,รายได้รับล่วงหน้า - ค่าบริการจัดหา Staff,212,Regular,account.data_account_account_type_liability,FALSE
+2112-19,2112-19,รายได้รับล่วงหน้า - จัดทำมีเดียส์พรีเซนเตชั่น,212,Regular,account.data_account_account_type_liability,FALSE
+2112-21,2112-21,รายได้รับล่วงหน้า - Graphic & Inkjet,212,Regular,account.data_account_account_type_liability,FALSE
+2112-22,2112-22,รายได้รับล่วงหน้า - Printing,212,Regular,account.data_account_account_type_liability,FALSE
+2112-23,2112-23,รายได้รับล่วงหน้า - สถานที่,212,Regular,account.data_account_account_type_liability,FALSE
+2112-24,2112-24,รายได้รับล่วงหน้า - ค่าประชาสัมพันธ์,212,Regular,account.data_account_account_type_liability,FALSE
+2112-25,2112-25,รายได้รับล่วงหน้า - ค่าติดตั้งอุปกรณ์ไฟฟ้า,212,Regular,account.data_account_account_type_liability,FALSE
+2112-26,2112-26,รายได้รับล่วงหน้า - ค่าบริการส่วนกลาง,212,Regular,account.data_account_account_type_liability,FALSE
+2112-27,2112-27,รายได้รับล่วงหน้า - ค่าบริการโทรศัพท์,212,Regular,account.data_account_account_type_liability,FALSE
+2112-28,2112-28,รายได้รับล่วงหน้า - ค่าบริการจ่ายน้ำและน้ำทิ้ง,212,Regular,account.data_account_account_type_liability,FALSE
+2112-29,2112-29,รายได้รับล่วงหน้า - ค่าติดตั้งบูธ,212,Regular,account.data_account_account_type_liability,FALSE
+2112-30,2112-30,รายได้รับล่วงหน้า - ค่าผลิตสารคดี,212,Regular,account.data_account_account_type_liability,FALSE
+2112-31,2112-31,รายได้รับล่วงหน้า - ค่าไฟก่อสร้างรื้อถอน,212,Regular,account.data_account_account_type_liability,FALSE
+2113,2113,ภาษีเงินเดือนหักณที่จ่ายค้างจ่าย,212,Regular,account.data_account_account_type_liability,FALSE
+2113-1,2113-1,ภาษีเงินได้หัก ณ ที่จ่ายเงินปันผล,212,Regular,account.data_account_account_type_liability,FALSE
+2113-2,2113-2,ภาษีเงินได้หัก ณ ที่จ่าย(ภงด.2),212,Regular,account.data_account_account_type_liability,FALSE
+2114,2114,ภาษีเงินได้บุคคลธรรมดาหักณที่จ่าย,212,Regular,account.data_account_account_type_liability,FALSE
+2114-1,2114-1,ภาษีเงินได้หัก ณ ที่จ่ายบุคคลธรรมดา,212,Regular,account.data_account_account_type_liability,FALSE
+2115,2115,ภาษีเงินได้นิติบุคคลหักณที่จ่าย,212,Regular,account.data_account_account_type_liability,FALSE
+2115-1,2115-1,ภาษีเงินได้หัก ณ ที่จ่ายนิติบุคคล,212,Regular,account.data_account_account_type_liability,FALSE
+2115-2,2115-2,ภาษีเงินได้หัก ณ ที่จ่ายนิติบุคคลต่างประเทศ,212,Regular,account.data_account_account_type_liability,FALSE
+2116,2116,เงินค้ำประกันพนักงาน,212,Regular,account.data_account_account_type_liability,FALSE
+2117,2117,เงินประกันสังคมหักณที่จ่ายค้างจ่าย,212,Regular,account.data_account_account_type_liability,FALSE
+2118,2118,ภาษีขาย,212,Regular,account.data_account_account_type_output_tax,FALSE
+2118-1,2118-1,ภาษีขายยังไม่ถึงกำหนด,212,Regular,account.data_account_account_type_liability,FALSE
+2119,2119,เจ้าหนี้แฟคเตอริ่ง,212,Regular,account.data_account_account_type_liability,FALSE
+2200,2200,หนี้สินระยะยาว,221,Regular,account.data_account_account_type_liability,FALSE
+2201,2201,เงินกู้ยืมธนาคาร,212,Regular,account.data_account_account_type_liability,FALSE
+2202,2202,เงินกู้ยืมระยะยาว,221,Regular,account.data_account_account_type_liability,FALSE
+2202-01,2202-01,เงินกู้ยืมระยะยาวที่ครบกำหนดชำระใน 1 ปี,212,Regular,account.data_account_account_type_liability,FALSE
+2203,2203,เจ้าหนี้ค่าหุ้น,212,Regular,account.data_account_account_type_liability,FALSE
+2206,2206,เจ้าหนี้เงินกู้ยืม - บ.นครหลวงไทย,212,Regular,account.data_account_account_type_liability,FALSE
+2300,2300,หนี้สินอื่น,212,Regular,account.data_account_account_type_liability,FALSE
+2301,2301,เงินกู้ยืมกรรมการ,212,Regular,account.data_account_account_type_liability,FALSE
+2400,2400,เงินปันผลค้างจ่าย,212,Regular,account.data_account_account_type_liability,FALSE
+2500,2500,สำรองผลขาดทุนที่เกินกว่าเงินลงทุนในบริษัทย่อย,212,Regular,account.data_account_account_type_liability,FALSE
+2501,2501,สำรองผลขาดทุนที่อาจจะเกิดขึ้น,212,Regular,account.data_account_account_type_liability,FALSE
+2502,2502,สำรองเลี้ยงชีพพนักงาน,221,Regular,account.data_account_account_type_liability,FALSE
+2503,2503,หนี้สินผลประโยชน์พนักงาน,221,Regular,account.data_account_account_type_liability,FALSE
+2504,2504,ดอกเบี้ยรับรอตัดบัญชี,221,Regular,account.data_account_account_type_liability,FALSE
+2600,2600,หนี้สินภาษีเงินได้รอการตัดบัญชี,221,Regular,account.data_account_account_type_liability,FALSE
+30,30,ทุน,BS,View,account.data_account_account_type_view,FALSE
+301,301,ส่วนของผู้ถือหุ้น,30,View,account.data_account_account_type_view,FALSE
+302,302,กำไรสะสม,30,View,account.data_account_account_type_view,FALSE
+3001,3001,ทุนเรือนหุ้น,301,Regular,account.data_account_account_type_equity,FALSE
+3001-1,3001-1,ส่วนเกินมูลค่าหุ้น,301,Regular,account.data_account_account_type_equity,FALSE
+3001-1-1,3001-1-1,ส่วนเกินมูลค่าหุ้น ESOP,301,Regular,account.data_account_account_type_equity,FALSE
+3001-1-2,3001-1-2,ส่วนเกินมูลค่าหุ้น RO,301,Regular,account.data_account_account_type_equity,FALSE
+3001-2,3001-2,ส่วนเกินทุนจาการตีราคาสินทรัพย์-ที่ดิน,301,Regular,account.data_account_account_type_equity,FALSE
+3001-3,3001-3,ส่วนเกินทุนจาการตีราคาสินทรัพย์-อาคารส่วนปรับปรุง,301,Regular,account.data_account_account_type_equity,FALSE
+3002,3002,กำไรสะสม,302,Regular,account.data_account_account_type_equity,FALSE
+3002-1,3002-1,เงินปันผล,302,Regular,account.data_account_account_type_equity,FALSE
+3002-2,3002-2,เงินปันผลระหว่างกาล,302,Regular,account.data_account_account_type_equity,FALSE
+3002-3,3002-3,หุ้นสามัญปันผล,302,Regular,account.data_account_account_type_equity,FALSE
+3002-4,3002-4,หุ้น ESOP,301,Regular,account.data_account_account_type_equity,FALSE
+3002-5,3002-5,หุ้น RO,301,Regular,account.data_account_account_type_equity,FALSE
+3003,3003,เงินสำรองตามกฎหมาย,301,Regular,account.data_account_account_type_equity,FALSE
+3004,3004,กำไรขาดทุน,301,Regular,account.data_account_account_type_profit_and_loss,FALSE
+3005,3005,สำรองเพื่อการจ่ายโดยใช้หุ้นเป็นเกณฑ์,301,Regular,account.data_account_account_type_equity,FALSE
+PL,PL,Statement of Income,CMO,View,account.data_account_account_type_view,FALSE
+40,40,รายได้,PL,View,account.data_account_account_type_view,FALSE
+401,401,รายได้ค่าบริการ,40,View,account.data_account_account_type_view,FALSE
+4013-01,4013-01,รายได้ค่าบริการตกแต่ง,401,Regular,account.data_account_account_type_income,FALSE
+4013-02,4013-02,รายได้ค่าบริการจัดทำวีดีโอโปรเจคเตอร์,401,Regular,account.data_account_account_type_income,FALSE
+4013-03,4013-03,รายได้ค่าบริการเช่าอุปกรณ์,401,Regular,account.data_account_account_type_income,FALSE
+4013-04,4013-04,รายได้ค่าจัดหาการแสดง,401,Regular,account.data_account_account_type_income,FALSE
+4013-05,4013-05,รายได้ค่าแสดงแสงสีเสียง,401,Regular,account.data_account_account_type_income,FALSE
+4013-06,4013-06,รายได้ค่าบริการดำเนินงาน,401,Regular,account.data_account_account_type_income,FALSE
+4013-07,4013-07,รายได้ค่าบริการจัดหาพิธีกรและศิลปิน,401,Regular,account.data_account_account_type_income,FALSE
+4013-08,4013-08,รายได้ค่าบริการจัดทำสไลด์มัลติวิชั่น,401,Regular,account.data_account_account_type_income,FALSE
+4013-09,4013-09,รายได้ค่าบริการจัดทำซาวน์โปรดักส์ชั่น,401,Regular,account.data_account_account_type_income,FALSE
+4013-10,4013-10,รายได้ค่าบริการทำคอมพิวเตอร์กราฟฟิค,401,Regular,account.data_account_account_type_income,FALSE
+4013-11,4013-11,รายได้ค่าบริการจัดทำวีดีโอโปรดักส์ชั่น,401,Regular,account.data_account_account_type_income,FALSE
+4013-12,4013-12,รายได้ค่าบริการอื่นๆ,401,Regular,account.data_account_account_type_income,FALSE
+4013-13,4013-13,รายได้ค่าพาหนะและเดินทาง,401,Regular,account.data_account_account_type_income,FALSE
+4013-14,4013-14,รายได้ค่าบริการถ่ายภาพ,401,Regular,account.data_account_account_type_income,FALSE
+4013-15,4013-15,รายได้ค่าบริการจัดหาสตาฟท์,401,Regular,account.data_account_account_type_income,FALSE
+4013-16,4013-16,รายได้ค่าบริการจัดหา pretty gril,401,Regular,account.data_account_account_type_income,FALSE
+4013-17,4013-17,รายได้ค่าบริการจัดหาอาหารและเครื่องดื่ม,401,Regular,account.data_account_account_type_income,FALSE
+4013-18,4013-18,รายได้ค่าจัดหาช่างแต่งหน้า,401,Regular,account.data_account_account_type_income,FALSE
+4013-19,4013-19,รายได้ค่าบริการ - จัดทำมีเดียส์พรีเซนเตชั่น,401,Regular,account.data_account_account_type_income,FALSE
+4013-20,4013-20,รายได้ค่าบริการ- Accommodations,401,Regular,account.data_account_account_type_income,FALSE
+4013-21,4013-21,รายได้ค่าบริการ-Graphic & Inkjet,401,Regular,account.data_account_account_type_income,FALSE
+4013-22,4013-22,รายได้ค่าบริการ- Printing,401,Regular,account.data_account_account_type_income,FALSE
+4013-23,4013-23,รายได้ค่าบริการ-สถานที่,401,Regular,account.data_account_account_type_income,FALSE
+4013-24,4013-24,รายได้ - ค่าประชาสัมพันธ์,401,Regular,account.data_account_account_type_income,FALSE
+4013-25,4013-25,รายได้ - ค่าติดตั้งอุปกรณ์ไฟฟ้า,401,Regular,account.data_account_account_type_income,FALSE
+4013-26,4013-26,รายได้ - ค่าบริการส่วนกลาง,401,Regular,account.data_account_account_type_income,FALSE
+4013-27,4013-27,รายได้ - ค่าบริการโทรศัพท์,401,Regular,account.data_account_account_type_income,FALSE
+4013-28,4013-28,รายได้ - ค่าบริการจ่ายน้ำและน้ำทิ้ง,401,Regular,account.data_account_account_type_income,FALSE
+4013-29,4013-29,รายได้ - ค่าติดตั้งบูธ,401,Regular,account.data_account_account_type_income,FALSE
+4013-30,4013-30,รายได้ - ค่าผลิตสารคดี,401,Regular,account.data_account_account_type_income,FALSE
+4013-31,4013-31,รายได้ - ค่าไฟก่อสร้างรื้อถอน,401,Regular,account.data_account_account_type_income,FALSE
+4013-32,4013-32,รายได้ค่าบริการ-Member Fee,401,Regular,account.data_account_account_type_income,FALSE
+4013-33,4013-33,รายได้ - ค่าขายบัตร,401,Regular,account.data_account_account_type_income,FALSE
+4013-34,4013-34,รายได้ - ค่าขายของที่ระลึก,401,Regular,account.data_account_account_type_income,FALSE
+402,402,รายได้อื่น,40,View,account.data_account_account_type_view,FALSE
+4014,4014,รายได้ค่าบันทึกเสียงสไลด์,402,Regular,account.data_account_account_type_income,FALSE
+4015,4015,รายได้ค่าห้องบันทึกเสียงวีดีโอ,402,Regular,account.data_account_account_type_income,FALSE
+4016,4016,รายได้ค่าถ่ายเทปสปอร์ตวีดีโอ,402,Regular,account.data_account_account_type_income,FALSE
+4017,4017,รายได้ค่าถ่ายเทปสารคดีวีดีโอ,402,Regular,account.data_account_account_type_income,FALSE
+4018,4018,รายได้ค่าวีดีโอ โปรเจคเตอร์,402,Regular,account.data_account_account_type_income,FALSE
+4019,4019,รายได้ค่าจับภาพขึ้นจอก็อปปี้วีดีโอ,402,Regular,account.data_account_account_type_income,FALSE
+4020,4020,รายได้ค่าติดตั้งจอและพัทฟอร์ม,402,Regular,account.data_account_account_type_income,FALSE
+4021,4021,รายได้ค่าบริการโปรแกรมและจัดฉาย,402,Regular,account.data_account_account_type_income,FALSE
+4022,4022,รายได้ค่าติดตั้งจอมอนิเตอร์,402,Regular,account.data_account_account_type_income,FALSE
+4023,4023,รายได้ค่าติดตั้งเครื่องเสียง,402,Regular,account.data_account_account_type_income,FALSE
+4024,4024,รายได้ค่าติดตั้งไฮโดรลิค,402,Regular,account.data_account_account_type_income,FALSE
+4025,4025,รายได้ค่าติดตั้งเครื่องทำน้ำพุ,402,Regular,account.data_account_account_type_income,FALSE
+4026,4026,รายได้ค่าติดตั้ง)รเจคชั่นวอลล์,402,Regular,account.data_account_account_type_income,FALSE
+4027,4027,รายได้ค่ายิงสไลด์,402,Regular,account.data_account_account_type_income,FALSE
+4028,4028,รายได้ค่าจัดทำภาพเคลื่อนไหวสำหรังานพรีเซนเตชั่น,402,Regular,account.data_account_account_type_income,FALSE
+4029,4029,รายได้ค่าจัดทำภาพเคลื่อนไหววีดีโอ,402,Regular,account.data_account_account_type_income,FALSE
+4030,4030,รายได้ค่าจัดทำสไลด์เป็นใบ,402,Regular,account.data_account_account_type_income,FALSE
+4031,4031,รายได้ค่าจัดทำสไลด์ใช้ในงานสไลด์มัลติวิชั่น,402,Regular,account.data_account_account_type_income,FALSE
+4032,4032,รายได้ค่าสิ่งพิมพ์,402,Regular,account.data_account_account_type_income,FALSE
+4033,4033,รายได้ค่าสแกนภาพ,402,Regular,account.data_account_account_type_income,FALSE
+4034,4034,รายได้ค่าจัดทำสไลด์ 4*5,402,Regular,account.data_account_account_type_income,FALSE
+4035,4035,รายได้จาการขาย,402,Regular,account.data_account_account_type_income,FALSE
+4036,4036,รายได้เงินปันผล,402,Regular,account.data_account_account_type_income,FALSE
+4037,4037,ดอกเบี้ยรับ,402,Regular,account.data_account_account_type_income,FALSE
+4037-1,4037-1,ดอกเบี้ยรับ-บริษัทที่เกี่ยวข้องกัน,402,Regular,account.data_account_account_type_income,FALSE
+4038,4038,ส่วนลดรับ,402,Regular,account.data_account_account_type_income,FALSE
+4039,4039,รายได้อื่น (Non Vat),402,Regular,account.data_account_account_type_income,FALSE
+4039-1,4039-1,รายได้อื่น มี VAT,402,Regular,account.data_account_account_type_income,FALSE
+4039-2,4039-2,รายได้ค่าความนิยม,402,Regular,account.data_account_account_type_income,FALSE
+4039-3,4039-3,ส่วนได้เสียจากการลงทุน,402,Regular,account.data_account_account_type_income,FALSE
+4039-4,4039-4,รายได้อื่น - บริการสถานที่,402,Regular,account.data_account_account_type_income,FALSE
+4040,4040,กำไรจากการจำหน่ายทรัพย์สิน,402,Regular,account.data_account_account_type_income,FALSE
+4040-01,4040-01,กำไรจากการจำหน่ายเงินลงทุน,402,Regular,account.data_account_account_type_income,FALSE
+4041,4041,รายได้ค่ารักษาความปลอดภัย,402,Regular,account.data_account_account_type_income,FALSE
+4042,4042,รายได้ค่าดอกไม้,402,Regular,account.data_account_account_type_income,FALSE
+4043,4043,รายได้ค่าตัดต่อ,402,Regular,account.data_account_account_type_income,FALSE
+4044,4044,รายได้ค่าดำเนินงาน,402,Regular,account.data_account_account_type_income,FALSE
+4045,4045,รายได้ค่าพาหนะ,402,Regular,account.data_account_account_type_income,FALSE
+4046,4046,รายได้ค่าติดตั้งรื้อถอน,402,Regular,account.data_account_account_type_income,FALSE
+4047,4047,รายได้ค่าจัดทำเครื่องตกแต่ง,402,Regular,account.data_account_account_type_income,FALSE
+4048,4048,รายได้ค่าจัดฉากและเวที,402,Regular,account.data_account_account_type_income,FALSE
+4050,4050,กำไรจากอัตราแลกเปลี่ยน,402,Regular,account.data_account_account_type_income,FALSE
+4051,4051,ส่วนแบ่งผลกำไรจากการดำเนินงาน,402,Regular,account.data_account_account_type_income,FALSE
+4052,4052,รายได้อื่น - บริษัทในเครือ,402,Regular,account.data_account_account_type_income,FALSE
+4053,4053,รายได้ค่าบริการที่ปรึกษาทางการตลาด (ESP),402,Regular,account.data_account_account_type_income,FALSE
+4054,4054,หนี้สงสัยจะสูญรับคืน,402,Regular,account.data_account_account_type_income,FALSE
+50,50,ต้นทุนงานและค่าใช้จ่ายขายและบริหาร,PL,View,account.data_account_account_type_view,FALSE
+501,501,ต้นทุนงานทางตรง,50,View,account.data_account_account_type_view,FALSE
+502,502,ต้นทุนงานทางอ้อม,50,View,account.data_account_account_type_view,FALSE
+5003-1,5003-1,ต้นทุน - เงินเดือน,502,Regular,account.data_account_account_type_expense,FALSE
+503,503,ค่าใช้จ่ายในการขาย,50,View,account.data_account_account_type_view,FALSE
+5001-01,5001-01,ต้นทุน - ค่าตกแต่ง,501,Regular,account.data_account_account_type_expense,FALSE
+5001-02,5001-02,ต้นทุน - วีดีโอโปรเจคเตอร์,501,Regular,account.data_account_account_type_expense,FALSE
+5001-03,5001-03,ต้นทุน - ค่าบริการเช่าอุปกรณ์,501,Regular,account.data_account_account_type_expense,FALSE
+5001-04,5001-04,ต้นทุน - ค่าจัดการแสดงและกิจกรรม,501,Regular,account.data_account_account_type_expense,FALSE
+5001-05,5001-05,ต้นทุน - ค่าจัดแสดงแสงเสียง,501,Regular,account.data_account_account_type_expense,FALSE
+5001-06,5001-06,ต้นทุน - ค่าใช้จ่ายในการดำเนินงาน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-07,5001-07,ต้นทุน - ค่าจัดหาพิธีกรและศิลปิน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-08,5001-08,ต้นทุน - ค่าจัดทำสไลด์มัลติวิชั่น,501,Regular,account.data_account_account_type_expense,FALSE
+5001-09,5001-09,ต้นทุน - ค่าจัดทำซาวน์โปรดักส์ชั่น,501,Regular,account.data_account_account_type_expense,FALSE
+5001-10,5001-10,ต้นทุน - ค่าบริการทำคอมกราฟฟิค,501,Regular,account.data_account_account_type_expense,FALSE
+5001-11,5001-11,ต้นทุน - ค่าจัดทำวีดีโอโปรดักส์ชั่น,501,Regular,account.data_account_account_type_expense,FALSE
+5001-12,5001-12,ต้นทุน - ค่าบริการอื่นๆ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-13,5001-13,ต้นทุน - ค่าจ้างประสานงาน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-14,5001-14,ต้นทุน - ค่าพาหนะ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-14-1,5001-14-1,ต้นทุน- ค่าTAXI,501,Regular,account.data_account_account_type_expense,FALSE
+5001-14-2,5001-14-2,ต้นทุน - ค่าทางด่วน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-14-3,5001-14-3,ต้นทุน- ค่าตั๋วเครื่องบิน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-15,5001-15,ต้นทุน - ค่าถ่ายภาพ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-16,5001-16,ต้นทุน - ค่าจ้าง Staff,501,Regular,account.data_account_account_type_expense,FALSE
+5001-17,5001-17,ต้นทุน - ค่าจ้าง pretty gril,501,Regular,account.data_account_account_type_expense,FALSE
+5001-18,5001-18,ต้นทุน - ค่าอัดขยายภาพ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-19,5001-19,ต้นทุน - ค่าอาหารและเครื่องดื่ม,501,Regular,account.data_account_account_type_expense,FALSE
+5001-19-1,5001-19-1,ต้นทุน - ค่าอุปกรณ์และวัตถุดิบ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-20,5001-20,ต้นทุน- ค่าช่างแต่งหน้า,501,Regular,account.data_account_account_type_expense,FALSE
+5001-21,5001-21,ต้นทุนงาน - Multimedia Presentation,501,Regular,account.data_account_account_type_expense,FALSE
+5001-22,5001-22,ต้นทุนงาน - ค่าจ้างในการขายบัตร,501,Regular,account.data_account_account_type_expense,FALSE
+5001-23,5001-23,ต้นทุนงาน - ค่าบริการสถานที่,501,Regular,account.data_account_account_type_expense,FALSE
+5001-24,5001-24,ต้นทุนงาน - ค่าที่พัก,501,Regular,account.data_account_account_type_expense,FALSE
+5001-25,5001-25,ต้นทุนงาน - ค่าเช่าWalkie-Talkie,501,Regular,account.data_account_account_type_expense,FALSE
+5001-26,5001-26,ต้นทุนงาน - ค่าเช่าเครื่องปั่นไฟ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-27,5001-27,ต้นทุนงาน - ค่าจัดทำสูจิบัตร โปสการ์ด ใบปลิว,501,Regular,account.data_account_account_type_expense,FALSE
+5001-28,5001-28,ต้นทุนงาน - ค่าตัดต่อ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-29,5001-29,ต้นทุนงาน- ค่าเงินเดือน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-30,5001-30,ต้นทุนงาน- ค่าเบี้ยเลี้ยง,501,Regular,account.data_account_account_type_expense,FALSE
+5001-31,5001-31,ต้นทุนงาน- Printing,501,Regular,account.data_account_account_type_expense,FALSE
+5001-32,5001-32,ต้นทุนงาน-Graphic & Inkjet,501,Regular,account.data_account_account_type_expense,FALSE
+5001-33,5001-33,ต้นทุนงาน - Accommodations,501,Regular,account.data_account_account_type_expense,FALSE
+5001-34,5001-34,ต้นทุนงาน- ค่าขนส่ง,501,Regular,account.data_account_account_type_expense,FALSE
+5001-35,5001-35,ต้นทุนงาน - ขาดทุนจากงานโครงการ,501,Regular,account.data_account_account_type_expense,FALSE
+5001-36,5001-36,ต้นทุนงาน - ค่าติดตั้งอุปกรณ์ไฟฟ้า/ไฟฟ้า,501,Regular,account.data_account_account_type_expense,FALSE
+5001-37,5001-37,ต้นทุนงาน -โฆษณาประชาสัมพันธ์,501,Regular,account.data_account_account_type_expense,FALSE
+5001-38,5001-38,ต้นทุนงาน - BID งาน,501,Regular,account.data_account_account_type_expense,FALSE
+5001-39,5001-39,ต้นทุนงาน - Classified Admin Direct,501,Regular,account.data_account_account_type_expense,FALSE
+5001-98,5001-98,ประมาณการต้นทุนส่วนเพิ่ม,501,Regular,account.data_account_account_type_expense,FALSE
+5002,5002,ต้นทุนขาย,501,Regular,account.data_account_account_type_expense,FALSE
+504,504,ค่าใช้จ่ายบริหาร,50,View,account.data_account_account_type_view,FALSE
+5003,5003,เงินเดือนและค่าจ้าง,504,Regular,account.data_account_account_type_expense,FALSE
+5003-2,5003-2,ต้นทุน - เงินเดือนอื่น,502,Regular,account.data_account_account_type_expense,FALSE
+5004-1,5004-1,ต้นทุน - ค่าเบี้ยเลี้ยงโอที,502,Regular,account.data_account_account_type_expense,FALSE
+5004,5004,ค่าล่วงเวลาและเบี้ยเลี้ยง,504,Regular,account.data_account_account_type_expense,FALSE
+5004-2,5004-2,ต้นทุน - ค่าเบี้ยเลี้ยงโอที อื่น,502,Regular,account.data_account_account_type_expense,FALSE
+5005-1,5005-1,ต้นทุน-ค่าโบนัส,502,Regular,account.data_account_account_type_expense,FALSE
+5005,5005,ค่าโบนัส,504,Regular,account.data_account_account_type_expense,FALSE
+5006-2,5006-2,ต้นทุน - ค่าสวัสดิการเนื่องจากตำแหน่ง,502,Regular,account.data_account_account_type_expense,FALSE
+5006,5006,สวัสดิการพนักงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5006-1,5006-1,ค่าสวัสดิการเนื่องจากตำแหน่ง,504,Regular,account.data_account_account_type_expense,FALSE
+5008-01,5008-01,ต้นทุน - ค่าใช้จ่ายยานพาหนะ,502,Regular,account.data_account_account_type_expense,FALSE
+5009-01,5009-01,ต้นทุน - ค่าเช่า,502,Regular,account.data_account_account_type_expense,FALSE
+5019-01,5019-01,ต้นทุน - ค่าวัสดุอุปกรณ์,502,Regular,account.data_account_account_type_expense,FALSE
+5034-3,5034-3,ต้นทุน - ภาษีซื้อไม่ขอคืนแต่ถือเป็นคชจ,502,Regular,account.data_account_account_type_expense,FALSE
+5051-1,5051-1,ต้นทุน-ค่าตอบแทนผู้บริหาร,502,Regular,account.data_account_account_type_expense,FALSE
+5008,5008,ค่าใช้จ่ายยานพาหนะ,504,Regular,account.data_account_account_type_expense,FALSE
+,,,,,,
+5009,5009,ค่าเช่า,504,Regular,account.data_account_account_type_expense,FALSE
+5007,5007,ค่าใช้จ่ายพาหนะและเดินทาง,503,Regular,account.data_account_account_type_expense,FALSE
+5010,5010,ค่าไฟฟ้า,504,Regular,account.data_account_account_type_expense,FALSE
+5007-1,5007-1,ค่าใช้จ่าย - ค่า TAXI,503,Regular,account.data_account_account_type_expense,FALSE
+5011,5011,ค่าน้ำประปา,504,Regular,account.data_account_account_type_expense,FALSE
+5012,5012,ค่าโทรศัพท์,504,Regular,account.data_account_account_type_expense,FALSE
+5013,5013,ค่าไปรษณีย์โทรเลข,504,Regular,account.data_account_account_type_expense,FALSE
+5014,5014,ค่าเครื่องเขียนแบบพิมพ์,504,Regular,account.data_account_account_type_expense,FALSE
+5015,5015,ค่าใช้จ่ายสำนักงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5015-01,5015-01,ค่าใช้จ่ายเพื่อการบริการสถานที่,504,Regular,account.data_account_account_type_expense,FALSE
+5007-2,5007-2,ค่าใช้จ่าย - ค่าทางด่วน,503,Regular,account.data_account_account_type_expense,FALSE
+5017,5017,ค่าวารสารหนังสือ,504,Regular,account.data_account_account_type_expense,FALSE
+5018,5018,ค่าโฆษณาและส่งเสริมการขาย,504,Regular,account.data_account_account_type_expense,FALSE
+5007-3,5007-3,ค่าใช้จ่าย - ค่าตั๋วเครื่องบิน,503,Regular,account.data_account_account_type_expense,FALSE
+5010-01,5010-01,ค่าใช้จ่ายขาย,503,Regular,account.data_account_account_type_expense,FALSE
+5019,5019,ค่าวัสดุอุปกรณ์,504,Regular,account.data_account_account_type_expense,FALSE
+5016,5016,ค่ารับรอง,503,Regular,account.data_account_account_type_expense,FALSE
+5020,5020,ค่าธรรมเนียมธนาคาร,504,Regular,account.data_account_account_type_expense,FALSE
+5020-1,5020-1,ค่าธรรมเนียมอื่น,504,Regular,account.data_account_account_type_expense,FALSE
+5021,5021,ค่าธรรมเนียมภาษีอากร,504,Regular,account.data_account_account_type_expense,FALSE
+5022,5022,ค่าคอมมิชชั่น,504,Regular,account.data_account_account_type_expense,FALSE
+5023,5023,ค่าบริการวิชาชีพ,504,Regular,account.data_account_account_type_expense,FALSE
+5023-1,5023-1,ค่าที่ปรึกษา,504,Regular,account.data_account_account_type_expense,FALSE
+5024,5024,ค่าเสื่อมราคาอาคารเก่า,504,Regular,account.data_account_account_type_expense,FALSE
+5024-1,5024-1,ค่าเสื่อมราคา - ส่วนปรับปรุงอาคารเช่า,504,Regular,account.data_account_account_type_expense,FALSE
+5024-2,5024-2,ค่าเสื่อมราคา-อุปกรณ์ดำเนินงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5024-3,5024-3,ค่าเสื่อมราคา-เครื่องใช้สำนักงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5024-4,5024-4,ค่าเสื่อมราคา-ยานพาหนะ,504,Regular,account.data_account_account_type_expense,FALSE
+5024-5,5024-5,ค่าเสื่อมราคา-อาคารและส่วนปรับปรุงใหม่,504,Regular,account.data_account_account_type_expense,FALSE
+5024-6,5024-6,ค่าเสื่อมราคา-อาคารและส่วนตกแต่งอาคาร,504,Regular,account.data_account_account_type_expense,FALSE
+5024-7,5024-7,ค่าเสื่อมราคา - อุปกรณ์ UTILITY,504,Regular,account.data_account_account_type_expense,FALSE
+5025,5025,ค่าเบี้ยประกันภัย,504,Regular,account.data_account_account_type_expense,FALSE
+5026,5026,ค่าซ่อมแซมบำรุงรักษา,504,Regular,account.data_account_account_type_expense,FALSE
+5027,5027,ค่าอบรมสัมนา,504,Regular,account.data_account_account_type_expense,FALSE
+5027-1,5027-1,ค่าอบรมพัฒนาบุคคากร(T.200%),504,Regular,account.data_account_account_type_expense,FALSE
+5027-2,5027-2,ค่าอบรมพัฒนา - ดูงานต่างประเทศ,504,Regular,account.data_account_account_type_expense,FALSE
+5028,5028,ค่ารักษาความปลอดภัย,504,Regular,account.data_account_account_type_expense,FALSE
+5029,5029,ค่าใช้จ่ายจัดตั้งบริษัท,504,Regular,account.data_account_account_type_expense,FALSE
+5030,5030,เงินสบทบกองทุน,504,Regular,account.data_account_account_type_expense,FALSE
+5030-1,5030-1,ค่าเงินสมทบกองทุนทดแทน,504,Regular,account.data_account_account_type_expense,FALSE
+5030-2,5030-2,เงินสบทมกองทุนส่งเสริมและพัฒนาคนพิการ,504,Regular,account.data_account_account_type_expense,FALSE
+5031,5031,ค่าบริจาคการกุศล,504,Regular,account.data_account_account_type_expense,FALSE
+5032,5032,ค่าใช้จ่ายปีใหม่,504,Regular,account.data_account_account_type_expense,FALSE
+5032-1,5032-1,ค่าใช้จ่ายเที่ยวประจำปี,504,Regular,account.data_account_account_type_expense,FALSE
+5032-2,5032-2,ค่าใช้จ่ายทำบุญบริษัท,504,Regular,account.data_account_account_type_expense,FALSE
+5033,5033,ค่าเช่าลิสซิ่ง,504,Regular,account.data_account_account_type_expense,FALSE
+5034,5034,ค่าใช้จ่ายที่ไม่ถือเป็นค่าใช้จ่าย,504,Regular,account.data_account_account_type_expense,FALSE
+5034-1,5034-1,ภาษีซื้อไม่ขอคืน,504,Regular,account.data_account_account_type_expense,FALSE
+5034-2,5034-2,ภาษีซื้อไม่ขอคืนแต่ถือเป็นคชจ.,504,Regular,account.data_account_account_type_expense,FALSE
+5018-1,5018-1,ค่าโฆษณาประชาสัมพันธ์,503,Regular,account.data_account_account_type_expense,FALSE
+5035,5035,ค่าใช้จ่ายเบ็ดเตล็ด,504,Regular,account.data_account_account_type_expense,FALSE
+5036,5036,ดอกเบี้ยจ่าย,504,Regular,account.data_account_account_type_expense,FALSE
+5036-1,5036-1,ดอกเบี้ยจ่าย- บริษัทเกี่ยวข้องกัน,504,Regular,account.data_account_account_type_expense,FALSE
+5036-2,5036-2,ดอกเบี้ยจ่าย - ขายลดลูกหนี้,504,Regular,account.data_account_account_type_expense,FALSE
+5037,5037,ส่วนลดจ่าย,504,Regular,account.data_account_account_type_expense,FALSE
+5038,5038,ภาษีเงินได้นิติบุคคล,504,Regular,account.data_account_account_type_expense,FALSE
+5038-1,5038-1,ภาษีเงินได้นิติบุคคล ถูก หักณ.ที่จ่ายเกิน3 ปี,504,Regular,account.data_account_account_type_expense,FALSE
+5039,5039,ขาดทุนจากการจำหน่ายทรัพย์สิน,504,Regular,account.data_account_account_type_expense,FALSE
+5039-1,5039-1,ขาดทุนจากการด้อยค่าทรัพย์สิน,504,Regular,account.data_account_account_type_expense,FALSE
+5039-2,5039-2,ขาดทุนจากการตีราคา-ที่ดิน,504,Regular,account.data_account_account_type_expense,FALSE
+5040,5040,ค่าวัสดุสำนักงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5041,5041,เงินประกันสังคมส่วนของนายจ้าง,504,Regular,account.data_account_account_type_expense,FALSE
+5041-1,5041-1,เงินสมทบกองทุนสำรองเลี้ยงชีพ PVF,504,Regular,account.data_account_account_type_expense,FALSE
+5041-2,5041-2,คชจ.จากประมาณการตามหลักคณิตศาสตร์ประกันภัย,504,Regular,account.data_account_account_type_expense,FALSE
+5042,5042,เงินชดเชยพนักงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5043,5043,ค่าใช้จ่ายสรรหาบุคลากร,504,Regular,account.data_account_account_type_expense,FALSE
+5044,5044,หนี้สูญ,504,Regular,account.data_account_account_type_expense,FALSE
+5045,5045,ขาดทุนจากอัตราแลกเปลี่ยน,504,Regular,account.data_account_account_type_expense,FALSE
+5046,5046,ค่าบริการดูแลรักษาความสะอาด,504,Regular,account.data_account_account_type_expense,FALSE
+5047,5047,ค่าสอบบัญชี,504,Regular,account.data_account_account_type_expense,FALSE
+5048,5048,ภาษีเงินได้นิติบุคคลไม่เกิน 5 ปี,504,Regular,account.data_account_account_type_expense,FALSE
+5049,5049,ขาดทุนจากการจำหน่ายตั๋วล่วงหน้า,504,Regular,account.data_account_account_type_expense,FALSE
+5050,5050,ค่าภาษีตั๋วเครื่องบิน,504,Regular,account.data_account_account_type_expense,FALSE
+5051,5051,ค่าตอบแทนผู้บริหาร,504,Regular,account.data_account_account_type_expense,FALSE
+5018-2,5018-2,ค่าส่งเสริมการขาย,503,Regular,account.data_account_account_type_expense,FALSE
+5052,5052,ค่าบริการอินเทอร์เนต,504,Regular,account.data_account_account_type_expense,FALSE
+5053,5053,ค่าสิทธิในการจัดงานประกวดตัดจำหน่าย,504,Regular,account.data_account_account_type_expense,FALSE
+5054,5054,หนี้สงสัยจะสูญ,504,Regular,account.data_account_account_type_expense,FALSE
+5055,5055,เงินปันผลจ่าย,504,Regular,account.data_account_account_type_expense,FALSE
+5056,5056,ขาดทุนจากการลงทุน,504,Regular,account.data_account_account_type_expense,FALSE
+5057,5057,ค่าตอบแทนกรรมการ,504,Regular,account.data_account_account_type_expense,FALSE
+5058,5058,ค่าธรรมเนียมบ.ศูนย์รับฝากหลักทรัพย์,504,Regular,account.data_account_account_type_expense,FALSE
+5059,5059,ค่าใช้จ่ายจัดหาข้อมูลและข่าวสาร,504,Regular,account.data_account_account_type_expense,FALSE
+5060,5060,ค่าใช้จ่ายในการประชุมผู้ถือหุ้น,504,Regular,account.data_account_account_type_expense,FALSE
+5061,5061,ค่าธรรมเนียม กลต.และตลาดหลักทรัพย์,504,Regular,account.data_account_account_type_expense,FALSE
+5062,5062,ค่าสิทธิ์ในการประกวดตัดบัญชี,504,Regular,account.data_account_account_type_expense,FALSE
+5063,5063,เงินสนับสนุนงานแสดงศิลปะ,504,Regular,account.data_account_account_type_expense,FALSE
+5064,5064,ผลขาดทุนจากด้อยค่า - ค่าสิทธฺ์,504,Regular,account.data_account_account_type_expense,FALSE
+5065,5065,สำรองด้อยค่า - เงินลงทุน,504,Regular,account.data_account_account_type_expense,FALSE
+5065-1,5065-1,สำรองด้อยค่า - เงินให้กู้ยืม,504,Regular,account.data_account_account_type_expense,FALSE
+5066,5066,ค่าใช้จ่ายBID งาน,504,Regular,account.data_account_account_type_expense,FALSE
+5067,5067,ค่าใช้จ่ายในการออกหุ้นให้กับพนักงาน,504,Regular,account.data_account_account_type_expense,FALSE
+5067-1,5067-1,ค่าใช้จ่ายในการเพิ่มทุน RO,504,Regular,account.data_account_account_type_expense,FALSE
+5068,5068,ประมาณการค่าใช้จ่ายที่อาจจะเกิดขึ้น,504,Regular,account.data_account_account_type_expense,FALSE

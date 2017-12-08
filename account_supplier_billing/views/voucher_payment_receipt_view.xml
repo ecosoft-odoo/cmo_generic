@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_vendor_payment_form" model="ir.ui.view">
+            <field name="name">view.vendor.payment.form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
+            <field name="model">account.voucher</field>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/sheet/group/group/field[@name='amount']" position="attributes">
+                        <attribute name="context">{'supplier_billing_id': supplier_billing_id}</attribute>
+                    </xpath>
+                    <xpath expr="/form/sheet/group/group/field[@name='journal_id']" position="attributes">
+                        <attribute name="context">{'supplier_billing_id': supplier_billing_id}</attribute>
+                    </xpath>
+                    <xpath expr="/form/sheet//field[@name='journal_id']" position="after">
+                        <field name="supplier_billing_id"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

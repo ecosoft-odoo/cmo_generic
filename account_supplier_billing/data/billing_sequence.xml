@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="seq_type_supplier_billing" model="ir.sequence.type">
+            <field name="name">Supplier Billing</field>
+            <field name="code">supplier.billing</field>
+        </record>
+        <record id="seq_supplier_billing" model="ir.sequence">
+            <field name="name">Supplier Billing (CMO)</field>
+            <field name="code">supplier.billing</field>
+            <field name="prefix">SBLCM%(fy)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+    </data>
+</openerp>

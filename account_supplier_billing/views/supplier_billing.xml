@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_supplier_billing_tree" model="ir.ui.view">
+            <field name="name">view.supplier.billing.tree</field>
+            <field name="model">supplier.billing</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';gray:state == 'cancel'">
+                    <field name="number"/>
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="due_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_invoice_supplier_billing" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="supplier_invoice_number" position="after">
+                    <field name="supplier_billing_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="inherit_view_invoice_tree" model="ir.ui.view">
+            <field name="name">project.project.invoice.tree</field>
+            <field name="model">account.invoice</field>
+            <field eval="17" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Supplier Invoice">
+                    <field name="supplier_billing_id" invisible="1"/>
+                    <field name="partner_id" string="Supplier"/>
+                    <field name="date_invoice"/>
+                    <field name="supplier_invoice_number"/>
+                    <field name="origin"/>
+                    <field name="invoice_plan_installment"/>
+                    <!-- <field name="super_origin"/> -->
+                    <field name="amount_total" sum="Total Amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_supplier_billing_form" model="ir.ui.view">
+			<field name="name">Supplier Billing Form</field>
+			<field name="model">supplier.billing</field>
+			<field name="arch" type="xml">
+                <form string="Billing">
+                    <header>
+                        <button name="action_billed" type="object"
+                                states="draft"
+                                string="Bill" class="oe_highlight" />
+                        <button name="action_cancel" type="object"
+                                states="billed"
+                                string="Cancel" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,billed"/>
+                    </header>
+                    <sheet string="Supplier Billing">
+                        <div class="oe_right oe_button_box" name="invoice_relate_buttons" attrs="{'invisible':[['state', 'not in', ['billed']]]}">
+                            <button class="oe_inline oe_stat_button" type="object" name="invoice_relate_billing_tree_view" icon="fa-pencil-square-o">
+                                <field string="Invoices" name="invoice_related_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <h1>
+                            <label for="name" string="Supplier Billing"/>
+                            <field name="number" string="Supplier Billing" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="partner_id" options="{'no_create':1,'no_create_edit':1}"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="due_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Billing">
+                                <field name="invoice_ids" nolabel="1" widget="many2many"
+                                    context="{'tree_view_ref':'account_supplier_billing.inherit_view_invoice_tree'}"
+                                    domain="[
+                                        ('partner_id', '=', partner_id),
+                                        ('state', '=', 'draft'),
+                                        ('supplier_billing_id', '=', False),
+                                        '|',
+                                        ('type', '=', 'in_invoice'),
+                                        ('type', '=', 'in_refund')
+                                    ]"
+                                    >
+                                <tree editable="bottom">
+                                    <field name="supplier_billing_id" invisible="1"/>
+                                    <field name="partner_id" string="Supplier" readonly="1"/>
+                                    <field name="date_invoice" readonly="1"/>
+                                    <field name="supplier_invoice_number" readonly="1"/>
+                                    <field name="origin" readonly="1"/>
+                                    <field name="invoice_plan_installment"/>
+                                    <!-- <field name="super_origin"/> -->
+                                    <field name="amount_total" sum="Total Amount"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_supplier_billing" model="ir.actions.act_window">
+            <field name="name">Supplier Billing</field>
+            <field name="res_model">supplier.billing</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a supplier billing
+                </p>
+                <p>
+                    Manage supplier billing you want to be used in the system.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_filter_supplier_billing" model="ir.ui.view">
+            <field name="name">Supplier Billing Filter</field>
+            <field name="model">supplier.billing</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Draft"
+                            domain="[('state','=','draft')]"/>
+                    <filter string="Billled"
+                            domain="[('state','=','billed')]"/>
+                    <filter string="Cancelled"
+                            domain="[('state','=','cancel')]"/>
+                </search>
+            </field>
+        </record>
+
+        <menuitem action="action_supplier_billing"
+                  id="menu_action_supplier_billing"
+                  string="Supplier Billing"
+                  parent="account.menu_finance_payables"
+                  groups="account.group_account_invoice,account.group_account_manager"
+                  sequence="11" />
+
+    </data>
+</openerp>
