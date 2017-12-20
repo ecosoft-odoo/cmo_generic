@@ -89,7 +89,9 @@ class sale_order_line(osv.osv):
         res = super(sale_order_line, self)._prepare_order_line_invoice_line(
             cr, uid, line, account_id=account_id, context=context)
         line_percent = context.get('line_percent', False)
-        if line_percent:
+        if context.get('force_ignore_line_percent', False):
+            return res
+        if not line_percent:
             res.update(
                 {'quantity':
                  (res.get('quantity') or 0.0) * (line_percent / 100)})
