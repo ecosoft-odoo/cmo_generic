@@ -71,6 +71,7 @@ and $X{IN, report_period_id, period_pids}]]>
 	<field name="taxbranch" class="java.lang.String"/>
 	<field name="base" class="java.lang.Double"/>
 	<field name="amount" class="java.lang.Double"/>
+	<field name="cancel" class="java.lang.Boolean"/>
 	<variable name="base" class="java.lang.Number" resetType="Group" resetGroup="period" calculation="Sum">
 		<variableExpression><![CDATA[$F{base}]]></variableExpression>
 	</variable>
@@ -319,9 +320,8 @@ $V{COLUMN_COUNT}]]></textFieldExpression>
 				<textElement verticalAlignment="Top">
 					<font fontName="Monospaced" size="9" isBold="false" isStrikeThrough="false" pdfFontName="Garuda.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{partner_title} == null ?
-$F{partner_name} :
-$F{partner_title} + " " + $F{partner_name}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cancel} == false ? ($F{partner_title} == null ? $F{partner_name} : $F{partner_title} + " " + $F{partner_name}) :
+$P{doc_type}.toString() == "sale" ? "Cancelled" : ""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement style="table2" stretchType="RelativeToTallestObject" x="301" y="0" width="105" height="15"/>
