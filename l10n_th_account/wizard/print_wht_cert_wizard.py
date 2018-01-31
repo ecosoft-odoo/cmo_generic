@@ -133,7 +133,9 @@ class PrintWhtCertWizard(models.TransientModel):
         data['supplier_taxid'] = list(supplier_taxid)
         data['company_address'] = self.company_address
         data['supplier_address'] = self.supplier_address
+        data['pnd1'] = voucher.income_tax_form == 'pnd1' and 'X' or ''
         data['pnd3'] = voucher.income_tax_form == 'pnd3' and 'X' or ''
+        data['pnd3a'] = voucher.income_tax_form == 'pnd3a' and 'X' or ''
         data['pnd53'] = voucher.income_tax_form == 'pnd53' and 'X' or ''
         data['wht_sequence_display'] = voucher.wht_sequence_display
         data['withholding'] = voucher.tax_payer == 'withholding' and 'X' or ''
