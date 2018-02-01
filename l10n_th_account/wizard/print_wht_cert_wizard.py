@@ -145,16 +145,21 @@ class PrintWhtCertWizard(models.TransientModel):
         data['total_tax'] = self._get_summary_by_type('tax')
         data['type_1_base'] = self._get_summary_by_type('base', '1')
         data['type_1_tax'] = self._get_summary_by_type('tax', '1')
+        data['type_1_percent'] = self._get_summary_by_type('percent', '1')
         data['type_2_base'] = self._get_summary_by_type('base', '2')
         data['type_2_tax'] = self._get_summary_by_type('tax', '2')
+        data['type_2_percent'] = self._get_summary_by_type('percent', '2')
         data['type_3_base'] = self._get_summary_by_type('base', '3')
         data['type_3_tax'] = self._get_summary_by_type('tax', '3')
+        data['type_3_percent'] = self._get_summary_by_type('percent', '3')
         data['type_5_base'] = self._get_summary_by_type('base', '5')
         data['type_5_tax'] = self._get_summary_by_type('tax', '5')
         data['type_5_desc'] = self._get_summary_by_type('desc', '5')
+        data['type_5_percent'] = self._get_summary_by_type('percent', '5')
         data['type_6_base'] = self._get_summary_by_type('base', '6')
         data['type_6_tax'] = self._get_summary_by_type('tax', '6')
         data['type_6_desc'] = self._get_summary_by_type('desc', '6')
+        data['type_6_percent'] = self._get_summary_by_type('percent', '6')
         data['signature'] = self.with_context(TH).env.user.name_get()[0][1]
         return data
 
@@ -172,6 +177,17 @@ class PrintWhtCertWizard(models.TransientModel):
             descs = [x.wht_cert_income_desc for x in wht_lines]
             descs = filter(lambda x: x is not False and x != '', descs)
             return ', '.join(descs)
+        if column == 'percent':
+            percents = []
+            for line in wht_lines:
+                if line.voucher_tax_id and line.voucher_tax_id.tax_id:
+                    percents.append(
+                        '%s%s' %
+                        (str(int(line.voucher_tax_id.tax_id.amount * 100)),
+                         '%'))
+            if wht_lines:
+                percents = percents and list(set(percents)) or ['0%']
+            return ', '.join(percents)
 
     @api.model
     def _prepare_address(self, partner):
