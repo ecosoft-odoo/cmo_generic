@@ -29,7 +29,7 @@
                     <header>
                         <button name="validate_bank_payment" states="draft" string="Validate" type="object" class="oe_highlight"/>
                         <button name="backtodraft" states="cancel" string="Back to Draft" type="object"/>
-                        <button name="cancel_bank_payment" states="done" string="Cancel" type="object"/>
+                        <button name="cancel_bank_payment" states="draft,done" string="Cancel" type="object"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                     </header>
                     <sheet>
