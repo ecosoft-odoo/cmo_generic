@@ -70,6 +70,9 @@
                                               ('account_id', '=', journal_default_account_id)]"
                                     context="{'currency': currency_id,
                                           'journal_id': journal_id,
+                                          'currency_none_same_company_id': currency_none_same_company_id,
+                                          'journal_default_account_id': journal_default_account_id,
+                                          'type': 'bank_payment',
                                           'tree_view_ref': 'account_bank_payment.view_account_move_line_tree'}" />
                                 <field name="note"/>
                             </page>
