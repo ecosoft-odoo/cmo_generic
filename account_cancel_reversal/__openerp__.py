@@ -4,7 +4,7 @@
     'version': '1.0',
     'author': 'Ecosoft',
     'summary': """
-Cancel Invoice / Voucher / Bank receipt / Salary Expense
+Cancel Invoice / Voucher / Bank receipt / Bank payment / Salary Expense
 by create reversed journal entry
     """,
     'description': """
@@ -36,6 +36,7 @@ To-Be:
         'account_invoice_cancel_hooks',
         'account_voucher_cancel_hooks',
         'account_bank_receipt',
+        'account_bank_payment',
         'hr_salary',
     ],
     'demo': [],
@@ -43,6 +44,7 @@ To-Be:
         'views/voucher_payment_receipt_view.xml',
         'views/account_invoice_view.xml',
         'views/account_bank_receipt_view.xml',
+        'views/account_bank_payment_view.xml',
         'views/hr_salary_view.xml',
     ],
     'test': [
