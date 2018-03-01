@@ -8,7 +8,8 @@ class AccountVoucher(models.Model):
     supplier_billing_id = fields.Many2one(
         'supplier.billing',
         string='Billing Ref',
-        domain="[('state', '=', 'billed'), ('partner_id', '=', partner_id)]",
+        domain="[('state', '=', 'billed'), ('partner_id', '=', partner_id), \
+                 ('invoice_ids.state', 'not in', ('paid', 'cancel'))]",
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
