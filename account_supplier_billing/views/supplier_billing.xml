@@ -131,8 +131,6 @@
             <field name="model">supplier.billing</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="number"/>
-                    <field name="partner_id"/>
                     <filter string="Draft"
                             domain="[('state','=','draft')]"/>
                     <filter string="Billled"
