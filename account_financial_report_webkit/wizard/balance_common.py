@@ -90,7 +90,8 @@ class AccountBalanceCommonWizard(orm.TransientModel):
             [('filter_no', 'No Filters'),
              ('filter_date', 'Date'),
              ('filter_period', 'Periods'),
-             ('filter_opening', 'Opening Only')],
+             # ('filter_opening', 'Opening Only'),
+             ],
             "Filter by",
             required=True,
             help='Filter by date: no opening balance will be displayed. '
@@ -222,7 +223,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                                 " 'invisible': [('comp%(index)s_filter','!=',\
                                                         'filter_period')]}" % {
                     'index': index}
-                periods_domain = "[('special', '=', False)]"
+                periods_domain = "[('special2', '=', False)]"
                 modifiers_and_append(etree.Element(
                     'separator',
                     {'string': _('Periods'),
@@ -273,7 +274,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                                LEFT JOIN account_fiscalyear f
                                    ON (p.fiscalyear_id = f.id)
                                WHERE f.id = %s
-                               AND COALESCE(p.special, FALSE) = FALSE
+                               AND COALESCE(p.special2, FALSE) = FALSE
                                ORDER BY p.date_start ASC
                                LIMIT 1) AS period_start
                 UNION ALL
@@ -283,7 +284,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                                    ON (p.fiscalyear_id = f.id)
                                WHERE f.id = %s
                                AND p.date_start < NOW()
-                               AND COALESCE(p.special, FALSE) = FALSE
+                               AND COALESCE(p.special2, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''',
                        (fiscalyear_id, fiscalyear_id))
@@ -364,7 +365,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                                LEFT JOIN account_fiscalyear f
                                    ON (p.fiscalyear_id = f.id)
                                WHERE f.id = %(fiscalyear)s
-                               AND COALESCE(p.special, FALSE) = FALSE
+                               AND COALESCE(p.special2, FALSE) = FALSE
                                ORDER BY p.date_start ASC
                                LIMIT 1) AS period_start
                 UNION ALL
@@ -374,7 +375,7 @@ class AccountBalanceCommonWizard(orm.TransientModel):
                                    ON (p.fiscalyear_id = f.id)
                                WHERE f.id = %(fiscalyear)s
                                AND p.date_start < NOW()
-                               AND COALESCE(p.special, FALSE) = FALSE
+                               AND COALESCE(p.special2, FALSE) = FALSE
                                ORDER BY p.date_stop DESC
                                LIMIT 1) AS period_stop''',
                        {'fiscalyear': last_fiscalyear_id})

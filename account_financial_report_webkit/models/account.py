@@ -45,3 +45,17 @@ class AccountAccount(orm.Model):
     _defaults = {
         'centralized': False,
     }
+
+
+class AccountPeriod(orm.Model):
+    _inherit = 'account.period'
+
+    _columns = {
+        'special2': fields.boolean(
+            'Special2',
+            help="Dummy field, used to ensure no special is in report"),
+    }
+
+    _defaults = {
+        'special2': False,
+    }

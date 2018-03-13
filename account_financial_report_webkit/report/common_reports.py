@@ -250,11 +250,12 @@ class CommonReportHeaderWebkit(common_report_header):
         We actually filter on this instead of opening period as older version
         of OpenERP did not have this notion"""
         return self.pool.get('account.period').search(self.cursor, self.uid,
-                                                      [('special', '=', True)])
+                                                      [('special2', '=',
+                                                        True)])
 
     def exclude_opening_periods(self, period_ids):
         period_obj = self.pool.get('account.period')
-        return period_obj.search(self.cr, self.uid, [['special', '=', False],
+        return period_obj.search(self.cr, self.uid, [['special2', '=', False],
                                                      ['id', 'in', period_ids]])
 
     def get_included_opening_period(self, period):
@@ -262,7 +263,7 @@ class CommonReportHeaderWebkit(common_report_header):
         that there is only one opening period per fiscal year"""
         period_obj = self.pool.get('account.period')
         return period_obj.search(self.cursor, self.uid,
-                                 [('special', '=', True),
+                                 [('special2', '=', True),
                                   ('date_start', '>=', period.date_start),
                                   ('date_stop', '<=', period.date_stop),
                                   ('company_id', '=', period.company_id.id)],
@@ -290,7 +291,7 @@ class CommonReportHeaderWebkit(common_report_header):
                          ('date_stop', '<=', stop_period.date_stop)]
 
         if mode == 'exclude_opening':
-            search_period += [('special', '=', False)]
+            search_period += [('special2', '=', False)]
         res = period_obj.search(self.cursor, self.uid, search_period)
         return res
 
@@ -305,7 +306,7 @@ class CommonReportHeaderWebkit(common_report_header):
         mv_line_obj = self.pool.get('account.move.line')
         # We look for previous opening period
         if stop_at_previous_opening:
-            opening_search = [('special', '=', True),
+            opening_search = [('special2', '=', True),
                               ('date_stop', '<', start_period.date_start)]
             if fiscalyear:
                 opening_search.append(('fiscalyear_id', '=', fiscalyear.id))
@@ -333,7 +334,7 @@ class CommonReportHeaderWebkit(common_report_header):
         periods_search += past_limit
 
         if not include_opening:
-            periods_search += [('special', '=', False)]
+            periods_search += [('special2', '=', False)]
 
         if fiscalyear:
             periods_search.append(('fiscalyear_id', '=', fiscalyear.id))
@@ -351,12 +352,12 @@ class CommonReportHeaderWebkit(common_report_header):
     def get_last_fiscalyear_period(self, fiscalyear):
         return self._get_st_fiscalyear_period(fiscalyear, order='DESC')
 
-    def _get_st_fiscalyear_period(self, fiscalyear, special=False,
+    def _get_st_fiscalyear_period(self, fiscalyear, special2=False,
                                   order='ASC'):
         period_obj = self.pool.get('account.period')
         p_id = period_obj.search(self.cursor,
                                  self.uid,
-                                 [('special', '=', special),
+                                 [('special2', '=', special2),
                                   ('fiscalyear_id', '=', fiscalyear.id)],
                                  limit=1,
                                  order='date_start %s' % (order,))
@@ -506,7 +507,7 @@ class CommonReportHeaderWebkit(common_report_header):
                 _('No valid filter'), _('Please set a valid time filter'))
 
     def _get_move_line_datas(self, move_line_ids,
-                             order='per.special DESC, l.date ASC, \
+                             order='per.special2 DESC, l.date ASC, \
                              per.date_start ASC, m.name ASC'):
         # Possible bang if move_line_ids is too long
         # We can not slice here as we have to do the sort.
@@ -535,7 +536,7 @@ SELECT l.id AS id,
             l.credit,
             l.period_id AS lperiod_id,
             per.code as period_code,
-            per.special AS peropen,
+            per.special2 AS peropen,
             l.partner_id AS lpartner_id,
             p.name AS partner_name,
             m.name AS move_name,

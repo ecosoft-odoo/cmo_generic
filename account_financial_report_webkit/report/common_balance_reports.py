@@ -225,7 +225,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             stop_period = self.get_last_fiscalyear_period(fiscalyear)
         elif main_filter == 'filter_opening':
             opening_period = self._get_st_fiscalyear_period(
-                fiscalyear, special=True)
+                fiscalyear, special2=True)
             start_period = stop_period = opening_period
         if main_filter == 'filter_date':
             start = start_date

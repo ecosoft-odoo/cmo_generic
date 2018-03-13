@@ -190,7 +190,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             # search on account.period in order to sort them by date_start
             sorted_period_ids = period_obj.search(
                 self.cr, self.uid, [('id', 'in', period_ids)],
-                order='special desc, date_start', context=context)
+                order='special2 desc, date_start', context=context)
             sorted_ledger_lines = sorted(
                 ledger_lines, key=lambda x: sorted_period_ids.
                 index(x['lperiod_id']))
