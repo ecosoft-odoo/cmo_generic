@@ -2,7 +2,7 @@
 from datetime import datetime
 from dateutil import relativedelta
 from openerp import models, fields, api, _
-from openerp.exceptions import ValidationError
+from openerp.exceptions import ValidationError, Warning as UserError
 from openerp import SUPERUSER_ID
 
 
@@ -31,15 +31,14 @@ class InvoiceVoucherTaxDetail(object):
                     doc_date = doc.date
                     domain = [('voucher_tax_id', '=', tax.id)]
                 sign = doc.type in ('out_refund') and -1 or 1
-                vals = TaxDetail.\
-                    _prepare_tax_detail(invoice_tax_id,
-                                        voucher_tax_id,
-                                        'sale',
-                                        doc.partner_id.id,
-                                        doc.number_preprint or doc.number,
-                                        doc_date,
-                                        sign * tax.base,
-                                        sign * tax.amount)
+                vals = TaxDetail._prepare_tax_detail(invoice_tax_id,
+                                                     voucher_tax_id,
+                                                     'sale',
+                                                     doc.partner_id.id,
+                                                     doc.number,
+                                                     doc_date,
+                                                     sign * tax.base,
+                                                     sign * tax.amount)
                 detail = TaxDetail.search(domain)
                 if detail:
                     detail.write(vals)
@@ -49,14 +48,15 @@ class InvoiceVoucherTaxDetail(object):
     @api.multi
     def _check_tax_detail_info(self):
         for doc in self:
-            taxes = doc.tax_line.filtered(lambda l:
-                                          l.tax_code_type == 'normal')
-            for tax in taxes:
-                if tax.detail_ids.filtered(lambda l: not (l.partner_id and
-                                                          l.invoice_number and
-                                                          l.invoice_date)):
-                    raise ValidationError(
-                        _('Some data in Tax Detail is not filled!'))
+            for tax in doc.tax_line:
+                if tax.tax_code_type != 'normal':
+                    continue
+                for detail in tax.detail_ids:
+                    if (not detail.partner_id or
+                            not detail.invoice_number or
+                            not detail.invoice_date):
+                        raise UserError(
+                            _('Some data in Tax Detail is not filled!'))
         return True
 
     @api.model
@@ -89,7 +89,7 @@ class AccountTaxDetail(models.Model):
         [('sale', 'Sales'),
          ('purchase', 'Purchase')],
         string='Document Type',
-        readonly=False,
+        readonly=True,
         required=True,
     )
     invoice_tax_id = fields.Many2one(
@@ -110,7 +110,7 @@ class AccountTaxDetail(models.Model):
     tax_id = fields.Many2one(
         'account.tax',
         ondelete='cascade',
-        readonly=False,
+        readonly=True,
     )
     tax_sequence = fields.Integer(
         string='Sequence',
@@ -134,7 +134,7 @@ class AccountTaxDetail(models.Model):
         readonly=True,
     )
     addition = fields.Boolean(
-        string='Past Period Tax',
+        strin='Past Period Tax',
         default=False,
     )
     partner_id = fields.Many2one(
@@ -219,38 +219,33 @@ class AccountTaxDetail(models.Model):
             relativedelta.relativedelta(months=-months + 1)
         return date_start, date_stop
 
-    @api.multi
+    @api.model
     def _set_next_sequence(self, date_doc=None):
-        for rec in self:
-            if rec.tax_sequence:
-                continue
-            months = rec.env.user.company_id.number_month_tax_addition
-            tax_months = months and int(months) or 6
-            date_start, date_stop = rec._get_valid_date_range(tax_months)
-            period = self.env['account.period'].find(date_doc)[:1]
-            invoice_date = datetime.strptime(rec.invoice_date,
-                                             '%Y-%m-%d').date()
-            ref_move_id = rec.ref_move_id.id or \
-                rec.invoice_tax_id.invoice_id.move_id.id or \
-                rec.voucher_tax_id.voucher_id.move_id.id or \
-                rec.move_line_id.move_id.id or False
-            if date_start <= invoice_date <= date_stop:
-                next_seq = rec._get_next_sequence(period)
-                rec.write({'tax_sequence': next_seq,
-                           'period_id': period.id,
-                           'date_doc': date_doc,
-                           'ref_move_id': ref_move_id,
-                           })
-            else:
-                Period = self.env['account.period']
-                add_period = Period.find(rec.invoice_date)[:1]
-                next_seq = rec._get_next_sequence(add_period)
-                rec.write({'tax_sequence': next_seq,
-                           'period_id': add_period.id,
-                           'date_doc': date_doc,
-                           'ref_move_id': ref_move_id,
-                           'addition': True,
-                           })
+        months = self.env.user.company_id.number_month_tax_addition
+        tax_months = months and int(months) or 6
+        date_start, date_stop = self._get_valid_date_range(tax_months)
+        period = self.env['account.period'].find(date_doc)[:1]
+        invoice_date = datetime.strptime(self.invoice_date,
+                                         '%Y-%m-%d').date()
+        ref_move_id = self.invoice_tax_id.invoice_id.move_id.id or \
+            self.voucher_tax_id.voucher_id.move_id.id or \
+            self.move_line_id.move_id.id or False
+        if date_start <= invoice_date <= date_stop:
+            next_seq = self._get_next_sequence(period)
+            self.write({'tax_sequence': next_seq,
+                        'period_id': period.id,
+                        'date_doc': date_doc,
+                        'ref_move_id': ref_move_id,
+                        })
+        else:
+            add_period = self.env['account.period'].find(self.invoice_date)[:1]
+            next_seq = self._get_next_sequence(add_period)
+            self.write({'tax_sequence': next_seq,
+                        'period_id': add_period.id,
+                        'date_doc': date_doc,
+                        'ref_move_id': ref_move_id,
+                        'addition': True,
+                        })
 
     @api.model
     def _get_tax_id(self, tax_code, validate=True):
@@ -367,7 +362,7 @@ class AccountTaxDetail(models.Model):
     def _create_sequence(self, doc_type, period):
         seq_vals = {'name': self._get_seq_name(doc_type, period),
                     'implementation': 'no_gap'}
-        new_sequence = self.env['ir.sequence'].sudo().create(seq_vals)
+        new_sequence = self.env['ir.sequence'].create(seq_vals)
         vals = self._prepare_taxdetail_seq(doc_type, period, new_sequence)
         return self.env['account.tax.detail.sequence'].create(vals)
 

@@ -56,12 +56,14 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="/form/sheet/notebook/page/field[@name='line_cr_ids']/tree/field[@name='amount']" position="after">
-                        <field sum="Total WHT" name="amount_wht" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
+                        <field name="create_date" invisible="1"/>
+                        <field sum="Total WHT" name="amount_wht" attrs="{'invisible': [('create_date', '=', False)]}"/>
                         <field name="retention_on_payment" invisible="1"/>
                         <field sum="Total Retention" name="amount_retention" attrs="{'readonly': [('retention_on_payment','!=',True)]}" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
                     </xpath>
                     <xpath expr="/form/sheet/notebook/page/field[@name='line_dr_ids']/tree/field[@name='amount']" position="after">
-                        <field sum="Total WHT" name="amount_wht" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
+                        <field name="create_date" invisible="1"/>
+                        <field sum="Total WHT" name="amount_wht" attrs="{'invisible': [('create_date', '=', False)]}"/>
                         <field name="retention_on_payment" invisible="1"/>
                         <field sum="Total Retention" name="amount_retention" attrs="{'readonly': [('retention_on_payment','!=',True)]}" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
                     </xpath>
@@ -91,6 +93,9 @@
                         <field name="comment" attrs="{'invisible':[('payment_option','!=','with_writeoff')]}"/>
                         <field name="analytic_id" groups="analytic.group_analytic_accounting"/>
                     </field>
+                    <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/group/field[@name='audit']" position="before">
+                        <field name="move_id" readonly="1"/>
+                    </xpath>
                     <!-- Tax -->
                     <page string="Payment Information" position="after">
                         <page string="Tax">
@@ -122,6 +127,7 @@
                 <data>
                     <button name="action_cancel_draft" position="after">
                         <field name="auto_recognize_vat" invisible="1"/>
+                        <field name="wht_cert_ids" invisible="1"/>
                         <button
                             name="proforma_voucher"
                             string="Clear Undue VAT"
@@ -130,15 +136,18 @@
                             context="{'recognize_vat': True}"
                             attrs="{'invisible': ['|', '|', '|', ('state', '!=', 'posted'), ('auto_recognize_vat', '=', True),
                    						('recognize_vat_move_id', '!=', False), ('tax_line_normal', '=', [])]}"/>
-                        <button name="%(action_print_wht_cert)d" type="action" string="Print WHT Cert." class="oe_highlight" attrs="{'invisible': ['|', ('state', '!=', 'posted'), ('tax_line_wht', '=', [])]}"/>
+                        <button name="%(action_print_wht_cert)d" type="action" string="Create WHT Cert." class="oe_highlight" attrs="{'invisible': ['|', '|', ('state', '!=', 'posted'), ('tax_line_wht', '=', []), ('wht_cert_ids', '!=', [])]}"/>
+                        <button name="open_wht_cert" type="object" string="View WHT Cert." class="oe_highlight" attrs="{'invisible': [('wht_cert_ids', '=', [])]}"/>
                     </button>
                     <xpath expr="/form/sheet/notebook/page/field[@name='line_cr_ids']/tree/field[@name='amount']" position="after">
-                        <field sum="Total WHT" name="amount_wht" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
+                        <field name="create_date" invisible="1"/>
+                        <field sum="Total WHT" name="amount_wht" attrs="{'invisible': [('create_date', '=', False)]}"/>
                         <field name="retention_on_payment" invisible="1"/>
                         <field sum="Total Retention" name="amount_retention" attrs="{'readonly': [('retention_on_payment','!=',True)]}" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
                     </xpath>
                     <xpath expr="/form/sheet/notebook/page/field[@name='line_dr_ids']/tree/field[@name='amount']" position="after">
-                        <field sum="Total WHT" name="amount_wht" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
+                        <field name="create_date" invisible="1"/>
+                        <field sum="Total WHT" name="amount_wht" attrs="{'invisible': [('create_date', '=', False)]}"/>
                         <field name="retention_on_payment" invisible="1"/>
                         <field sum="Total Retention" name="amount_retention" attrs="{'readonly': [('retention_on_payment','!=',True)]}" on_change="onchange_amount(parent.partner_id, move_line_id, amount_original, amount, amount_unreconciled, context)"/>
                     </xpath>
@@ -153,6 +162,12 @@
                     </xpath>
                     <xpath expr="/form/sheet/notebook/page/field[@name='line_dr_ids']/tree/field[@name='reconcile']" position="attributes">
                         <attribute name="on_change">onchange_reconcile(parent.partner_id, move_line_id, amount_original, reconcile, amount, amount_unreconciled, context)</attribute>
+                    </xpath>
+                    <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/group/field[@name='number']" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </xpath>
+                    <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/group/field[@name='number']" position="before">
+                        <field name="move_id" readonly="1"/>
                     </xpath>
                     <!-- Moving Payment Options to header -->
                     <xpath expr="/form/sheet/notebook/page/group//separator[@string='Payment Options']" position="replace"/>
@@ -189,9 +204,9 @@
                             <group>
                                 <group>
                                     <field name="income_tax_form"/>
-                                    <field name="wht_period_id" invisible="1"/>
+                                    <!-- <field name="wht_period_id" invisible="1"/>
                                     <field name="wht_sequence" invisible="1"/>
-                                    <field name="wht_sequence_display"/>
+                                    <field name="wht_sequence_display"/> -->
                                 </group>
                                 <group>
                                     <field name="tax_payer"/>

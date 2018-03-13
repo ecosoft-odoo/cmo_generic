@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields, api, _
+from openerp import tools
 from openerp.exceptions import ValidationError
 
 
@@ -154,3 +155,79 @@ class AccountPeriod(models.Model):
         'period_id',
         string='WHT Sequence',
     )
+    calendar_name = fields.Char(
+        string='Calendar Name',
+        compute='_compute_calendar_name',
+        readonly=True,
+        store=True,
+    )
+
+    @api.multi
+    @api.depends('date_start')
+    def _compute_calendar_name(self):
+        mo_dict = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr',
+                   '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug',
+                   '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec', }
+        for rec in self:
+            rec.calendar_name = 'N/A'
+            if rec.date_start:
+                year = rec.date_start and rec.date_start[:4] or '????'
+                month = rec.date_start and rec.date_start[5:7] or '??'
+                rec.calendar_name = '%s-%s' % (mo_dict[month], year)
+
+    @api.model
+    def get_num_period_by_period(self, period_id=False):
+        """ Convert from month 10 to period 1... month 9  to period 12 """
+        period = False
+        if period_id:
+            period = self.browse(period_id)
+        else:
+            period = self.find()
+        x = int(period.fiscalyear_id.date_start[5:7]) - 1
+        num_period = (12 + int(period.date_start[5:7]) - x) % 12
+        return num_period
+
+
+class AccountPeriodCalendar(models.Model):
+    _name = 'account.period.calendar'
+    _inherit = 'account.period'
+    _auto = False
+    _rec_name = 'calendar_name'
+
+    def init(self, cr):
+        tools.drop_view_if_exists(cr, self._table)
+        cr.execute(
+            """CREATE or REPLACE VIEW %s as (%s)""" %
+            (self._table, "select * from account_period where special=false",))
+
+
+class AccountFiscalyear(models.Model):
+    _inherit = 'account.fiscalyear'
+
+    calendar_name = fields.Char(
+        string='Calendar Name',
+        compute='_compute_calendar_name',
+        readonly=True,
+        store=True,
+    )
+
+    @api.multi
+    @api.depends('date_start')
+    def _compute_calendar_name(self):
+        for rec in self:
+            rec.calendar_name = 'N/A'
+            if rec.date_start:
+                rec.calendar_name = rec.date_start[:4]
+
+
+class AccountFiscalyearCalendar(models.Model):
+    _name = 'account.fiscalyear.calendar'
+    _inherit = 'account.fiscalyear'
+    _auto = False
+    _rec_name = 'calendar_name'
+
+    def init(self, cr):
+        tools.drop_view_if_exists(cr, self._table)
+        cr.execute(
+            """CREATE or REPLACE VIEW %s as (%s)""" %
+            (self._table, "select * from account_fiscalyear",))

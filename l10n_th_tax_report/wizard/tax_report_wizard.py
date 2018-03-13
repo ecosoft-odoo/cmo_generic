@@ -5,11 +5,6 @@ from openerp import fields, models, api
 class AccountTaxReportWizard(models.TransientModel):
     _name = 'account.tax.report.wizard'
 
-    period_id = fields.Many2one(
-        'account.period',
-        string='Period',
-        related='calendar_period_id.period_id',
-    )
     period_type = fields.Selection(
         [('specific', 'Specific Period'),
          ('range', 'Period Range')],
@@ -54,14 +49,14 @@ class AccountTaxReportWizard(models.TransientModel):
     @api.onchange('calendar_from_period_id', 'calendar_to_period_id')
     def _onchange_calendar_from_to_period_id(self):
         if self.calendar_from_period_id and self.calendar_to_period_id:
-            if self.calendar_from_period_id.period_id.date_start > \
-                    self.calendar_to_period_id.period_id.date_start:
+            if self.calendar_from_period_id.date_start > \
+                    self.calendar_to_period_id.date_start:
                 self.calendar_from_period_id = False
                 self.calendar_to_period_id = False
                 return {'warning': {
                     'title': 'Incorrect Periods',
                     'message': 'From period is later than to period!',
-                    }}
+                }}
 
     @api.multi
     def run_report(self):
@@ -71,10 +66,10 @@ class AccountTaxReportWizard(models.TransientModel):
 
         period_ids = []
         if self.period_type == 'specific':
-            period_ids = [self.calendar_period_id.period_id.id]
+            period_ids = [self.calendar_period_id.id]
         elif self.period_type == 'range':
-            domain = [('id', '>=', self.calendar_from_period_id.period_id.id),
-                      ('id', '<=', self.calendar_to_period_id.period_id.id)]
+            domain = [('id', '>=', self.calendar_from_period_id.id),
+                      ('id', '<=', self.calendar_to_period_id.id)]
             period_ids = self.env['account.period'].search(domain).ids
 
         # Params

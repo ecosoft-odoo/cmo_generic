@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vat_report" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.3636363636363658"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="132"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 			<topPen lineWidth="1.0"/>
@@ -48,18 +48,11 @@
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[$P{period_ids}.toList()]]></defaultValueExpression>
 	</parameter>
-	<parameter name="is_cancel_inv_obj" class="java.lang.Object" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{doc_type} == "purchase" ? Arrays.asList(false) : Arrays.asList(true,false)]]></defaultValueExpression>
-	</parameter>
-	<parameter name="is_cancel_inv_list" class="java.util.List" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{is_cancel_inv_obj}]]></defaultValueExpression>
-	</parameter>
 	<queryString>
 		<![CDATA[select * from account_tax_report
 where doc_type = $P{doc_type}
 and tax_id = $P{tax_id}
-and $X{IN, report_period_id, period_pids}
-and $X{IN, cancel, is_cancel_inv_list}]]>
+and $X{IN, report_period_id, period_pids}]]>
 	</queryString>
 	<field name="doc_type" class="java.lang.String"/>
 	<field name="id" class="java.lang.Integer"/>
@@ -78,7 +71,6 @@ and $X{IN, cancel, is_cancel_inv_list}]]>
 	<field name="taxbranch" class="java.lang.String"/>
 	<field name="base" class="java.lang.Double"/>
 	<field name="amount" class="java.lang.Double"/>
-	<field name="cancel" class="java.lang.Boolean"/>
 	<variable name="base" class="java.lang.Number" resetType="Group" resetGroup="period" calculation="Sum">
 		<variableExpression><![CDATA[$F{base}]]></variableExpression>
 	</variable>
@@ -327,8 +319,9 @@ $V{COLUMN_COUNT}]]></textFieldExpression>
 				<textElement verticalAlignment="Top">
 					<font fontName="Monospaced" size="9" isBold="false" isStrikeThrough="false" pdfFontName="Garuda.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{cancel} == false ? ($F{partner_title} == null ? $F{partner_name} : $F{partner_title} + " " + $F{partner_name}) :
-$P{doc_type}.toString() == "sale" ? "Cancelled" : ""]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{partner_title} == null ?
+$F{partner_name} :
+$F{partner_title} + " " + $F{partner_name}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement style="table2" stretchType="RelativeToTallestObject" x="301" y="0" width="105" height="15"/>

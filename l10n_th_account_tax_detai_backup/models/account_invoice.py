@@ -6,12 +6,6 @@ from .account_tax_detail import InvoiceVoucherTaxDetail
 class AccountInvoice(InvoiceVoucherTaxDetail, models.Model):
     _inherit = 'account.invoice'
 
-    # If specified, will be used for sales tax detail.
-    # By default it not used, can be extended from other addons.
-    number_preprint = fields.Char(
-        string='Preprint Number',
-    )
-
     @api.model
     def check_missing_tax(self):
         res = False  # Force not check missing tax
@@ -21,20 +15,9 @@ class AccountInvoice(InvoiceVoucherTaxDetail, models.Model):
     def action_number(self):
         result = super(AccountInvoice, self).action_number()
         self._compute_sales_tax_detail()
-        self._check_tax_detail_info()  # Double checking
+        self._check_tax_detail_info()
         self._assign_detail_tax_sequence()
         return result
-
-    @api.multi
-    def check_tax_lines(self, compute_taxes):
-        """ This check tax detail as soon as it get created to speed up
-        otherwise, it wait unitl move line created, it slow """
-        self.ensure_one()
-        res = super(AccountInvoice, self).check_tax_lines(compute_taxes)
-        # Only check for case supplier invoice
-        if self.type in ('in_refund', 'in_invoice'):
-            self._check_tax_detail_info()
-        return res
 
     @api.multi
     def action_cancel_draft(self):

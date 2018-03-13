@@ -1,29 +1,25 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': "Undue Tax, Withholding Tax, Retention",
-    'summary': "Added support for undue Tax, Withholding Tax and Retention",
+    'name': "Invoice Tax Detail",
+    'summary': "Allow editing tax table in detail",
     'author': "Ecosoft",
     'website': "http://ecosoft.co.th",
     'category': 'Account',
     'version': '0.1.0',
     'depends': [
-        'l10n_th_fields',
-        'l10n_th_address',
         'account',
-        'account_voucher',
-        'account_voucher_action_move_line_create_hooks',
+        'l10n_th_account',
+        'account_invoice_check_tax_lines_hook',
     ],
     'data': [
+        'data/config_data.xml',
         'security/ir.model.access.csv',
-        'data/report_data.xml',
-        # 'data/journal_data.xml',
+        'wizard/account_tax_detail_view.xml',
         'views/account_view.xml',
-        'views/res_partner_view.xml',
         'views/account_invoice_view.xml',
-        'views/voucher_payment_receipt_view.xml',
+        'views/account_voucher_view.xml',
         'views/account_config.xml',
-        'views/account_wht_cert.xml',
     ],
     'demo': [
     ],

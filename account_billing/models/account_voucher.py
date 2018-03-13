@@ -40,7 +40,7 @@ class AccountVoucher(models.Model):
                 billing = rec.billing_id
                 billing.payment_id = rec.id
                 billing.state = 'billed'
-            return super(AccountVoucher, rec).proforma_voucher()
+        return super(AccountVoucher, self).proforma_voucher()
 
     @api.multi
     def cancel_voucher(self):
@@ -49,7 +49,7 @@ class AccountVoucher(models.Model):
             if rec.billing_id:
                 billing = rec.billing_id
                 billing.payment_id = False
-            return super(AccountVoucher, rec).cancel_voucher()
+        return super(AccountVoucher, self).cancel_voucher()
 
     @api.onchange('billing_id')
     def onchange_billing_id(self):
@@ -109,8 +109,8 @@ class AccountVoucher(models.Model):
             res['value']['line_dr_ids'] = line_dr_ids
         return res
 
-class account_voucher_line(models.Model):
 
+class account_voucher_line(models.Model):
     _inherit = "account.voucher.line"
 
     reference = fields.Char(

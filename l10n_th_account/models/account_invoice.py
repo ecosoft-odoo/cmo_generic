@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import psycopg2
 from openerp import models, fields, api, _
 import openerp.addons.decimal_precision as dp
+from openerp.exceptions import ValidationError
 
 
 class AccountInvoice(models.Model):
@@ -10,7 +12,8 @@ class AccountInvoice(models.Model):
     amount_retention = fields.Float(
         string='Retention',
         digits=dp.get_precision('Account'),
-        readonly=False,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     retention_on_payment = fields.Boolean(
         string='Retention on Payment',
@@ -66,6 +69,18 @@ class AccountInvoice(models.Model):
             res['context']['default_amount'] = 0.0
         return res
 
+    @api.multi
+    def action_move_create(self):
+        """ Check for multiple client access at the same time """
+        try:
+            return super(AccountInvoice, self).action_move_create()
+        except psycopg2.OperationalError:
+            raise ValidationError(
+                _('Multiple client accessing same resource!\n'
+                  'Please try again!'))
+        except:
+            raise
+
 
 class AccountInvoiceLine(models.Model):
 
@@ -86,6 +101,9 @@ class AccountInvoiceLine(models.Model):
                 account_id = company.account_retention_customer.id
             else:
                 account_id = company.account_retention_supplier.id
+            if not account_id:
+                raise ValidationError(
+                    _('No account for retention has been configured!'))
             res.append({
                 'type': 'src',
                 'name': _('Retention Amount'),
