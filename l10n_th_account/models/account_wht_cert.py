@@ -162,9 +162,10 @@ class AccountWhtCert(models.Model):
             rec.x_date_value = rec.date
             rec.x_company_name = company.display_name
             rec.x_supplier_name = supplier.display_name
-            rec.x_company_taxid = len(company.vat) == 13 and company.vat or ''
+            rec.x_company_taxid = \
+                company.vat and len(company.vat) == 13 and company.vat or ''
             rec.x_supplier_taxid = \
-                len(supplier.vat) == 13 and supplier.vat or ''
+                supplier.vat and len(supplier.vat) == 13 and supplier.vat or ''
             rec.x_supplier_address = rec.supplier_address
             rec.x_company_address = rec.company_address
             rec.x_pnd1 = rec.income_tax_form == 'pnd1' and 'X' or ''
