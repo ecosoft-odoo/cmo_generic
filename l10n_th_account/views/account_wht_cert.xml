@@ -73,7 +73,7 @@
             <field name="model">account.wht.cert</field>
             <field name="arch" type="xml">
                 <tree string="Withholding Tax Cert.">
-                    <field name="voucher_id"/>
+                    <field name="number"/>
                     <field name="sequence_display"/>
                     <field name="supplier_partner_id"/>
                     <field name="income_tax_form"/>
