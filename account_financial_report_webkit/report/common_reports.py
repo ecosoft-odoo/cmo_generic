@@ -455,7 +455,7 @@ class CommonReportHeaderWebkit(common_report_header):
     ################################################
     def _get_move_ids_from_periods(self, account_id, period_start, period_stop,
                                    target_move,
-                                   extra_params={}):
+                                   extra_cond={}):
         move_line_obj = self.pool.get('account.move.line')
         period_obj = self.pool.get('account.period')
         periods = period_obj.build_ctx_periods(
@@ -467,16 +467,15 @@ class CommonReportHeaderWebkit(common_report_header):
         if target_move == 'posted':
             search += [('move_id.state', '=', 'posted')]
         # HOOK
-        if extra_params.get('extra_params', False):
-            for key, value in extra_params['extra_params'].iteritems():
-                if value:
-                    search += [(key, 'in', value)]
+        for key, value in extra_cond.iteritems():
+            if value:
+                search += [(key, 'in', value)]
         # --
         return move_line_obj.search(self.cursor, self.uid, search)
 
     def _get_move_ids_from_dates(self, account_id, date_start, date_stop,
                                  target_move, mode='include_opening',
-                                 extra_params={}):
+                                 extra_cond={}):
         # TODO imporve perfomance by setting opening period as a property
         move_line_obj = self.pool.get('account.move.line')
         search_period = [('date', '>=', date_start),
@@ -494,10 +493,9 @@ class CommonReportHeaderWebkit(common_report_header):
             search_period += [('move_id.state', '=', 'posted')]
 
         # HOOK
-        if extra_params.get('extra_params', False):
-            for key, value in extra_params['extra_params'].iteritems():
-                if value:
-                    search_period += [(key, 'in', value)]
+        for key, value in extra_cond.iteritems():
+            if value:
+                search_period += [(key, 'in', value)]
         # --
         return move_line_obj.search(self.cursor, self.uid, search_period)
 
@@ -510,15 +508,21 @@ class CommonReportHeaderWebkit(common_report_header):
                 _('Invalid query mode'),
                 _('Must be in include_opening, exclude_opening'))
 
+        # kittiu
+        extra_cond = {}
+        if extra_params.get('extra_conditions', False):
+            extra_cond = extra_params.get('extra_conditions')
+        # --
+
         if main_filter in ('filter_period', 'filter_no'):
             return self._get_move_ids_from_periods(account_id, start, stop,
                                                    target_move,
-                                                   extra_params=extra_params)
+                                                   extra_cond=extra_cond)
 
         elif main_filter == 'filter_date':
             return self._get_move_ids_from_dates(account_id, start, stop,
                                                  target_move,
-                                                 extra_params=extra_params)
+                                                 extra_cond=extra_cond)
         else:
             raise osv.except_osv(
                 _('No valid filter'), _('Please set a valid time filter'))
