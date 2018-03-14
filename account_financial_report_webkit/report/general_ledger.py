@@ -80,6 +80,11 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         new_ids = data['form']['account_ids'] or data[
             'form']['chart_account_id']
 
+        # HOOK
+        # I.e., extra_params = {'field_ids': [1,2,3,3], 'field2_ids': [5,6]}
+        extra_params = data.get('extra_params', {})
+        # --
+
         # Account initial balance memoizer
         init_balance_memoizer = {}
 
@@ -120,7 +125,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
         ledger_lines_memoizer = self._compute_account_ledger_lines(
             accounts, init_balance_memoizer, main_filter, target_move, start,
-            stop)
+            stop, extra_params=extra_params)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
                                                           accounts,
@@ -212,23 +217,29 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
 
     def _compute_account_ledger_lines(self, accounts_ids,
                                       init_balance_memoizer, main_filter,
-                                      target_move, start, stop):
+                                      target_move, start, stop,
+                                      extra_params={}):
         res = {}
         for acc_id in accounts_ids:
             move_line_ids = self.get_move_lines_ids(
-                acc_id, main_filter, start, stop, target_move)
+                acc_id, main_filter, start, stop, target_move,
+                extra_params=extra_params)
             if not move_line_ids:
                 res[acc_id] = []
                 continue
 
-            lines = self._get_ledger_lines(move_line_ids, acc_id)
+            lines = self._get_ledger_lines(move_line_ids, acc_id,
+                                           extra_params=extra_params)
             res[acc_id] = lines
         return res
 
-    def _get_ledger_lines(self, move_line_ids, account_id):
+    def _get_ledger_lines(self, move_line_ids, account_id, extra_params={}):
         if not move_line_ids:
             return []
-        res = self._get_move_line_datas(move_line_ids)
+        res = self._get_move_line_datas(
+            move_line_ids,
+            extra_select=extra_params['extra_sql_select'],
+            extra_join=extra_params['extra_sql_join'])
         # computing counter part is really heavy in term of ressouces
         # consuption looking for a king of SQL to help me improve it
         move_ids = [x.get('move_id') for x in res]

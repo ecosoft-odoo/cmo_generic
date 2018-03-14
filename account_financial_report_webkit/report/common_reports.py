@@ -454,7 +454,8 @@ class CommonReportHeaderWebkit(common_report_header):
     # Account move retrieval helper                #
     ################################################
     def _get_move_ids_from_periods(self, account_id, period_start, period_stop,
-                                   target_move):
+                                   target_move,
+                                   extra_params={}):
         move_line_obj = self.pool.get('account.move.line')
         period_obj = self.pool.get('account.period')
         periods = period_obj.build_ctx_periods(
@@ -465,10 +466,17 @@ class CommonReportHeaderWebkit(common_report_header):
             ('period_id', 'in', periods), ('account_id', '=', account_id)]
         if target_move == 'posted':
             search += [('move_id.state', '=', 'posted')]
+        # HOOK
+        if extra_params.get('extra_params', False):
+            for key, value in extra_params['extra_params'].iteritems():
+                if value:
+                    search += [(key, 'in', value)]
+        # --
         return move_line_obj.search(self.cursor, self.uid, search)
 
     def _get_move_ids_from_dates(self, account_id, date_start, date_stop,
-                                 target_move, mode='include_opening'):
+                                 target_move, mode='include_opening',
+                                 extra_params={}):
         # TODO imporve perfomance by setting opening period as a property
         move_line_obj = self.pool.get('account.move.line')
         search_period = [('date', '>=', date_start),
@@ -485,10 +493,17 @@ class CommonReportHeaderWebkit(common_report_header):
         if target_move == 'posted':
             search_period += [('move_id.state', '=', 'posted')]
 
+        # HOOK
+        if extra_params.get('extra_params', False):
+            for key, value in extra_params['extra_params'].iteritems():
+                if value:
+                    search_period += [(key, 'in', value)]
+        # --
         return move_line_obj.search(self.cursor, self.uid, search_period)
 
     def get_move_lines_ids(self, account_id, main_filter, start, stop,
-                           target_move, mode='include_opening'):
+                           target_move, mode='include_opening',
+                           extra_params={}):
         """Get account move lines base on form data"""
         if mode not in ('include_opening', 'exclude_opening'):
             raise osv.except_osv(
@@ -497,18 +512,21 @@ class CommonReportHeaderWebkit(common_report_header):
 
         if main_filter in ('filter_period', 'filter_no'):
             return self._get_move_ids_from_periods(account_id, start, stop,
-                                                   target_move)
+                                                   target_move,
+                                                   extra_params=extra_params)
 
         elif main_filter == 'filter_date':
             return self._get_move_ids_from_dates(account_id, start, stop,
-                                                 target_move)
+                                                 target_move,
+                                                 extra_params=extra_params)
         else:
             raise osv.except_osv(
                 _('No valid filter'), _('Please set a valid time filter'))
 
     def _get_move_line_datas(self, move_line_ids,
                              order='per.special2 DESC, l.date ASC, \
-                             per.date_start ASC, m.name ASC'):
+                             per.date_start ASC, m.name ASC',
+                             extra_select='', extra_join=''):
         # Possible bang if move_line_ids is too long
         # We can not slice here as we have to do the sort.
         # If slice has to be done it means that we have to reorder in python
@@ -523,6 +541,7 @@ class CommonReportHeaderWebkit(common_report_header):
             move_line_ids = [move_line_ids]
         monster = """
 SELECT l.id AS id,
+            """ + extra_select + """
             l.date AS ldate,
             j.code AS jcode ,
             j.type AS jtype,
@@ -558,6 +577,7 @@ FROM account_move_line l
     LEFT JOIN account_invoice i on (m.id =i.move_id)
     LEFT JOIN account_period per on (per.id=l.period_id)
     JOIN account_journal j on (l.journal_id=j.id)
+    """ + extra_join + """
     WHERE l.id in %s"""
         monster += (" ORDER BY %s" % (order,))
         try:
