@@ -335,8 +335,9 @@ class AccountWhtCert(models.Model):
             return round(sum([x.amount for x in wht_lines]), 2)
         if column == 'desc':
             descs = [x.wht_cert_income_desc for x in wht_lines]
-            descs = filter(lambda x: x is not False and x != '', descs)
-            return ', '.join(descs)
+            descs = filter(lambda x: x and x != '', descs)
+            desc = ', '.join(descs)
+            return desc
 
     @api.model
     def _prepare_address(self, partner):
