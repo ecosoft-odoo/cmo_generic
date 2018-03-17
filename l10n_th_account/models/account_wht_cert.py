@@ -147,10 +147,10 @@ class AccountWhtCert(models.Model):
     x_type_3_tax = fields.Float(compute='_compute_cert_fields')
     x_type_5_base = fields.Float(compute='_compute_cert_fields')
     x_type_5_tax = fields.Float(compute='_compute_cert_fields')
-    x_type_5_desc = fields.Float(compute='_compute_cert_fields')
+    x_type_5_desc = fields.Char(compute='_compute_cert_fields')
     x_type_6_base = fields.Float(compute='_compute_cert_fields')
     x_type_6_tax = fields.Float(compute='_compute_cert_fields')
-    x_type_6_desc = fields.Float(compute='_compute_cert_fields')
+    x_type_6_desc = fields.Char(compute='_compute_cert_fields')
     x_signature = fields.Char(compute='_compute_cert_fields')
 
     @api.multi
