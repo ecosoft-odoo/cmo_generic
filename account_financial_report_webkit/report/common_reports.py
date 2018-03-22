@@ -342,8 +342,9 @@ class CommonReportHeaderWebkit(common_report_header):
         if include_opening and opening_period_id:
             periods.append(opening_period_id)
         periods = list(set(periods))
-        if start_period.id in periods:
-            periods.remove(start_period.id)
+        # kittiu: avoid removing opening balance period
+        # if start_period.id in periods:
+        #     periods.remove(start_period.id)
         return periods
 
     def get_first_fiscalyear_period(self, fiscalyear):
