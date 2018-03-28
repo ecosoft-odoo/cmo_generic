@@ -311,7 +311,9 @@ class HRExpenseClearing(models.Model):
                         on ai.id = ail.invoice_id
                     left outer join hr_expense_expense exp
                         on exp.id = ai.expense_id
-                where ((ai.type in ('in_invoice') and ail.price_subtotal < 0.0)
+                where ((ai.type in ('in_invoice') and ail.price_subtotal < 0.0
+                    and ail.account_id = (select employee_advance_account_id
+                    from res_company where id = ail.company_id))
                     or ai.type in ('out_invoice'))
                     and ai.state in ('open', 'paid')
             ) a
