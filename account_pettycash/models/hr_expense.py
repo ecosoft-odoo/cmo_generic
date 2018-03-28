@@ -8,6 +8,7 @@ class HRExpense(models.Model):
 
     pay_to = fields.Selection(
         selection_add=[('pettycash', 'Petty Cash')],
+        change_default=1,
     )
     pettycash_id = fields.Many2one(
         'account.pettycash',
