@@ -56,7 +56,8 @@
                                 string="Bill" class="oe_highlight" />
                         <button name="action_cancel" type="object"
                                 states="billed"
-                                string="Cancel" />
+                                string="Cancel"
+                                confirm="Are you sure to cancel this document?"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,billed"/>
                     </header>
                     <sheet string="Supplier Billing">
