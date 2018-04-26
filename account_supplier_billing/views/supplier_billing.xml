@@ -33,7 +33,7 @@
             <field name="arch" type="xml">
                 <tree string="Supplier Invoice">
                     <field name="supplier_billing_id" invisible="1"/>
-                    <field name="partner_id" string="Supplier"/>
+                    <field name="partner_id"/>
                     <field name="date_invoice"/>
                     <field name="supplier_invoice_number"/>
                     <field name="origin"/>
@@ -82,7 +82,7 @@
                         <notebook>
                             <page string="Billing">
                                 <field name="invoice_ids" nolabel="1" widget="many2many"
-                                    context="{'tree_view_ref':'account_supplier_billing.inherit_view_invoice_tree'}"
+                                    context="{'type': 'in_invoice', 'tree_view_ref':'account_supplier_billing.inherit_view_invoice_tree'}"
                                     domain="[
                                         ('partner_id', '=', partner_id),
                                         ('state', '=', 'draft'),
