@@ -11,7 +11,6 @@
 				<button name="draft" position="replace"/>
 				<button name="done" position="replace">
 					<button name="%(action_expense_create_supplier_invoice)d" string="Create Supplier Invoice" type="action" groups="account.group_account_invoice" states="accepted" class="oe_highlight"/>
-					<button name="%(hr_expense_cancel_reason.action_hr_expense_cancel)d" string="Refuse" type="action" groups="account.group_account_invoice" states="accepted"/>
 				</button>
 				<button name="action_view_move" position="attributes">
 					<attribute name="string">View Invoice</attribute>
