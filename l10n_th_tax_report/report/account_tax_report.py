@@ -44,12 +44,6 @@ class AccountTaxReport(models.Model):
     partner_title = fields.Char(
         string='Partner Title',
     )
-    partner_vat = fields.Char(
-        string='Partner VAT',
-    )
-    partner_taxbranch = fields.Char(
-        string='Partner Taxbranch',
-    )
     tax_id = fields.Many2one(
         'account.tax',
         string='Tax',
@@ -72,6 +66,9 @@ class AccountTaxReport(models.Model):
     amount = fields.Float(
         string='Tax',
     )
+    cancel = fields.Boolean(
+        string='Cancel',
+    )
 
     def _select(self):
         res = """
@@ -80,7 +77,7 @@ class AccountTaxReport(models.Model):
             to_char(ap.date_start, 'YYYY') as "year",
             to_char(ap.date_start, 'MM') as "month",
             report_period_id, tax_sequence, tax_id, tax_sequence_display,
-            invoice_date, invoice_number, atd.partner_id,
+            invoice_date, invoice_number, atd.partner_id, atd.cancel,
             case when cancel is true then ''
                 else rp.name end as partner_name,
             case when cancel is true then ''
