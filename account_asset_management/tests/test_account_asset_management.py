@@ -327,3 +327,40 @@ class TestAssetManagement(common.TransactionCase):
                                200.00, places=2)
         self.assertAlmostEqual(asset.depreciation_line_ids[-1].amount,
                                100.00, places=2)
+
+    def test_8_prorata_days_calc(self):
+        """Prorata temporis depreciation with days calc option"""
+        asset_id = self.asset_model.create(self.cr, self.uid, {
+            'name': 'test asset',
+            'profile_id': self.ref('account_asset_management.'
+                                   'account_asset_profile_car_5Y'),
+            'purchase_value': 3333,
+            'salvage_value': 0,
+            'date_start': time.strftime('%Y-07-07'),
+            'method_time': 'year',
+            'method_number': 5,
+            'method_period': 'month',
+            'prorata': True,
+            'days_calc': True,
+        })
+        asset = self.asset_model.browse(self.cr, self.uid, asset_id)
+        self.asset_model.compute_depreciation_board(
+            self.cr, self.uid, [asset.id])
+        asset.refresh()
+        day_rate = 0.0
+        if calendar.isleap(date.today().year):
+            day_rate = 1.82  # 3333 / 1827 depreciation days
+        else:
+            day_rate = 1.83  # 3333 / 1826 depreciation days
+
+        for i in range(1, 10):
+            self.assertAlmostEqual(
+                asset.depreciation_line_ids[i].amount,
+                asset.depreciation_line_ids[i].line_days * day_rate, places=2)
+
+        if calendar.isleap(date.today().year):  # Last depreciation remaining
+            self.assertAlmostEqual(
+                asset.depreciation_line_ids[-1].amount, 18.78, places=2)
+        else:
+            self.assertAlmostEqual(
+                asset.depreciation_line_ids[-1].amount, 2.4, places=2)

@@ -333,7 +333,7 @@ class AccountAsset(models.Model):
         asset = super(AccountAsset, self).create(vals)
         if self._context.get('create_asset_from_move_line'):
             # Trigger compute of depreciation_base
-            asset.salvage_value = 0.0
+            asset.salvage_value = vals.get('salvage_value', False) or 0.0
         if asset.type == 'normal':
             # create first asset line
             asset_line_obj = self.env['account.asset.line']
@@ -957,7 +957,7 @@ class AccountAsset(models.Model):
                 init_flag = False
             except:
                 fy_id = False
-            if fy_id:
+            if fy_id and self.method_period == 'year':
                 fy = fy_obj.browse(fy_id)
                 if fy.state == 'done':
                     init_flag = True
@@ -1038,11 +1038,41 @@ class AccountAsset(models.Model):
         return (self.code or str(self.id)) + '/' + str(seq)
 
     @api.multi
-    def _compute_entries(self, period, check_triggers=False):
+    def _test_prev_depre_unposted(self, period):
+        """ Refactor code by kittiu, so this method can be reused
+            also works with multiple assets (will return list of assets) """
+        self._cr.execute("""
+            select asset_id
+            from account_asset_line
+            where asset_id in %s
+                and type = 'depreciate'
+                and init_entry = false
+                and line_date < %s
+                and move_check = false
+        """, (tuple(self.ids), period.date_start))
+        # asset_line_obj = self.env['account.asset.line']
+        # depreciations = asset_line_obj.search([
+        #     ('asset_id', '=', asset.id),
+        #     ('type', '=', 'depreciate'),
+        #     ('init_entry', '=', False),
+        #     ('line_date', '<', period.date_start),
+        #     ('move_check', '=', False)])
+        unposted_asset_ids = [x[0] for x in self._cr.fetchall()]
+        return unposted_asset_ids
+        # if depreciations:
+        #     message = _("Asset contains unposted lines "
+        #                 "prior to the selected period. "
+        #                 "Please post those entries first!")
+        #     return (False, message)  # Error
+        # return (True, False)
+
+    @api.multi
+    def _compute_entries(self, period, check_triggers=False,
+                         merge_move=False, merge_date=False):
         # To DO : add ir_cron job calling this method to
         # generate periodical accounting entries
         result = []
-        error_log = ''
+        error_log = []
         asset_line_obj = self.env['account.asset.line']
         if check_triggers:
             recompute_obj = self.env['account.asset.recompute.trigger']
@@ -1052,20 +1082,14 @@ class AccountAsset(models.Model):
             for asset in self:
                 if asset.company_id.id in trigger_companies.ids:
                     asset.compute_depreciation_board()
-        for asset in self:
-            depreciations = asset_line_obj.search([
-                ('asset_id', '=', asset.id),
-                ('type', '=', 'depreciate'),
-                ('init_entry', '=', False),
-                ('line_date', '<', period.date_start),
-                ('move_check', '=', False)])
-            if depreciations:
-                asset_ref = asset.code and '%s (ref: %s)' \
-                    % (asset.name, asset.code) or asset.name
-                raise UserError(
-                    _("Asset '%s' contains unposted lines "
-                      "prior to the selected period."
-                      "\nPlease post these entries first !") % asset_ref)
+
+        # Return asset_ids with prev depre problem
+        unposted_asset_ids = self._test_prev_depre_unposted(period)
+        if unposted_asset_ids:
+            messsage = _("Asset(s) contains unposted lines "
+                         "prior to the selected period. "
+                         "Please post those entries first!")
+            raise UserError(messsage)
 
         depreciations = asset_line_obj.search([
             ('asset_id', 'in', self.ids),
@@ -1074,22 +1098,44 @@ class AccountAsset(models.Model):
             ('line_date', '<=', period.date_stop),
             ('line_date', '>=', period.date_start),
             ('move_check', '=', False)])
-        for depreciation in depreciations:
+
+        # Special case merge into 1 move
+        if merge_move:
+            _logger.info("Generate merged move for %s depre." %
+                         len(depreciations))
             try:
+                # for merge case, use specified date
                 with self._cr.savepoint():
-                    result += depreciation.create_move()
-            except:
+                    result += depreciations.create_single_move(merge_date)
+            except Exception:
                 e = exc_info()[0]
                 tb = ''.join(format_exception(*exc_info()))
-                asset_ref = depreciation.asset_id.code and '%s (ref: %s)' \
-                    % (asset.name, asset.code) or asset.name
-                error_log += _(
-                    "\nError while processing asset '%s': %s"
-                ) % (asset_ref, str(e))
+                error_log.append(
+                    _("Error while processing deprs. '%s': %s") %
+                     (depreciations, str(e)))
                 error_msg = _(
-                    "Error while processing asset '%s': \n\n%s"
-                ) % (asset_ref, tb)
+                    "Error while processing depre. '%s': \n\n%s"
+                ) % (depreciations, tb)
                 _logger.error("%s, %s", self._name, error_msg)
+        else:  # Standard
+            for depreciation in depreciations:
+                asset = depreciation.asset_id
+                _logger.info("Generate depres. for asset: %s" % asset.code)
+                try:
+                    with self._cr.savepoint():
+                        result += depreciation.create_move()
+                except Exception:
+                    e = exc_info()[0]
+                    tb = ''.join(format_exception(*exc_info()))
+                    asset_ref = depreciation.asset_id.code and '%s (ref: %s)' \
+                        % (asset.name, asset.code) or asset.name
+                    error_log.append(
+                        _("Error while processing asset '%s': %s") %
+                         (asset_ref, str(e)))
+                    error_msg = _(
+                        "Error while processing asset '%s': \n\n%s"
+                    ) % (asset_ref, tb)
+                    _logger.error("%s, %s", self._name, error_msg)
 
         if check_triggers and recomputes:
             companies = recomputes.mapped('company_id')
@@ -1101,5 +1147,5 @@ class AccountAsset(models.Model):
                     'state': 'done',
                 }
                 triggers.sudo().write(recompute_vals)
-
+        error_log = '\n'.join(error_log)
         return (result, error_log)

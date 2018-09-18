@@ -4,7 +4,7 @@
 
 import datetime
 import logging
-
+import pandas as pd
 from openerp import api, fields, models, _
 from openerp.addons.decimal_precision import decimal_precision as dp
 from openerp.exceptions import Warning as UserError
@@ -52,7 +52,7 @@ class AccountAssetLine(models.Model):
     line_date = fields.Date(string='Date', required=True)
     line_days = fields.Integer(
         string='Days',
-        readonly=False,
+        readonly=True,
     )
     move_id = fields.Many2one(
         comodel_name='account.move',
@@ -153,8 +153,8 @@ class AccountAssetLine(models.Model):
                               "after already posted entries."))
                 else:
                     check = asset_lines.filtered(
-                        lambda l: (l.init_entry or l.move_check) and
-                        l.line_date > vals['line_date'] and l != dl)
+                        lambda x: (x.init_entry or x.move_check) and
+                        x.line_date > vals['line_date'] and x != dl)
                     if check:
                         raise UserError(_(
                             "You cannot set the date on a depreciation line "
@@ -163,6 +163,7 @@ class AccountAssetLine(models.Model):
 
     @api.multi
     def unlink(self):
+        ctx = {}
         for dl in self:
             if dl.type == 'create':
                 raise UserError(_(
@@ -193,7 +194,7 @@ class AccountAssetLine(models.Model):
         return move_data
 
     def _setup_move_line_data(self, depreciation_date, period,
-                              account, type, move):
+                              account, type, move_id):
         asset = self.asset_id
         amount = self.amount
         analytic_id = False
@@ -207,7 +208,7 @@ class AccountAssetLine(models.Model):
         move_line_data = {
             'name': asset.name,
             'ref': self.name,
-            'move_id': move.id,
+            'move_id': move_id,
             'account_id': account.id,
             'credit': credit,
             'debit': debit,
@@ -239,10 +240,10 @@ class AccountAssetLine(models.Model):
             depr_acc = asset.profile_id.account_depreciation_id
             exp_acc = asset.profile_id.account_expense_depreciation_id
             aml_d_vals = line._setup_move_line_data(
-                depreciation_date, period, depr_acc, 'depreciation', move)
+                depreciation_date, period, depr_acc, 'depreciation', move.id)
             self.env['account.move.line'].with_context(ctx).create(aml_d_vals)
             aml_e_vals = line._setup_move_line_data(
-                depreciation_date, period, exp_acc, 'expense', move)
+                depreciation_date, period, exp_acc, 'expense', move.id)
             self.env['account.move.line'].with_context(ctx).create(aml_e_vals)
             if move.journal_id.entry_posted:
                 del ctx['novalidate']
@@ -257,6 +258,116 @@ class AccountAssetLine(models.Model):
             if asset.company_id.currency_id.is_zero(asset.value_residual):
                 asset.state = 'close'
         return created_move_ids
+
+    @api.multi
+    def create_single_move(self, depre_date, compound=True):
+        """ Similar to create_move() but used for case Grouping
+            - This method will always use depre_date as posting date!
+            - Will use info of first asset to process, as it will merge lines!
+            - If compound, it will aggregate by dr and cr
+        """
+        # TODO: currently, we only group all depreciation line of same group
+        # into 1 JE. But still pending merge multiple lines into 1 line for
+        # performance boost (will not able to assign asset id to move line)
+        ctx = dict(self._context,
+                   account_period_prefer_normal=True,
+                   company_id=self.env.user.company_id.id,
+                   allow_asset=True, novalidate=True)
+        period = self.env['account.period'].with_context(ctx).find(depre_date)
+        asset_ids = [x.asset_id.id for x in self]
+        assets = self.env['account.asset'].browse(list(set(asset_ids)))
+        if not assets:
+            return []
+        # Use data of the first asset, to get accounting information.
+        asset = assets[0]
+        journal = asset.profile_id.journal_id
+        depr_acc = asset.profile_id.account_depreciation_id
+        exp_acc = asset.profile_id.account_expense_depreciation_id
+        asset_profile = asset.profile_id.display_name
+        am_vals = {
+            'name': '/',
+            'date': depre_date,
+            'ref': asset_profile,
+            'period_id': period.id,
+            'journal_id': journal.id,
+        }
+        move_lines = []
+        if not compound:
+            for line in self:
+                aml_d_vals = line._setup_move_line_data(
+                    depre_date, period, depr_acc, 'depreciation', False)
+                move_lines.append((0, 0, aml_d_vals))
+                aml_e_vals = line._setup_move_line_data(
+                    depre_date, period, exp_acc, 'expense', False)
+                move_lines.append((0, 0, aml_e_vals))
+        if compound:
+            move_lines = self._do_compound_move_lines(asset_profile,
+                                                      depre_date, period,
+                                                      depr_acc, exp_acc)
+        # Create Move
+        am_vals.update({'line_id': move_lines})
+        move = self.env['account.move'].with_context(ctx).create(am_vals)
+        # Link to depre lines
+        write_ctx = dict(self._context, allow_asset_line_update=True)
+        self.with_context(write_ctx).write({'move_id': move.id})
+        if move.journal_id.entry_posted:
+            del ctx['novalidate']
+            move.with_context(ctx).post()
+        # we re-evaluate the assets to determine if we can close them
+        for asset in assets:
+            if asset.company_id.currency_id.is_zero(asset.value_residual):
+                asset.state = 'close'
+        return [move.id]
+
+    @api.multi
+    def _do_compound_move_lines(self, asset_profile, depre_date,
+                                period, depr_acc, exp_acc):
+
+        def _setup_compound_move_line_data(c_lines, c_depre_date,
+                                           c_period, c_acct, c_ttype):
+            remove_list = [  # fields not to be used in group by sum
+                'asset_id', 'ref', 'name', 'state', 'date',
+                'period_id', 'partner_id', 'tag_id', 'tag_type_id',
+            ]
+            move_lines = []
+            for line in c_lines:
+                aml_vals = line._setup_move_line_data(
+                    c_depre_date, c_period, c_acct, c_ttype, False)
+                for f in remove_list:
+                    if f in aml_vals:
+                        del aml_vals[f]
+                move_lines.append(aml_vals)
+            return move_lines
+
+        def _merge_compound_move_lines(debit_lines, credit_lines):
+            merged_move_lines = []
+            for move_lines in (debit_lines, credit_lines):
+                if not move_lines:
+                    continue
+                keys = move_lines[0].keys()
+                group_by = [x for x in keys if x not in ['debit', 'credit']]
+                # Split Dr and Cr, don't mix it.
+                dr_lines = filter(lambda x: x['debit'] > 0.0, move_lines)
+                cr_lines = filter(lambda x: x['credit'] > 0.0, move_lines)
+                for lines in (dr_lines, cr_lines):
+                    if not lines:
+                        continue
+                    df = pd.DataFrame(lines)
+                    df = df.fillna(False)
+                    grouped = df.groupby(group_by).agg(sum)
+                    lines = grouped.reset_index().to_dict('records')
+                    for vals in lines:
+                        vals.update({'name': asset_profile})
+                        merged_move_lines.append((0, 0, vals))
+            return merged_move_lines
+
+        # Get cr/dr lines without some columns, prepare for merge
+        debit_lines = _setup_compound_move_line_data(self, depre_date, period,
+                                                     depr_acc, 'depreciation')
+        credit_lines = _setup_compound_move_line_data(self, depre_date, period,
+                                                      exp_acc, 'expense')
+        move_lines = _merge_compound_move_lines(debit_lines, credit_lines)
+        return move_lines
 
     @api.multi
     def open_move(self):
