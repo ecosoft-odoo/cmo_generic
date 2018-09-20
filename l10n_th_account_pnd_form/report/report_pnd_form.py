@@ -76,7 +76,10 @@ class ReportPNDForm(models.Model):
     tax_total = fields.Float(
         string='Tax Total',
     )
-    wht_cert_id = fields.Many2one(
+    sequence = fields.Char(
+        string='Sequence',
+    )
+    cert_line_id = fields.Many2one(
         'wht.cert.tax.line',
         string='Withholding Cert Tax ID'
     )
@@ -97,7 +100,10 @@ class ReportPNDForm(models.Model):
                 and res_id = a.partner_id),
                 a.supplier_name) as supplier_name_th
         from (
-        select c.id, c.state,
+        select
+            LPAD(row_number() over (order by c.sequence_display)::char, 5, '0')
+            as sequence,
+            c.id, c.state,
             c.sequence_display as wht_sequence_display,
             c.number,
             c.date as date_value,
@@ -105,7 +111,7 @@ class ReportPNDForm(models.Model):
             c.period_id as wht_period_id,
             c.id as cert_id,
             c.tax_payer,
-            ct.id as wht_cert_id,
+            ct.id as cert_line_id,
             rp.vat as supplier_taxid,
             rp.taxbranch as supplier_branch,
             rp.id as partner_id,
