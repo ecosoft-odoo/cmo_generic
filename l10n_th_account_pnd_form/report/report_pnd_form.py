@@ -33,9 +33,9 @@ class ReportPNDForm(models.Model):
     supplier_taxid = fields.Char(
         string='Supplier TaxID',
     )
-    supplier_branch_th = fields.Char(
-        string='Supplier Branch',
-    )
+    # supplier_branch_th = fields.Char(
+    #     string='Supplier Branch',
+    # )
     supplier_branch = fields.Char(
         string='Supplier Branch',
     )
@@ -70,6 +70,16 @@ class ReportPNDForm(models.Model):
         TAX_PAYER,
         string='Tax Payer',
     )
+    base_total = fields.Float(
+        string='Base Total',
+    )
+    tax_total = fields.Float(
+        string='Tax Total',
+    )
+    wht_cert_id = fields.Many2one(
+        'wht.cert.tax.line',
+        string='Withholding Cert Tax ID'
+    )
 
     def init(self, cr):
         tools.drop_view_if_exists(cr, self._table)
@@ -95,6 +105,7 @@ class ReportPNDForm(models.Model):
             c.period_id as wht_period_id,
             c.id as cert_id,
             c.tax_payer,
+            ct.id as wht_cert_id,
             rp.vat as supplier_taxid,
             rp.taxbranch as supplier_branch,
             rp.id as partner_id,
@@ -129,7 +140,7 @@ class ReportPNDForm(models.Model):
             c.date, c.income_tax_form, c.period_id, c.id,
             c.tax_payer, rp.vat, rp.taxbranch, rp.id, rp.name,
             rt.id, rt.name, emp.id, rp.street, rp.street2,
-            ts.name, dt.name, pv.name, ts.zip, co.name
+            ts.name, dt.name, pv.name, ts.zip, co.name, ct.id
         ) a
         order by a.wht_sequence_display
         )""" % (self._table, ))
