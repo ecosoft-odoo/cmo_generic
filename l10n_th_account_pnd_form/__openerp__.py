@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': "PND3, PND53 Forms",
+    'name': "PND3, PND53 Forms (CMO)",
     'summary': "",
     'author': "Ecosoft",
     'website': "http://ecosoft.co.th",
