@@ -1047,8 +1047,8 @@ class AccountVoucherTax(common_voucher, models.Model):
                         val['account_id'] == line.account_id.id:
                     val['account_analytic_id'] = line.account_analytic_id.id
 
-                key = (val['invoice_id'], val['tax_code_id'],
-                       val['base_code_id'], val['account_id'])
+                key = (val['tax_code_id'], val['base_code_id'],
+                       val['account_id'])
                 if not (key in tax_gp):
                     tax_gp[key] = val
                     tax_gp[key]['amount'] = tax_gp[key]['amount']
