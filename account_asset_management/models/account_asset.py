@@ -1149,3 +1149,11 @@ class AccountAsset(models.Model):
                 triggers.sudo().write(recompute_vals)
         error_log = '\n'.join(error_log)
         return (result, error_log)
+
+    @api.multi
+    def _set_close_asset_zero_value(self):
+        # we re-evaluate the assets to determine if we can close them
+        for asset in self:
+            if asset.company_id.currency_id.is_zero(asset.value_residual):
+                asset.state = 'close'
+        return True
