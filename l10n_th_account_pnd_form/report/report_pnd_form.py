@@ -70,6 +70,9 @@ class ReportPNDForm(models.Model):
         TAX_PAYER,
         string='Tax Payer',
     )
+    percent = fields.Integer(
+        string='Percent',
+    )
     base_total = fields.Float(
         string='Base Total',
     )
@@ -126,10 +129,9 @@ class ReportPNDForm(models.Model):
             pv.name as supplier_province,
             ts.zip as supplier_zip,
             co.name as supplier_country,
-            case when c.state != 'cancel'
-                then sum(ct.base) else 0.0 end as base_total,
-            case when c.state != 'cancel'
-                then sum(ct.amount) else 0.0 end as tax_total
+            round(avg(ct.percent), 0) as percent,
+            sum(ct.base) as base_total,
+            sum(ct.amount) as tax_total
         from account_wht_cert c
             left outer join wht_cert_tax_line ct on ct.cert_id = c.id
             left outer join res_partner rp on rp.id = c.supplier_partner_id
@@ -141,7 +143,7 @@ class ReportPNDForm(models.Model):
             left outer join res_country_district dt on dt.id = rp.district_id
             left outer join res_country_province pv on pv.id = rp.province_id
             left outer join res_country co on co.id = rp.country_id
-        where c.state != 'draft'
+        where c.state = 'done'
         group by c.state, c.sequence_display, c.number,
             c.date, c.income_tax_form, c.period_id, c.id,
             c.tax_payer, rp.vat, rp.taxbranch, rp.id, rp.name,
@@ -205,7 +207,7 @@ class ReportPNDFormLine(models.Model):
         from account_wht_cert c join wht_cert_tax_line ct
             on ct.cert_id = c.id
             left outer join account_period ap on ap.id = c.period_id
-        where c.state != 'draft'
+        where c.state = 'done'
         group by c.period_id, c.income_tax_form, ct.cert_id,
             ap.name, c.date, ct.wht_cert_income_type,
             ct.wht_cert_income_desc, c.state

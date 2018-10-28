@@ -399,6 +399,11 @@ class WhtCertTaxLine(models.Model):
         size=50,
         required=False,
     )
+    percent = fields.Integer(
+        string='Percent',
+        compute='_compute_percent',
+        store=True,
+    )
     base = fields.Float(
         string='Base Amount',
         readonly=False,
@@ -407,6 +412,16 @@ class WhtCertTaxLine(models.Model):
         string='Tax Amount',
         readonly=False,
     )
+
+    @api.multi
+    @api.depends('base', 'amount')
+    def _compute_percent(self):
+        for rec in self:
+            if rec.base:
+                rec.percent = int(round(rec.amount / rec.base * 100, 0))
+            else:
+                rec.percent = 0
+        return True
 
     @api.onchange('wht_cert_income_type')
     def _onchange_wht_cert_income_type(self):
