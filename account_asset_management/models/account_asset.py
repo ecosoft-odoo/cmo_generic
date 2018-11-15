@@ -433,6 +433,10 @@ class AccountAsset(models.Model):
         amls = self.env['account.move.line'].search(
             [('asset_id', '=', self.id)], order='date ASC')
         am_ids = [l.move_id.id for l in amls]
+        # check filter group_by
+        ctx = dict(self._context).copy()
+        if self._context.get('group_by', False):
+            ctx.pop('group_by')
         return {
             'name': _("Journal Entries"),
             'view_type': 'form',
@@ -440,7 +444,7 @@ class AccountAsset(models.Model):
             'res_model': 'account.move',
             'view_id': False,
             'type': 'ir.actions.act_window',
-            'context': self._context,
+            'context': ctx,
             'nodestroy': True,
             'domain': [('id', 'in', am_ids)],
         }
