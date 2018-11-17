@@ -51,11 +51,17 @@
                                   confirm="This will cancel all draft invoices, are you sure you want to proceed?"
                                   attrs="{'invisible': ['|', ('plan_invoice_created', '!=', True), ('state', '!=', 'approved')]}" groups="base.group_user"/>
                                 <field name="invoice_mode"/>
+                                <field name="bypass_validate_amount"/>
+                                <p color="red" colspan="2">
+                                  <font color="red">
+                                  <field name="invoice_plan_warning" nolabel="1"/>
+                                  </font>
+                                </p>
                             </group>
                             <group>
                                 <field name="use_advance"/>
                                 <field name="use_deposit"/>
-                                <h2 >
+                                <h2>
                                     <label for="total_invoice_amount"/>
                                     <field name="total_invoice_amount" class="oe_inline"/>
                                 </h2>

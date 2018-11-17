@@ -120,13 +120,14 @@ class PurchaseInvoicePlan(models.Model):
         store=True,
     )
     is_deposit_installment = fields.Boolean(
-        string="Deposit Installment",
+        string='Deposit Installment',
     )
     is_advance_installment = fields.Boolean(
-        string="Advance Installment",
+        string='Advance Installment',
     )
     description = fields.Text(
-        string="Description"
+        string='Description',
+        size=1000,
     )
 
     _sql_constraints = [
@@ -142,7 +143,7 @@ class PurchaseInvoicePlan(models.Model):
         obj_precision = self.env['decimal.precision']
         prec = obj_precision.precision_get('Account')
         subtotal = (self.order_line_id.price_subtotal)
-        self.invoice_amount = round(subtotal and self.invoice_percent/100 *
+        self.invoice_amount = round(subtotal and self.invoice_percent / 100 *
                                     subtotal or 0.0, prec)
 
     @api.one
@@ -159,7 +160,7 @@ class PurchaseInvoicePlan(models.Model):
         obj_precision = self.env['decimal.precision']
         prec = obj_precision.precision_get('Account')
         subtotal = (self.order_id.amount_untaxed)
-        self.deposit_amount = round(subtotal and self.deposit_percent/100 *
+        self.deposit_amount = round(subtotal and self.deposit_percent / 100 *
                                     subtotal or 0.0, prec)
 
     @api.one
