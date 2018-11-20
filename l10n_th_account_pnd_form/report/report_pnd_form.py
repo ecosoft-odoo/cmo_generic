@@ -79,13 +79,6 @@ class ReportPNDForm(models.Model):
     tax_total = fields.Float(
         string='Tax Total',
     )
-    sequence = fields.Char(
-        string='Sequence',
-    )
-    cert_line_id = fields.Many2one(
-        'wht.cert.tax.line',
-        string='Withholding Cert Tax ID'
-    )
 
     def init(self, cr):
         tools.drop_view_if_exists(cr, self._table)
@@ -104,8 +97,6 @@ class ReportPNDForm(models.Model):
                 a.supplier_name) as supplier_name_th
         from (
         select
-            LPAD(row_number() over (order by c.sequence_display)::char, 5, '0')
-            as sequence,
             c.id, c.state,
             c.sequence_display as wht_sequence_display,
             c.number,
@@ -114,7 +105,6 @@ class ReportPNDForm(models.Model):
             c.period_id as wht_period_id,
             c.id as cert_id,
             c.tax_payer,
-            ct.id as cert_line_id,
             rp.vat as supplier_taxid,
             rp.taxbranch as supplier_branch,
             rp.id as partner_id,
@@ -130,8 +120,10 @@ class ReportPNDForm(models.Model):
             ts.zip as supplier_zip,
             co.name as supplier_country,
             round(avg(ct.percent), 0) as percent,
-            sum(ct.base) as base_total,
-            sum(ct.amount) as tax_total
+            case when c.state != 'cancel'
+                then sum(ct.base) else 0.0 end as base_total,
+            case when c.state != 'cancel'
+                then sum(ct.amount) else 0.0 end as tax_total
         from account_wht_cert c
             left outer join wht_cert_tax_line ct on ct.cert_id = c.id
             left outer join res_partner rp on rp.id = c.supplier_partner_id
@@ -143,12 +135,12 @@ class ReportPNDForm(models.Model):
             left outer join res_country_district dt on dt.id = rp.district_id
             left outer join res_country_province pv on pv.id = rp.province_id
             left outer join res_country co on co.id = rp.country_id
-        where c.state = 'done'
+        where c.state != 'draft'
         group by c.state, c.sequence_display, c.number,
             c.date, c.income_tax_form, c.period_id, c.id,
             c.tax_payer, rp.vat, rp.taxbranch, rp.id, rp.name,
             rt.id, rt.name, emp.id, rp.street, rp.street2,
-            ts.name, dt.name, pv.name, ts.zip, co.name, ct.id
+            ts.name, dt.name, pv.name, ts.zip, co.name
         ) a
         order by a.wht_sequence_display
         )""" % (self._table, ))
