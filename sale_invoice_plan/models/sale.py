@@ -47,6 +47,11 @@ class sale_order(models.Model):
         requied=True,
         readonly=True,
     )
+    bypass_validate_amount = fields.Boolean(
+        string='Ignore Amount Mismatch',
+        default=False,
+        help="To unlock creation of invoices, when amount mismatch!"
+    )
 
     @api.model
     def _calculate_subtotal(self, vals):
@@ -143,13 +148,16 @@ class sale_order(models.Model):
                 for line in invoice_lines:
                     total_amount += line.invoice_amount
                     # Validate percent
-                    if round(line.invoice_percent/100 * subtotal, prec) != \
+                    if not self.bypass_validate_amount and \
+                            round(line.invoice_percent/100 *
+                                  subtotal, prec) != \
                             round(line.invoice_amount, prec):
                         raise except_orm(
                             _('Invoice Plan Percent Mismatch!'),
                             _("%s on installment %s")
                             % (order_line.name, line.installment))
-                if round(total_amount, prec) != round(subtotal, prec):
+                if not self.bypass_validate_amount and \
+                        round(total_amount, prec) != round(subtotal, prec):
                     raise except_orm(
                         _('Invoice Plan Amount Mismatch!'),
                         _("%s, plan amount %d not equal to line amount %d!")
