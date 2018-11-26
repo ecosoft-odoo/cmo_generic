@@ -87,9 +87,9 @@ class AccountTaxReport(models.Model):
             case when cancel is true then ''
                 else rp.taxbranch end as taxbranch,
             case when cancel is true then 0.0
-                else base_company end as base,
+                else atd.base end as base,
             case when cancel is true then 0.0
-                else amount_company end as amount
+                else atd.amount end as amount
         """
         return res
 
