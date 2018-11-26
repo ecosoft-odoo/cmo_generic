@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vat_report" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.02452018304761"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="22"/>
+	<property name="ireport.zoom" value="1.8150000000000082"/>
+	<property name="ireport.x" value="315"/>
+	<property name="ireport.y" value="227"/>
 	<style name="table">
 		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 			<topPen lineWidth="1.0"/>
@@ -71,6 +71,7 @@ and $X{IN, report_period_id, period_pids}]]>
 	<field name="taxbranch" class="java.lang.String"/>
 	<field name="base" class="java.lang.Double"/>
 	<field name="amount" class="java.lang.Double"/>
+	<field name="cancel" class="java.lang.Boolean"/>
 	<sortField name="invoice_date"/>
 	<variable name="base" class="java.lang.Number" resetType="Page" calculation="Sum">
 		<variableExpression><![CDATA[$F{base}]]></variableExpression>
@@ -266,13 +267,6 @@ and $X{IN, report_period_id, period_pids}]]>
 				</textElement>
 				<text><![CDATA[เลขที่]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="-9" y="32" width="403" height="29"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Monospaced" size="16" isBold="true" isStrikeThrough="false" pdfFontName="Garuda.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{doc_type}]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageHeader>
 	<detail>
@@ -303,7 +297,9 @@ and $X{IN, report_period_id, period_pids}]]>
 				<textElement verticalAlignment="Top">
 					<font fontName="Monospaced" size="9" isBold="false" isStrikeThrough="false" pdfFontName="Garuda.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{partner_title} == null ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cancel} ?
+"Cancel" :
+$F{partner_title} == null ?
 $F{partner_name} :
 $F{partner_title} + " " + $F{partner_name}]]></textFieldExpression>
 			</textField>
