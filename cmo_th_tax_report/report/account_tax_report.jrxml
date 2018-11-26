@@ -266,13 +266,6 @@ and $X{IN, report_period_id, period_pids}]]>
 				</textElement>
 				<text><![CDATA[เลขที่]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="-9" y="32" width="403" height="29"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Monospaced" size="16" isBold="true" isStrikeThrough="false" pdfFontName="Garuda.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{doc_type}]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageHeader>
 	<detail>
