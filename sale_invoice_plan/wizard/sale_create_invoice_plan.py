@@ -97,6 +97,12 @@ class sale_create_invoice_plan(models.TransientModel):
                     subtotal = order.price_include and \
                         (order_line.product_uom_qty *
                          order_line.price_unit) or order_line.price_subtotal
+                    price_ex_discount = \
+                        order_line.product_uom_qty * order_line.price_unit
+                    if subtotal != price_ex_discount:
+                        discount = (round(order_line.discount, prec+4)/100) * \
+                                    price_ex_discount
+                        subtotal = price_ex_discount - discount
                     lines.append({
                         'order_id': order.id,
                         'order_line_id': order_line.id,
