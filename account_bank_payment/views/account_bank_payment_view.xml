@@ -27,7 +27,7 @@
             <field name="model">account.move.line</field>
             <field name="arch" type="xml">
                 <search string="Bank Payment Search">
-                    <field name="partner_id"/>
+                    <field name="partner_id" string="Payee"/>
                 </search>
             </field>
         </record>
