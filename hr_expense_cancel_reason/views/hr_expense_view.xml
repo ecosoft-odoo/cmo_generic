@@ -20,8 +20,12 @@
                     <button name="%(action_hr_expense_cancel)d"
                             type="action"
                             states="confirm,accepted"
+                            string="Refuse"/>
+                    <button name="%(action_hr_expense_cancel)d"
+                            type="action"
+                            states="validate"
                             string="Refuse"
-                            groups="base.group_hr_user"/>
+                            groups="base.group_hr_user,base.group_hr_manager"/>
                 </xpath>
             </field>
         </record>
