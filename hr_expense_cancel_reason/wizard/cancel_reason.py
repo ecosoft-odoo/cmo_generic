@@ -22,5 +22,6 @@ class HRExpenseCancel(models.TransientModel):
         assert len(expense_ids) == 1, "Only 1 Expense ID expected"
         expense = self.env['hr.expense.expense'].browse(expense_ids)
         expense.cancel_reason_txt = self.cancel_reason_txt
-        expense.signal_workflow('refuse')
+        # expense.signal_workflow('refuse')
+        expense.state = 'cancelled'
         return act_close
