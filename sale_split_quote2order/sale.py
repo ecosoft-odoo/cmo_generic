@@ -20,6 +20,7 @@ class sale_order(models.Model):
         readonly=True,
         ondelete='restrict',
         copy=False,
+        index=True,
     )
     order_id = fields.Many2one(
         'sale.order',
