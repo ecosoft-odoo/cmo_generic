@@ -32,7 +32,8 @@ class AccountInvoice(models.Model):
     discount_rate = fields.Float('Discount Rate',
                                  digits_compute=dp.get_precision('Account'),
                                  readonly=True,
-                                 states={'draft': [('readonly', False)]})
+                                 states={'draft': [('readonly', False)]},
+                                 copy=False)
     amount_discount = fields.Float(string='Discount',
                                    digits=dp.get_precision('Account'),
                                    readonly=True, compute='_compute_amount')
@@ -84,4 +85,3 @@ class AccountInvoice(models.Model):
             'discount_rate': self.discount_rate,
         })
         return res
-
