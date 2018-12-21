@@ -186,8 +186,7 @@ class HRExpenseExpense(models.Model):
             line_dict = advance_line.copy_data()
             for line in line_dict:
                 # Remove some key
-                keys = ['expense_id', 'inrev_activity_id',
-                        'description', 'ref']
+                keys = ['expense_id', 'description', 'ref']
                 for key in keys:
                     del line[key]
                 # Change some key
