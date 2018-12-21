@@ -5,7 +5,6 @@ from openerp.exceptions import ValidationError
 import openerp.addons.decimal_precision as dp
 from openerp import tools
 import ast
-from openerp.tools.float_utils import float_compare
 
 
 class HRExpenseExpense(models.Model):
@@ -23,33 +22,17 @@ class HRExpenseExpense(models.Model):
     advance_expense_id = fields.Many2one(
         'hr.expense.expense',
         string='Clear Advance',
-        index=True,
     )
     advance_clearing_ids = fields.One2many(
         'hr.expense.clearing',
         'advance_expense_id',
         string='Advance Clearing Expenses',
     )
-    clearing_expense_ids = fields.One2many(
-        'hr.expense.expense',
-        'advance_expense_id',
-        string='Clearing Document (Expense)',
-        readonly=True,
-        help="All expense clearing",
-    )
-    clearing_invoice_ids = fields.One2many(
-        'account.invoice',
-        'advance_expense_id',
-        string='Clearing Document (Invoice)',
-        readonly=True,
-        help="All invoice clearing",
-    )
     amount_to_clearing = fields.Float(
         string='Advanced Balance',
         compute='_compute_amount_to_clearing',
-        store=True,
-        # search='_search_amount_to_clearing',
-        # copy=False,
+        search='_search_amount_to_clearing',
+        copy=False,
     )
     amount_advanced = fields.Float(
         string='Advanced Amount',
@@ -98,18 +81,25 @@ class HRExpenseExpense(models.Model):
         result['context'] = context
         return result
 
+    @api.model
+    def _search_amount_to_clearing(self, operator, value):
+        # This method is valid only for Advance
+        recs = self.search([('invoice_id.state', 'in', ('open', 'paid')),
+                            ('is_employee_advance', '=', True)])
+        if operator == '=':
+            recs = recs.filtered(lambda x: x.amount_to_clearing == value)
+        if operator == '>':
+            recs = recs.filtered(lambda x: x.amount_to_clearing > value)
+        if operator == '<':
+            recs = recs.filtered(lambda x: x.amount_to_clearing < value)
+        return [('id', 'in', recs.ids)]
+
     @api.multi
-    @api.depends('state',
-                 'invoice_id.state',
-                 'clearing_expense_ids.invoice_ids.state',
-                 'clearing_invoice_ids.state')
+    @api.depends('advance_clearing_ids')
     def _compute_amount_to_clearing(self):
         for expense in self:
             amount_advanced = (expense.invoice_id.state in ('open', 'paid') and
                                expense.amount_advanced or 0.0)
-            # Special case for migration, there is not invoice
-            if not expense.invoice_id:
-                amount_advanced = expense.amount_advanced
             clearing_amount = sum([x.clearing_amount
                                    for x in expense.advance_clearing_ids])
             expense.amount_to_clearing = (amount_advanced -
@@ -136,9 +126,9 @@ class HRExpenseExpense(models.Model):
     def _module_installed(self, module_name):
         if not module_name:
             return False
-        self._cr.execute("""SELECT count(*) FROM ir_module_module
-                            WHERE name=%s AND
-                            state='installed'""", module_name)
+        self._cr.execute("SELECT count(*) FROM ir_module_module\
+                            WHERE name='%s' AND \
+                            state='installed'" % module_name)
         return self._cr.fetchone()[0] == 1
 
     @api.model
@@ -168,50 +158,17 @@ class HRExpenseExpense(models.Model):
 
     @api.model
     def _create_negative_clearing_line(self, expense, invoice):
-        # Use invoice line first
-        advance_expense = expense.advance_expense_id
-        if advance_expense.invoice_id.invoice_line:
-            amount_advance = expense.amount
-            if float_compare(amount_advance,
-                             advance_expense.amount_to_clearing, 2) == 1:
-                amount_advance = advance_expense.amount_to_clearing
-            advance_line = advance_expense.invoice_id.invoice_line[0]
-            advance_line.copy({'invoice_id': invoice.id,
-                               'price_unit': -amount_advance,
-                               'sequence': 1, })
-        # If no invoice line, use advance line and change it to invoice line
-        elif advance_expense.line_ids:
-            advance_line = advance_expense.line_ids[0]
-            advance_account_id = advance_line._get_non_product_account_id()
-            line_dict = advance_line.copy_data()
-            for line in line_dict:
-                # Remove some key
-                keys = ['expense_id', 'inrev_activity_id',
-                        'description', 'ref']
-                for key in keys:
-                    del line[key]
-                # Change some key
-                inv_exp = {'quantity': 'unit_quantity',
-                           'account_analytic_id': 'analytic_account',
-                           'price_unit': 'unit_amount',
-                           'invoice_line_tax_id': 'tax_ids', }
-                for new_key, old_key in inv_exp.iteritems():
-                    line[new_key] = line.pop(old_key)
-                # Added fields
-                cleared_ids = advance_expense.advance_clearing_ids
-                max_clear_amount = advance_expense.amount_advanced - \
-                    sum(cleared_ids.mapped('clearing_amount'))
-                amount_advance = expense.amount
-                if float_compare(amount_advance, max_clear_amount, 2) == 1:
-                    amount_advance = max_clear_amount
-                line.update({'account_id': advance_account_id,
-                             'invoice_id': invoice.id,
-                             'price_unit': -amount_advance,
-                             'sequence': 1, })
-                self.env['account.invoice.line'].create(line)
-        else:
+        employee_advance = expense.amount
+        if expense.amount > expense.advance_expense_id.amount_to_clearing:
+            employee_advance = \
+                expense.advance_expense_id.amount_to_clearing
+        invoice_line = expense.advance_expense_id.invoice_id.invoice_line
+        if not invoice_line:
             raise ValidationError(_('No advance product line to reference'))
-        return True
+        advance_line = invoice_line[0]
+        advance_line.copy({'invoice_id': invoice.id,
+                           'price_unit': -employee_advance,
+                           'sequence': 1, })
 
     @api.multi
     def _create_supplier_invoice_from_expense(self):
@@ -249,11 +206,9 @@ class HRExpenseExpense(models.Model):
                                partner.user_ids[0].employee_ids[0].id or
                                False)
             domain = [('is_employee_advance', '=', True),
-                      ('state', '=', 'paid'),
+                      ('state', 'in', ('open', 'paid')),
                       ('employee_id', '=', ref_employee_id),
-                      '|', ('amount_to_clearing', '>', 0.0),
-                      ('invoice_id', '=', False),  # Case migration, no inv
-                      ]
+                      ('amount_to_clearing', '>', 0.0)]
             args += domain
         return super(HRExpenseExpense, self).\
             name_search(name=name, args=args, operator=operator, limit=limit)
@@ -264,9 +219,8 @@ class HRExpenseLine(models.Model):
 
     is_advance_product_line = fields.Boolean('Advance Product Line')
 
-    @api.multi
+    @api.model
     def _get_non_product_account_id(self):
-        self.ensure_one()
         # If Advance Line, get from setup account
         if self.is_advance_product_line:
             advance_account = \
@@ -280,13 +234,11 @@ class HRExpenseLine(models.Model):
             return super(HRExpenseLine, self)._get_non_product_account_id()
 
     @api.model
-    def _prepare_analytic_line(self, reverse=False, currency=False,
-                               force_currency_rate=[]):
+    def _prepare_analytic_line(self, reverse=False, currency=False):
         if self.is_advance_product_line:
             return False
         res = super(HRExpenseLine, self).\
-            _prepare_analytic_line(reverse=reverse, currency=currency,
-                                   force_currency_rate=force_currency_rate)
+            _prepare_analytic_line(reverse=reverse, currency=currency)
         return res
 
 
@@ -319,7 +271,7 @@ class HRExpenseClearing(models.Model):
     def _sql_select_1(self):
         return """
             create_date as date, advance_expense_id, id as expense_id,
-            null::int as invoice_id, amount as expense_amount,
+            null as invoice_id, amount as expense_amount,
             null as clearing_amount, null as invoiced_amount
         """
 
@@ -359,7 +311,9 @@ class HRExpenseClearing(models.Model):
                         on ai.id = ail.invoice_id
                     left outer join hr_expense_expense exp
                         on exp.id = ai.expense_id
-                where ((ai.type in ('in_invoice') and ail.price_subtotal < 0.0)
+                where ((ai.type in ('in_invoice') and ail.price_subtotal < 0.0
+                    and ail.account_id = (select employee_advance_account_id
+                    from res_company where id = ail.company_id))
                     or ai.type in ('out_invoice'))
                     and ai.state in ('open', 'paid')
             ) a
