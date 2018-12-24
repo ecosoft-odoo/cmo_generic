@@ -196,7 +196,11 @@ class AccountAssetRemove(models.TransientModel):
             'type': 'remove',
         }
         asset_line_obj.create(asset_line_vals)
-        asset.write({'state': 'removed', 'date_remove': self.date_remove})
+        asset.write({
+            'state': 'removed',
+            'date_remove': self.date_remove,
+            'sale_value': self.sale_value,
+        })
 
         # create move lines
         move_lines = self._get_removal_data(asset, residual_value)
