@@ -1,26 +1,5 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    Author: Nicolas Bessi, Guewen Baconnier
-#    Copyright Camptocamp SA 2011
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
+# -*- coding: utf-8 -*-
 import time
-
 from openerp.osv import fields, orm
 
 
@@ -54,7 +33,8 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                     print all accounts."""),
         'centralize': fields.boolean(
             'Activate Centralization',
-            help='Uncheck to display all the details of centralized accounts.')
+            help='Uncheck to display all the details '
+            'of centralized accounts.'),
     }
     _defaults = {
         'amount_currency': False,
@@ -78,16 +58,21 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
 
     def pre_print_report(self, cr, uid, ids, data, context=None):
         data = super(AccountReportGeneralLedgerWizard, self).pre_print_report(
-            cr, uid, ids, data, context=context)
+            cr, uid, ids, data, context)
         # will be used to attach the report on the main account
         data['ids'] = [data['form']['chart_account_id']]
         vals = self.read(cr, uid, ids,
                          ['amount_currency',
                           'display_account',
                           'account_ids',
-                          'centralize'],
+                          'centralize',
+                          ],
                          context=context)[0]
         data['form'].update(vals)
+
+        # PABI2
+        data['specific_report'] = True
+
         return data
 
     def onchange_filter(self, cr, uid, ids, filter='filter_no',
@@ -125,8 +110,9 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                                LEFT JOIN account_fiscalyear f
                                    ON (p.fiscalyear_id = f.id)
                                WHERE f.id = %s
-                               AND COALESCE(p.special2, FALSE) = FALSE
-                               ORDER BY p.date_start ASC
+                               /*AND COALESCE(p.special, FALSE) = FALSE
+                               ORDER BY p.date_start ASC*/
+                               ORDER BY p.code ASC /*PABI2*/
                                LIMIT 1) AS period_start
                 UNION ALL
                 SELECT * FROM (SELECT p.id
@@ -135,8 +121,9 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                                    ON (p.fiscalyear_id = f.id)
                                WHERE f.id = %s
                                AND p.date_start < NOW()
-                               AND COALESCE(p.special2, FALSE) = FALSE
-                               ORDER BY p.date_stop DESC
+                               /*AND COALESCE(p.special, FALSE) = FALSE
+                               ORDER BY p.date_stop DESC*/
+                               ORDER BY p.code DESC /*PABI2*/
                                LIMIT 1) AS period_stop''',
                        (fiscalyear_id, fiscalyear_id))
             periods = [i[0] for i in cr.fetchall()]
@@ -151,6 +138,7 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
     def _print_report(self, cursor, uid, ids, data, context=None):
         # we update form with display account value
         data = self.pre_print_report(cursor, uid, ids, data, context=context)
+
         return {'type': 'ir.actions.report.xml',
                 'report_name': 'account.account_report_general_ledger_webkit',
                 'datas': data}
