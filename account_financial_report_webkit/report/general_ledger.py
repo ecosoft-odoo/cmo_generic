@@ -1,30 +1,10 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    Author: Nicolas Bessi, Guewen Baconnier
-#    Copyright Camptocamp SA 2011
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
+# -*- coding: utf-8 -*-
 from operator import itemgetter
 from itertools import groupby
 from datetime import datetime
 
 from openerp.report import report_sxw
-from openerp.modules.registry import RegistryManager
+from openerp import pooler
 from openerp.tools.translate import _
 from .common_reports import CommonReportHeaderWebkit
 from .webkit_parser_header_fix import HeaderFooterTextWebKitParser
@@ -35,14 +15,17 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
     def __init__(self, cursor, uid, name, context):
         super(GeneralLedgerWebkit, self).__init__(
             cursor, uid, name, context=context)
-        self.pool = RegistryManager.get(self.cr.dbname)
+        self.pool = pooler.get_pool(self.cr.dbname)
         self.cursor = self.cr
 
         company = self.pool.get('res.users').browse(
             self.cr, uid, uid, context=context).company_id
         header_report_name = ' - '.join(
             (_('GENERAL LEDGER'), company.name, company.currency_id.name))
-
+        # kittiu: Add to remove bug in case company name is TH
+        if header_report_name:
+            header_report_name = header_report_name.encode('utf-8')
+        # --
         footer_date_time = self.formatLang(
             str(datetime.today()), date_time=True)
 
@@ -75,15 +58,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
     def set_context(self, objects, data, ids, report_type=None):
         """Populate a ledger_lines attribute on each browse record that will be
         used by mako template"""
-        lang = self.localcontext.get('lang')
-        lang_ctx = lang and {'lang': lang} or {}
-        new_ids = data['form']['account_ids'] or data[
-            'form']['chart_account_id']
-
-        # HOOK
-        # I.e., extra_params = {'field_ids': [1,2,3,3], 'field2_ids': [5,6]}
-        extra_params = data.get('extra_params', {})
-        # --
+        new_ids = (data['form']['account_ids'] or
+                   [data['form']['chart_account_id']])
 
         # Account initial balance memoizer
         init_balance_memoizer = {}
@@ -91,6 +67,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         # Reading form
         main_filter = self._get_form_param('filter', data, default='filter_no')
         target_move = self._get_form_param('target_move', data, default='all')
+        # --
         start_date = self._get_form_param('date_from', data)
         stop_date = self._get_form_param('date_to', data)
         do_centralize = self._get_form_param('centralize', data)
@@ -99,9 +76,14 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         fiscalyear = self.get_fiscalyear_br(data)
         chart_account = self._get_chart_account_id_br(data)
 
+        # PABI2
+        specific_report = data.get('specific_report')
+
         if main_filter == 'filter_no':
-            start_period = self.get_first_fiscalyear_period(fiscalyear)
-            stop_period = self.get_last_fiscalyear_period(fiscalyear)
+            start_period = self.get_first_fiscalyear_period(
+                fiscalyear, specific_report=specific_report)
+            stop_period = self.get_last_fiscalyear_period(
+                fiscalyear, specific_report=specific_report)
 
         # computation of ledger lines
         if main_filter == 'filter_date':
@@ -111,25 +93,28 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             start = start_period
             stop = stop_period
 
-        initial_balance = self.is_initial_balance_enabled(main_filter)
+        initial_balance = self.is_initial_balance_enabled(
+            main_filter, start_period=start_period,
+            specific_report=specific_report)
         initial_balance_mode = initial_balance \
-            and self._get_initial_balance_mode(start) or False
+            and self._get_initial_balance_mode(
+                start, specific_report=specific_report) or False
 
         # Retrieving accounts
         accounts = self.get_all_accounts(new_ids, exclude_type=['view'])
         if initial_balance_mode == 'initial_balance':
             init_balance_memoizer = self._compute_initial_balances(
-                accounts, start, fiscalyear)
+                accounts, start, fiscalyear, specific_report=specific_report)
         elif initial_balance_mode == 'opening_balance':
-            init_balance_memoizer = self._read_opening_balance(accounts, start)
+            init_balance_memoizer = self._read_opening_balance(
+                accounts, start, specific_report=specific_report)
 
         ledger_lines_memoizer = self._compute_account_ledger_lines(
-            accounts, init_balance_memoizer, main_filter, target_move, start,
-            stop, extra_params=extra_params)
+            accounts, init_balance_memoizer, main_filter, target_move,
+            start, stop, specific_report=specific_report)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
-                                                          accounts,
-                                                          context=lang_ctx)
+                                                          accounts)
 
         init_balance = {}
         ledger_lines = {}
@@ -195,7 +180,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             # search on account.period in order to sort them by date_start
             sorted_period_ids = period_obj.search(
                 self.cr, self.uid, [('id', 'in', period_ids)],
-                order='special2 desc, date_start', context=context)
+                order='special desc, date_start', context=context)
             sorted_ledger_lines = sorted(
                 ledger_lines, key=lambda x: sorted_period_ids.
                 index(x['lperiod_id']))
@@ -218,28 +203,24 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
     def _compute_account_ledger_lines(self, accounts_ids,
                                       init_balance_memoizer, main_filter,
                                       target_move, start, stop,
-                                      extra_params={}):
+                                      specific_report=False):
         res = {}
         for acc_id in accounts_ids:
             move_line_ids = self.get_move_lines_ids(
                 acc_id, main_filter, start, stop, target_move,
-                extra_params=extra_params)
+                specific_report=specific_report)
             if not move_line_ids:
                 res[acc_id] = []
                 continue
 
-            lines = self._get_ledger_lines(move_line_ids, acc_id,
-                                           extra_params=extra_params)
+            lines = self._get_ledger_lines(move_line_ids, acc_id)
             res[acc_id] = lines
         return res
 
-    def _get_ledger_lines(self, move_line_ids, account_id, extra_params={}):
+    def _get_ledger_lines(self, move_line_ids, account_id):
         if not move_line_ids:
             return []
-        res = self._get_move_line_datas(
-            move_line_ids,
-            extra_select=extra_params['extra_sql_select'],
-            extra_join=extra_params['extra_sql_join'])
+        res = self._get_move_line_datas(move_line_ids)
         # computing counter part is really heavy in term of ressouces
         # consuption looking for a king of SQL to help me improve it
         move_ids = [x.get('move_id') for x in res]
