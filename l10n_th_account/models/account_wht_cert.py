@@ -17,6 +17,7 @@ TAX_PAYER = [('withholding', 'Withholding'),
 
 class AccountWhtCert(models.Model):
     _name = 'account.wht.cert'
+    _inherit = ['mail.thread']
     _rec_name = 'number'
 
     number = fields.Char(
@@ -37,6 +38,7 @@ class AccountWhtCert(models.Model):
         string='Status',
         default='draft',
         copy=False,
+        track_visibility='onchange',
     )
     voucher_id = fields.Many2one(
         'account.voucher',
