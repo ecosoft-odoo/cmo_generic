@@ -33,7 +33,8 @@
                     <field name="bank_receipt_id" invisible="1"/>
                 </field>
                 <button name="cancel_voucher" position="after">
-                    <button name="%(action_voucher_create_bank_receipt)d" type="action" string="Create Bank Receipt" attrs="{'invisible': ['|', '|', ('state', '!=', 'posted'), ('intransit', '=', False), ('bank_receipt_id', '!=', False)]}"/>
+                    <!-- <button name="%(action_voucher_create_bank_receipt)d" type="action" string="Create Bank Receipt" attrs="{'invisible': ['|', '|', ('state', '!=', 'posted'), ('intransit', '=', False), ('bank_receipt_id', '!=', False)]}"/> -->
+                    <button name="%(action_voucher_create_bank_receipt)d" type="action" string="Create Bank Receipt" attrs="{'invisible': True}"/>
                 </button>
             </field>
         </record>
