@@ -215,6 +215,10 @@ class trial_balance_xls(report_xls):
             num_format_str=report_xls.decimal_format)
         regular_cell_style_pct = xlwt.easyxf(
             regular_cell_format + _xs['center'], num_format_str='0')
+        total_diff, total_init_balance, total_debit, total_credit = \
+            [0.0, 0.0, 0.0, 0.0]
+        total_balance = 0.0
+        total_balance_comp = [0.0, 0.0, 0.0]
 
         for current_account in objects:
 
@@ -262,6 +266,8 @@ class trial_balance_xls(report_xls):
                                     'accounts'][current_account.id],
                                  None,
                                  cell_style_decimal)]
+                    total_init_balance += _p['init_balance_'
+                                             'accounts'][current_account.id]
                 c_specs += [
                     ('debit', 1, 0, 'number',
                      _p['debit_accounts'][current_account.id],
@@ -270,12 +276,15 @@ class trial_balance_xls(report_xls):
                      _p['credit_accounts'][current_account.id],
                      None, cell_style_decimal),
                 ]
+                total_debit += _p['debit_accounts'][current_account.id]
+                total_credit += _p['credit_accounts'][current_account.id]
                 c_specs += [('balance', 1, 0, 'number', None,
                              bal_formula, cell_style_decimal)]
             else:
                 c_specs += [('balance', 1, 0, 'number',
                              _p['balance_accounts'][current_account.id],
                              None, cell_style_decimal)]
+                total_balance += _p['balance_accounts'][current_account.id]
 
             if _p.comparison_mode in ('single', 'multiple'):
                 c = 1
@@ -283,6 +292,7 @@ class trial_balance_xls(report_xls):
                     c_specs += [('balance_%s' % c, 1, 0, 'number',
                                  comp_account['balance'], None,
                                  cell_style_decimal)]
+                    total_balance_comp[c-1] += comp_account['balance']
                     c += 1
                     if _p.comparison_mode == 'single':
                         c_specs += [
@@ -293,12 +303,64 @@ class trial_balance_xls(report_xls):
                              comp_account['percent_diff'] or 0, None,
                              cell_style_pct),
                         ]
+                        total_diff += comp_account['diff']
 
             c_specs += [('type', 1, 0, 'text',
                          current_account.type, None, cell_style_center)]
             row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
             row_pos = self.xls_write_row(
                 ws, row_pos, row_data, row_style=cell_style)
+
+        # Footer Table
+        cell_format = _xs['bold'] + _xs['fill_blue'] + _xs['borders_all']
+        cell_style = xlwt.easyxf(cell_format)
+        cell_total_decimal = xlwt.easyxf(
+                                cell_format + _xs['right'],
+                                num_format_str=report_xls.decimal_format)
+        c_specs = [
+            ('tt', account_span+1, 0, 'text', _('Total'))
+        ]
+        if _p.comparison_mode == 'no_comparison':
+            debit_cell = rowcol_to_cell(row_pos, 4)
+            credit_cell = rowcol_to_cell(row_pos, 5)
+            bal_formula = debit_cell + '-' + credit_cell
+
+            if _p.initial_balance_mode:
+                init_cell = rowcol_to_cell(row_pos, 3)
+                debit_cell = rowcol_to_cell(row_pos, 4)
+                credit_cell = rowcol_to_cell(row_pos, 5)
+                bal_formula = init_cell + '+' + \
+                    debit_cell + '-' + credit_cell
+                c_specs += [('init_bal', 1, 0, 'number', total_init_balance,
+                            None, cell_total_decimal)]
+            c_specs += [
+                ('db', 1, 0, 'number', total_debit, None, cell_total_decimal),
+                ('cd', 1, 0, 'number', total_credit, None, cell_total_decimal),
+                ('bl_no_comp', 1, 0, 'number', None, bal_formula,
+                    cell_total_decimal)
+            ]
+        else:
+            c_specs += [('t_bl', 1, 0, 'number', total_balance,
+                        None, cell_total_decimal)]
+
+        if _p.comparison_mode in ('single', 'multiple'):
+            c = 1
+            for comp_account in comparisons:
+                c_specs += [('t_bl_comp_ %s' % c, 1, 0, 'number',
+                            total_balance_comp[c-1], None, cell_total_decimal)]
+                c += 1
+
+                if _p.comparison_mode == 'single':
+                    c_specs += [
+                        ('t_diff', 1, 0, 'number', total_diff, None,
+                            cell_total_decimal),
+                        ('t_diff_percent', 1, 0, 'text', _(''))
+                    ]
+
+        c_specs += [('t_type', 1, 0, 'text', _(''))]
+        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=cell_style)
 
 
 trial_balance_xls('report.account.account_report_trial_balance_xls',
