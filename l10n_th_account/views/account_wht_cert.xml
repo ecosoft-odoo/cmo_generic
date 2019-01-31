@@ -6,7 +6,7 @@
             <field name="model">account.wht.cert</field>
             <field name="arch" type="xml">
                 <header attrs="{'invisible': [('number', '=', False)]}">
-                    <field name="state" widget="statusbar" statusbar_visible="draft,done" clickable="True"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                 </header>
                 <sheet>
                     <form string="Withholding Tax Certificate" create="0" edit="1" delete="0">
