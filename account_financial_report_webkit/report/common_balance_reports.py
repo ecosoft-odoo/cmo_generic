@@ -288,6 +288,11 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
         debit_accounts = dict.fromkeys(account_ids, False)
         credit_accounts = dict.fromkeys(account_ids, False)
         balance_accounts = dict.fromkeys(account_ids, False)
+        total_init, total_debit, total_credit, total_balance = \
+            [0.0, 0.0, 0.0, 0.0]
+        total_comparisons_diff = 0.0
+        new_comp_balance = []
+        total_comparisons_balance = []
 
         for account in objects:
             if not account.parent_id:  # hide top level account
@@ -306,6 +311,10 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                 accounts_by_ids[account.id]['balance']
             init_balance_accounts[account.id] =  \
                 accounts_by_ids[account.id].get('init_balance', 0.0)
+            total_init += accounts_by_ids[account.id].get('init_balance', 0.0)
+            total_debit += accounts_by_ids[account.id]['debit']
+            total_credit += accounts_by_ids[account.id]['credit']
+            total_balance += accounts_by_ids[account.id]['balance']
 
             # if any amount is != 0 in comparisons, we have to display the
             # whole account
@@ -321,6 +330,14 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
                                        values.get('balance', 0.0),
                                        values.get('init_balance', 0.0)))
                 comp_accounts.append(values)
+            if comp_accounts:
+                total_comparisons_diff += comp_accounts[0]['diff']
+            new_comp_balance = [x['balance'] for x in comp_accounts]
+            if total_comparisons_balance:
+                total_comparisons_balance = \
+                    map(sum, zip(new_comp_balance, total_comparisons_balance))
+            else:
+                total_comparisons_balance = new_comp_balance
             comparisons_accounts[account.id] = comp_accounts
             # we have to display the account if a comparison as an amount or
             # if we have an amount in the main column
@@ -334,7 +351,6 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             to_display_accounts.update(
                 {account.id: display_account and
                  to_display_accounts[account.id]})
-
         context_report_values = {
             'fiscalyear': fiscalyear,
             'start_date': start_date,
@@ -353,6 +369,12 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
             'debit_accounts': debit_accounts,
             'credit_accounts': credit_accounts,
             'balance_accounts': balance_accounts,
+            'total_init': total_init,
+            'total_debit': total_debit,
+            'total_credit': total_credit,
+            'total_balance': total_balance,
+            'total_comparisons_diff': total_comparisons_diff,
+            'total_comparisons_balance': total_comparisons_balance,
         }
 
         return objects, new_ids, context_report_values

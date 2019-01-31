@@ -200,7 +200,7 @@
                                 <div class="act_as_cell amount">${formatLang(comp_account['balance']) | amount}</div>
                                 %if comparison_mode == 'single':  ## no diff in multiple comparisons because it shows too data
                                     <div class="act_as_cell amount">${formatLang(comp_account['diff']) | amount}</div>
-                                    <div class="act_as_cell amount"> 
+                                    <div class="act_as_cell amount">
                                     %if comp_account['percent_diff'] is False:
                                      ${ '-' }
                                     %else:
@@ -212,6 +212,35 @@
                         %endif
                     </div>
                 %endfor
+            </div>
+
+            <div class="act_as_thead">
+                <div class="act_as_row labels">
+                    <div class="act_as_cell first_column" style="width: 20px;">${_('Total')}</div>
+                    <div class="act_as_cell" style="width: 80px;">${_('')}</div>
+                    %if comparison_mode == 'no_comparison':
+                        %if initial_balance_mode:
+                            ## opening balance
+                            <div class="act_as_cell amount" style="width: 30px;">${formatLang(total_init) | amount}</div>
+                        %endif
+                        ## debit
+                        <div class="act_as_cell amount" style="width: 30px;">${formatLang(total_debit) | amount}</div>
+                        ## credit
+                        <div class="act_as_cell amount" style="width: 30px;">${formatLang(total_credit) | amount}</div>
+                    %endif
+                    ## balance
+                    <div class="act_as_cell amount" style="width: 30px;">${formatLang(total_balance) | amount}</div>
+                    %if comparison_mode in ('single', 'multiple'):
+                        %for index in range(nb_comparison):
+                            <div class="act_as_cell amount" style="width: 30px;">${formatLang(total_comparisons_balance[index]) | amount}</div>
+
+                            %if comparison_mode == 'single':  ## no diff in multiple comparisons because it shows too data
+                                <div class="act_as_cell amount" style="width: 30px;">${formatLang(total_comparisons_diff) | amount}</div>
+                                <div class="act_as_cell amount" style="width: 30px;">${_('')}</div>
+                            %endif
+                        %endfor
+                    %endif
+                </div>
             </div>
         </div>
     </body>
