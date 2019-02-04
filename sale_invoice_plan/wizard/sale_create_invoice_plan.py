@@ -69,7 +69,10 @@ class sale_create_invoice_plan(models.TransientModel):
 
     @api.one
     def do_create_invoice_plan(self):
-        self._validate_total_amount()
+        res_id = self._context.get('active_id', False)
+        sale_id = self.env['sale.order'].browse(res_id)
+        if not sale_id.bypass_validate_amount:
+            self._validate_total_amount()
         self.env['sale.invoice.plan']._validate_installment_date(
             self.installment_ids)
         order = self.env['sale.order'].browse(self._context['active_id'])
