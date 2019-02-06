@@ -35,6 +35,4 @@ class AccountMove(models.Model):
     @api.multi
     def action_set_tax_sequence(self):
         for move in self:
-            for tax in move.tax_detail_ids:
-                date_doc = tax.invoice_date
-                tax._set_next_sequence(date_doc)
+            move.tax_detail_ids._set_next_sequence()
