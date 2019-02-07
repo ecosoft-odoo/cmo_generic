@@ -31,7 +31,7 @@
 							<field name="base" sum="Base" attrs="{'readonly': [('is_readonly', '=', True)]}"/>
 							<field name="amount" sum="Tax" attrs="{'readonly': [('is_readonly', '=', True)]}"/>
 							<field name="tax_sequence" invisible="1"/>
-							<field name="tax_sequence_display"/>
+							<field name="tax_sequence_display" invisible="1"/>
 							<field name="addition"/>
 						</tree>
 					</field>
