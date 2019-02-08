@@ -271,7 +271,7 @@ class HRExpenseClearing(models.Model):
     def _sql_select_1(self):
         return """
             create_date as date, advance_expense_id, id as expense_id,
-            null as invoice_id, amount as expense_amount,
+            null::int as invoice_id, amount as expense_amount,
             null as clearing_amount, null as invoiced_amount
         """
 
@@ -290,7 +290,9 @@ class HRExpenseClearing(models.Model):
             ai.advance_expense_id, ai.type, expense_id,
             ail.invoice_id, exp.amount as expense_amount,
             case when ai.type in ('in_invoice')
-            and ail.price_subtotal < 0.0 then -ail.price_subtotal
+            and ail.price_subtotal < 0.0 and
+            ail.account_id = (select employee_advance_account_id
+            from res_company limit 1) then -ail.price_subtotal
             when ai.type in ('out_invoice') then ai.amount_total
             else 0.0 end as clearing_amount, ai.amount_total
         """
@@ -313,7 +315,7 @@ class HRExpenseClearing(models.Model):
                         on exp.id = ai.expense_id
                 where ((ai.type in ('in_invoice') and ail.price_subtotal < 0.0
                     and ail.account_id = (select employee_advance_account_id
-                    from res_company where id = ail.company_id))
+                    from res_company limit 1))
                     or ai.type in ('out_invoice'))
                     and ai.state in ('open', 'paid')
             ) a
