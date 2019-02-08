@@ -22,6 +22,7 @@ class PurchaseOrder(models.Model):
         readonly=True,
         ondelete='restrict',
         copy=False,
+        index=True,
     )
     order_id = fields.Many2one(
         'purchase.order',

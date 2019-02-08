@@ -78,7 +78,7 @@ class AccountAssetRemove(models.TransientModel):
         sale_value = 0.0
         account_sale_id = False
         inv_lines = self.env['account.invoice.line'].search(
-            [('asset_id', '=', asset_id)])
+            [('asset_id', '=', asset_id or 0)])
         for line in inv_lines:
             inv = line.invoice_id
             comp_curr = inv.company_id.currency_id
