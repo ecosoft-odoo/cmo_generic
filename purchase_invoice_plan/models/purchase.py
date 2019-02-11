@@ -516,6 +516,12 @@ class PurchaseOrder(models.Model):
         for po in self:
             if po.use_invoice_plan:
                 po.write({'invoice_ids': [(6, 0, po_inv_rel[po.id])]})
+            po.order_line.write({'state': 'draft'})
+            po.write({'state': 'draft'})
+            po.delete_workflow()
+            po.create_workflow()
+            po.level_id = False
+            po.approver_ids = False
         return res
 
 
