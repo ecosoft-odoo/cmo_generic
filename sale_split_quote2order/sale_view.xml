@@ -48,7 +48,7 @@
                             type="action" states="manual" class="oe_highlight" groups="base.group_user"/>
                         <button name="copy_quotation" states="cancel" string="New Copy of Order" type="object"/>
                         <button name="cancel" states="draft,sent" string="Cancel Order" groups="base.group_user"/>
-                        <button name="action_cancel" states="manual,progress" string="Cancel Order" type="object" groups="base.group_user"/>
+                        <button name="action_cancel" states="manual,progress,done" string="Cancel Order" type="object" groups="base.group_user"/>
                         <!-- from sale_stock.view_order_form -->
                         <button name="ship_cancel" states="shipping_except" string="Cancel Order"/>
                         <!-- end -->
