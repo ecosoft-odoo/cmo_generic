@@ -75,6 +75,13 @@ class CommonReportHeaderWebkit(common_report_header):
         else:
             return val
 
+    def _get_display_operating_unit(self, data):
+        return self._get_info(data, 'operating_unit_ids', 'operating.unit')
+
+    def _get_display_analytic(self, data):
+        return self._get_info(
+            data, 'analytic_account_ids', 'account.analytic.account')
+
     def _get_display_period_length(self, data):
         val = self._get_form_param('period_length', data)
         return val
@@ -366,8 +373,39 @@ class CommonReportHeaderWebkit(common_report_header):
     # Initial Balance helper      #
     ###############################
 
+    def _get_extra_sql_join(self):
+        """
+        Additional sql join
+        """
+        sql_join = " JOIN account_move m ON l.move_id = m.id"
+        return sql_join
+
+    def _get_extra_sql_where(self, target_move=False, operating_unit_ids=False,
+                             analytic_account_ids=False):
+        """
+        Additional sql where
+        """
+        sql_where = ""
+        if target_move == 'posted':
+            sql_where += " AND m.state = '%s'" % (target_move)
+        if operating_unit_ids:
+            sql_where += " AND l.operating_unit_id"
+            if len(operating_unit_ids) > 1:
+                sql_where += " IN %s" % (str(tuple(operating_unit_ids)))
+            else:
+                sql_where += " = %s" % (str(operating_unit_ids[0]))
+        if analytic_account_ids:
+            sql_where += " AND l.analytic_account_id"
+            if len(analytic_account_ids) > 1:
+                sql_where += " IN %s" % (str(tuple(analytic_account_ids)))
+            else:
+                sql_where += " = %s" % (str(tuple(analytic_account_ids[0])))
+        return sql_where
+
     def _compute_init_balance(self, account_id=None, period_ids=None,
-                              mode='computed', default_values=False):
+                              target_move=False, operating_unit_ids=False,
+                              analytic_account_ids=False, mode='computed',
+                              default_values=False):
         if not isinstance(period_ids, list):
             period_ids = [period_ids]
         res = {}
@@ -376,14 +414,21 @@ class CommonReportHeaderWebkit(common_report_header):
             if not account_id or not period_ids:
                 raise Exception('Missing account or period_ids')
             try:
-                self.cursor.execute("SELECT sum(debit) AS debit, "
-                                    " sum(credit) AS credit, "
-                                    " sum(debit)-sum(credit) AS balance, "
-                                    " sum(amount_currency) AS curr_balance"
-                                    " FROM account_move_line"
-                                    " WHERE period_id in %s"
-                                    " AND account_id = %s",
-                                    (tuple(period_ids), account_id))
+                # Extra sql for addition criteria on wizard
+                extra_sql_join = self._get_extra_sql_join()
+                extra_sql_where = self._get_extra_sql_where(
+                    target_move=target_move,
+                    operating_unit_ids=operating_unit_ids,
+                    analytic_account_ids=analytic_account_ids)
+                sql = """
+                    SELECT sum(l.debit) AS debit, sum(l.credit) AS credit,
+                           sum(l.debit)-sum(l.credit) AS balance,
+                           sum(l.amount_currency) AS curr_balance
+                           FROM account_move_line l""" + extra_sql_join + \
+                    """
+                        WHERE l.period_id in %s AND l.account_id = %s""" + \
+                    extra_sql_where
+                self.cursor.execute(sql, (tuple(period_ids), account_id))
                 res = self.cursor.dictfetchone()
 
             except Exception:
@@ -397,6 +442,8 @@ class CommonReportHeaderWebkit(common_report_header):
                 'state': mode}
 
     def _read_opening_balance(self, account_ids, start_period,
+                              target_move=False, operating_unit_ids=False,
+                              analytic_account_ids=False,
                               specific_report=False):
         """ Read opening balances from the opening balance
         """
@@ -412,10 +459,14 @@ class CommonReportHeaderWebkit(common_report_header):
         res = {}
         for account_id in account_ids:
             res[account_id] = self._compute_init_balance(
-                account_id, opening_period_selected, mode='read')
+                account_id, opening_period_selected, target_move=target_move,
+                operating_unit_ids=operating_unit_ids,
+                analytic_account_ids=analytic_account_ids, mode='read')
         return res
 
     def _compute_initial_balances(self, account_ids, start_period, fiscalyear,
+                                  target_move=False, operating_unit_ids=False,
+                                  analytic_account_ids=False,
                                   specific_report=False):
         """We compute initial balance.
         If form is filtered by date all initial balance are equal to 0
@@ -450,16 +501,23 @@ class CommonReportHeaderWebkit(common_report_header):
                 # is not included in the period selection!
                 if pnl_periods_ids and not opening_period_selected:
                     res[acc.id] = self._compute_init_balance(
-                        acc.id, pnl_periods_ids)
+                        acc.id, pnl_periods_ids, target_move=target_move,
+                        operating_unit_ids=operating_unit_ids,
+                        analytic_account_ids=analytic_account_ids)
             else:
-                res[acc.id] = self._compute_init_balance(acc.id, bs_period_ids)
+                res[acc.id] = self._compute_init_balance(
+                    acc.id, bs_period_ids, target_move=target_move,
+                    operating_unit_ids=operating_unit_ids,
+                    analytic_account_ids=analytic_account_ids)
         return res
 
     ################################################
     # Account move retrieval helper                #
     ################################################
     def _get_move_ids_from_periods(self, account_id, period_start, period_stop,
-                                   target_move, specific_report=False):
+                                   target_move, operating_unit_ids=False,
+                                   analytic_account_ids=False,
+                                   specific_report=False):
         move_line_obj = self.pool.get('account.move.line')
         period_obj = self.pool.get('account.period')
         periods = []
@@ -475,14 +533,19 @@ class CommonReportHeaderWebkit(common_report_header):
             ('period_id', 'in', periods), ('account_id', '=', account_id)]
         if target_move == 'posted':
             search += [('move_id.state', '=', 'posted')]
-
+        if operating_unit_ids:
+            search += [('operating_unit_id', 'in', operating_unit_ids)]
+        if analytic_account_ids:
+            search += [('analytic_account_id', 'in', analytic_account_ids)]
         # --
 
         return move_line_obj.search(self.cursor, self.uid, search)
 
     def _get_move_ids_from_dates(self, account_id, date_start, date_stop,
                                  target_move,
-                                 mode='include_opening'):
+                                 mode='include_opening',
+                                 operating_unit_ids=False,
+                                 analytic_account_ids=False):
         # TODO imporve perfomance by setting opening period as a property
         move_line_obj = self.pool.get('account.move.line')
         search_period = [('date', '>=', date_start),
@@ -498,11 +561,18 @@ class CommonReportHeaderWebkit(common_report_header):
 
         if target_move == 'posted':
             search_period += [('move_id.state', '=', 'posted')]
+        if operating_unit_ids:
+            search_period += [('operating_unit_id', 'in', operating_unit_ids)]
+        if analytic_account_ids:
+            search_period += [('analytic_account_id', 'in',
+                               analytic_account_ids)]
 
         return move_line_obj.search(self.cursor, self.uid, search_period)
 
     def get_move_lines_ids(self, account_id, main_filter, start, stop,
                            target_move, mode='include_opening',
+                           operating_unit_ids=False,
+                           analytic_account_ids=False,
                            specific_report=False):
         """Get account move lines base on form data"""
         if mode not in ('include_opening', 'exclude_opening'):
@@ -513,11 +583,15 @@ class CommonReportHeaderWebkit(common_report_header):
         if main_filter in ('filter_period', 'filter_no'):
             return self._get_move_ids_from_periods(
                 account_id, start, stop, target_move,
+                operating_unit_ids=operating_unit_ids,
+                analytic_account_ids=analytic_account_ids,
                 specific_report=specific_report)
 
         elif main_filter == 'filter_date':
-            return self._get_move_ids_from_dates(account_id, start, stop,
-                                                 target_move)
+            return self._get_move_ids_from_dates(
+                account_id, start, stop, target_move,
+                operating_unit_ids=operating_unit_ids,
+                analytic_account_ids=analytic_account_ids)
         else:
             raise osv.except_osv(
                 _('No valid filter'), _('Please set a valid time filter'))
@@ -568,7 +642,9 @@ SELECT l.id AS id,
             i.id AS invoice_id,
             i.type AS invoice_type,
             i.number AS invoice_number,
-            l.date_maturity
+            l.date_maturity,
+            ou.code AS operating_unit,
+            aa.code AS analytic
 FROM account_move_line l
     JOIN account_move m on (l.move_id=m.id)
     LEFT JOIN res_currency c on (l.currency_id=c.id)
@@ -580,6 +656,8 @@ FROM account_move_line l
     LEFT JOIN account_period per on (per.id=l.period_id)
     JOIN account_journal j on (l.journal_id=j.id)
     LEFT JOIN account_fiscalyear fisc on (per.fiscalyear_id=fisc.id)
+    LEFT JOIN operating_unit ou ON (l.operating_unit_id=ou.id)
+    LEFT JOIN account_analytic_account aa ON (l.analytic_account_id=aa.id)
     WHERE l.id in %s"""
         monster += (" ORDER BY %s" % (order,))
         try:

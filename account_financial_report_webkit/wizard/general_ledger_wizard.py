@@ -35,6 +35,14 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
             'Activate Centralization',
             help='Uncheck to display all the details '
             'of centralized accounts.'),
+        'operating_unit_ids': fields.many2many(
+            'operating.unit',
+            string='Operating Units',
+            required=False),
+        'analytic_account_ids': fields.many2many(
+            'account.analytic.account',
+            string='Analytic Account',
+            required=False),
     }
     _defaults = {
         'amount_currency': False,
@@ -66,6 +74,8 @@ class AccountReportGeneralLedgerWizard(orm.TransientModel):
                           'display_account',
                           'account_ids',
                           'centralize',
+                          'operating_unit_ids',
+                          'analytic_account_ids',
                           ],
                          context=context)[0]
         data['form'].update(vals)
