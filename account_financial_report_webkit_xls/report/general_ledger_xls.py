@@ -17,6 +17,8 @@ _column_sizes = [
     ('move', 20),
     ('journal', 12),
     ('account_code', 12),
+    ('operating_unit', 12),
+    ('analytic', 12),
     ('partner', 30),
     ('ref', 30),
     ('label', 45),
@@ -74,14 +76,19 @@ class general_ledger_xls(report_xls):
         cell_format = _xs['bold'] + _xs['fill_blue'] + _xs['borders_all']
         cell_style = xlwt.easyxf(cell_format)
         cell_style_center = xlwt.easyxf(cell_format + _xs['center'])
+        col_span = 3
+        if _p.amount_currency(data):
+            col_span += 2
         c_specs = [
             ('coa', 2, 0, 'text', _('Chart of Account')),
             ('fy', 1, 0, 'text', _('Fiscal Year')),
             ('df', 3, 0, 'text', _p.filter_form(data) ==
              'filter_date' and _('Dates Filter') or _('Periods Filter')),
             ('af', 1, 0, 'text', _('Accounts Filter')),
+            ('ou', 1, 0, 'text', _('Operating Units')),
+            ('pj', 1, 0, 'text', _('Projects')),
             ('tm', 2, 0, 'text', _('Target Moves')),
-            ('ib', 2, 0, 'text', _('Initial Balance')),
+            ('ib', col_span, 0, 'text', _('Initial Balance')),
 
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -109,8 +116,14 @@ class general_ledger_xls(report_xls):
             ('df', 3, 0, 'text', df),
             ('af', 1, 0, 'text', _p.accounts(data) and ', '.join(
                 [account.code for account in _p.accounts(data)]) or _('All')),
+            ('ou', 1, 0, 'text', _p.display_operating_unit(data) and
+                ', '.join([x.code for x in _p.display_operating_unit(data)]) or
+                None),
+            ('pj', 1, 0, 'text', _p.display_analytic(data) and
+                ', '.join([x.code for x in _p.display_analytic(data)]) or
+                None),
             ('tm', 2, 0, 'text', _p.display_target_move(data)),
-            ('ib', 2, 0, 'text', initial_balance_text[
+            ('ib', col_span, 0, 'text', initial_balance_text[
              _p.initial_balance_mode]),
         ]
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -146,6 +159,10 @@ class general_ledger_xls(report_xls):
             ('journal', 1, 0, 'text', _('Journal'), None, c_hdr_cell_style),
             ('account_code', 1, 0, 'text',
              _('Account'), None, c_hdr_cell_style),
+            ('operating_unit', 1, 0, 'text',
+             _('OU Code'), None, c_hdr_cell_style),
+            ('analytic', 1, 0, 'text',
+             _('Project Code'), None, c_hdr_cell_style),
             ('partner', 1, 0, 'text', _('Partner'), None, c_hdr_cell_style),
             ('ref', 1, 0, 'text', _('Reference'), None, c_hdr_cell_style),
             ('label', 1, 0, 'text', _('Label'), None, c_hdr_cell_style),
@@ -213,7 +230,7 @@ class general_ledger_xls(report_xls):
                     cumul_balance_curr = init_balance.get(
                         'init_balance_currency') or 0.0
                     c_specs = [('empty%s' % x, 1, 0, 'text', None)
-                               for x in range(7)]
+                               for x in range(9)]
                     c_specs += [
                         ('init_bal', 1, 0, 'text', _('Initial Balance')),
                         ('counterpart', 1, 0, 'text', None),
@@ -263,6 +280,10 @@ class general_ledger_xls(report_xls):
                         ('move', 1, 0, 'text', line.get('move_name') or ''),
                         ('journal', 1, 0, 'text', line.get('jcode') or ''),
                         ('account_code', 1, 0, 'text', account.code),
+                        ('operating_unit', 1, 0, 'text',
+                         line.get('operating_unit') or ''),
+                        ('analytic', 1, 0, 'text',
+                         line.get('analytic') or ''),
                         ('partner', 1, 0, 'text',
                          line.get('partner_name') or ''),
                         ('ref', 1, 0, 'text', line.get('lref')),
@@ -290,17 +311,17 @@ class general_ledger_xls(report_xls):
                     row_pos = self.xls_write_row(
                         ws, row_pos, row_data, ll_cell_style)
 
-                debit_start = rowcol_to_cell(row_start, 9)
-                debit_end = rowcol_to_cell(row_pos - 1, 9)
+                debit_start = rowcol_to_cell(row_start, 11)
+                debit_end = rowcol_to_cell(row_pos - 1, 11)
                 debit_formula = 'SUM(' + debit_start + ':' + debit_end + ')'
-                credit_start = rowcol_to_cell(row_start, 10)
-                credit_end = rowcol_to_cell(row_pos - 1, 10)
+                credit_start = rowcol_to_cell(row_start, 12)
+                credit_end = rowcol_to_cell(row_pos - 1, 12)
                 credit_formula = 'SUM(' + credit_start + ':' + credit_end + ')'
-                balance_debit = rowcol_to_cell(row_pos, 9)
-                balance_credit = rowcol_to_cell(row_pos, 10)
+                balance_debit = rowcol_to_cell(row_pos, 11)
+                balance_credit = rowcol_to_cell(row_pos, 12)
                 balance_formula = balance_debit + '-' + balance_credit
                 c_specs = [
-                    ('acc_title', 8, 0, 'text',
+                    ('acc_title', 10, 0, 'text',
                      ' - '.join([account.code, account.name])),
                     ('cum_bal', 1, 0, 'text',
                      _('Cumulated Balance on Account'),

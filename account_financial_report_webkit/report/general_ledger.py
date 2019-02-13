@@ -40,6 +40,8 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
             'initial_balance': self._get_initial_balance,
             'amount_currency': self._get_amount_currency,
             'display_target_move': self._get_display_target_move,
+            'display_operating_unit': self._get_display_operating_unit,
+            'display_analytic': self._get_display_analytic,
             'accounts': self._get_accounts_br,
             'additional_args': [
                 ('--header-font-name', 'Helvetica'),
@@ -71,6 +73,9 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         start_date = self._get_form_param('date_from', data)
         stop_date = self._get_form_param('date_to', data)
         do_centralize = self._get_form_param('centralize', data)
+        operating_unit_ids = self._get_form_param('operating_unit_ids', data)
+        analytic_account_ids = self._get_form_param(
+            'analytic_account_ids', data)
         start_period = self.get_start_period_br(data)
         stop_period = self.get_end_period_br(data)
         fiscalyear = self.get_fiscalyear_br(data)
@@ -104,14 +109,22 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
         accounts = self.get_all_accounts(new_ids, exclude_type=['view'])
         if initial_balance_mode == 'initial_balance':
             init_balance_memoizer = self._compute_initial_balances(
-                accounts, start, fiscalyear, specific_report=specific_report)
+                accounts, start, fiscalyear, target_move=target_move,
+                operating_unit_ids=operating_unit_ids,
+                analytic_account_ids=analytic_account_ids,
+                specific_report=specific_report)
         elif initial_balance_mode == 'opening_balance':
             init_balance_memoizer = self._read_opening_balance(
-                accounts, start, specific_report=specific_report)
+                accounts, start, target_move=target_move,
+                operating_unit_ids=operating_unit_ids,
+                analytic_account_ids=analytic_account_ids,
+                specific_report=specific_report)
 
         ledger_lines_memoizer = self._compute_account_ledger_lines(
             accounts, init_balance_memoizer, main_filter, target_move,
-            start, stop, specific_report=specific_report)
+            start, stop, operating_unit_ids=operating_unit_ids,
+            analytic_account_ids=analytic_account_ids,
+            specific_report=specific_report)
         objects = self.pool.get('account.account').browse(self.cursor,
                                                           self.uid,
                                                           accounts)
@@ -203,11 +216,15 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
     def _compute_account_ledger_lines(self, accounts_ids,
                                       init_balance_memoizer, main_filter,
                                       target_move, start, stop,
+                                      operating_unit_ids=False,
+                                      analytic_account_ids=False,
                                       specific_report=False):
         res = {}
         for acc_id in accounts_ids:
             move_line_ids = self.get_move_lines_ids(
                 acc_id, main_filter, start, stop, target_move,
+                operating_unit_ids=operating_unit_ids,
+                analytic_account_ids=analytic_account_ids,
                 specific_report=specific_report)
             if not move_line_ids:
                 res[acc_id] = []

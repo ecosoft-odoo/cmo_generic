@@ -19,6 +19,15 @@
                         <field name="display_account" invisible="True"/>
                     </form>
                     <page name="filters" position="after">
+                        <page string="Operating Units"
+                              name="operating_units"
+                              groups="operating_unit.group_multi_operating_unit">
+                            <field name="operating_unit_ids"/>
+                        </page>
+                        <page string="Projects"
+                              name="analytic_accounts">
+                            <field name="analytic_account_ids"/>
+                        </page>
                         <page string="Accounts Filters" name="accounts">
                             <separator string="Print only" colspan="4"/>
                             <field name="account_ids" colspan="4" nolabel="1">
