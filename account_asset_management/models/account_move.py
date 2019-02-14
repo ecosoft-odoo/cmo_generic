@@ -92,7 +92,6 @@ class AccountMoveLine(models.Model):
                 'purchase_value': depreciation_base,
                 'partner_id': vals['partner_id'],
                 'date_start': move.date,
-                'code': move.name,
             }
             if self._context.get('company_id'):
                 temp_vals['company_id'] = self._context['company_id']
