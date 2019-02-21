@@ -218,7 +218,7 @@ class GeneralLedgerWebkit(report_sxw.rml_parse, CommonReportHeaderWebkit):
                                       target_move, start, stop,
                                       operating_unit_ids=False,
                                       analytic_account_ids=False,
-                                      specific_report=False):
+                                      specific_report=True):
         res = {}
         for acc_id in accounts_ids:
             move_line_ids = self.get_move_lines_ids(

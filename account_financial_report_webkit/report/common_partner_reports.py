@@ -20,7 +20,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                     target_move,
                                     exclude_reconcile=False,
                                     partner_filter=False,
-                                    specific_report=False):
+                                    specific_report=True):
         filter_from = False
         if main_filter in ('filter_period', 'filter_no'):
             filter_from = 'period'
@@ -72,7 +72,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                             include_opening=False,
                                             fiscalyear=False,
                                             stop_at_previous_opening=False,
-                                            specific_report=False):
+                                            specific_report=True):
         """We retrieve all periods before start period"""
         periods = super(CommonPartnersReportHeaderWebkit, self).\
             _get_period_range_from_start_period(
@@ -94,7 +94,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
 
     def _get_query_params_from_periods(self, period_start, period_stop,
                                        mode='exclude_opening',
-                                       specific_report=False):
+                                       specific_report=True):
         """
         Build the part of the sql "where clause" which filters on the selected
         periods.
@@ -131,7 +131,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
         return sql_conditions, search_params
 
     def _get_query_params_from_dates(self, date_start, date_stop,
-                                     specific_report=False, **args):
+                                     specific_report=True, **args):
         """
         Build the part of the sql where clause based on the dates to print.
 
@@ -164,7 +164,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                     opening_mode='exclude_opening',
                                     exclude_reconcile=False,
                                     partner_filter=None,
-                                    specific_report=False):
+                                    specific_report=True):
         """
 
         :param str filter_from: "periods" or "dates"
@@ -277,7 +277,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                            exclude_reconcile=False,
                                            force_period_ids=False,
                                            date_stop=None,
-                                           specific_report=False):
+                                           specific_report=True):
         # PABI2
         fiscalyear = False
         include_opening = False
@@ -325,7 +325,7 @@ class CommonPartnersReportHeaderWebkit(CommonReportHeaderWebkit):
                                            partner_filter=None,
                                            exclude_reconcile=False,
                                            force_period_ids=False,
-                                           specific_report=False):
+                                           specific_report=True):
         """We compute initial balance.
         If form is filtered by date all initial balance are equal to 0
         This function will sum pear and apple in currency amount if account

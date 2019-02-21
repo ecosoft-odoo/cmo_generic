@@ -235,7 +235,7 @@ class CommonReportHeaderWebkit(common_report_header):
         return period_obj.search(self.cr, self.uid, [['special', '=', False],
                                                      ['id', 'in', period_ids]])
 
-    def get_included_opening_period(self, period, specific_report=False):
+    def get_included_opening_period(self, period, specific_report=True):
         """Return the opening included in normal period we use the assumption
         that there is only one opening period per fiscal year"""
         period_obj = self.pool.get('account.period')
@@ -281,7 +281,7 @@ class CommonReportHeaderWebkit(common_report_header):
                                             include_opening=False,
                                             fiscalyear=False,
                                             stop_at_previous_opening=False,
-                                            specific_report=False):
+                                            specific_report=True):
         """We retrieve all periods before start period"""
         opening_period_id = False
         past_limit = []
@@ -341,16 +341,16 @@ class CommonReportHeaderWebkit(common_report_header):
             periods.remove(start_period.id)
         return periods
 
-    def get_first_fiscalyear_period(self, fiscalyear, specific_report=False):
+    def get_first_fiscalyear_period(self, fiscalyear, specific_report=True):
         return self._get_st_fiscalyear_period(
             fiscalyear, specific_report=specific_report)
 
-    def get_last_fiscalyear_period(self, fiscalyear, specific_report=False):
+    def get_last_fiscalyear_period(self, fiscalyear, specific_report=True):
         return self._get_st_fiscalyear_period(
             fiscalyear, order='DESC', specific_report=specific_report)
 
     def _get_st_fiscalyear_period(self, fiscalyear, special=False,
-                                  order='ASC', specific_report=False):
+                                  order='ASC', specific_report=True):
         period_obj = self.pool.get('account.period')
         p_id = False
         if specific_report:
@@ -444,7 +444,7 @@ class CommonReportHeaderWebkit(common_report_header):
     def _read_opening_balance(self, account_ids, start_period,
                               target_move=False, operating_unit_ids=False,
                               analytic_account_ids=False,
-                              specific_report=False):
+                              specific_report=True):
         """ Read opening balances from the opening balance
         """
         opening_period_selected = self.get_included_opening_period(
@@ -467,7 +467,7 @@ class CommonReportHeaderWebkit(common_report_header):
     def _compute_initial_balances(self, account_ids, start_period, fiscalyear,
                                   target_move=False, operating_unit_ids=False,
                                   analytic_account_ids=False,
-                                  specific_report=False):
+                                  specific_report=True):
         """We compute initial balance.
         If form is filtered by date all initial balance are equal to 0
         This function will sum pear and apple in currency amount if account as
@@ -517,7 +517,7 @@ class CommonReportHeaderWebkit(common_report_header):
     def _get_move_ids_from_periods(self, account_id, period_start, period_stop,
                                    target_move, operating_unit_ids=False,
                                    analytic_account_ids=False,
-                                   specific_report=False):
+                                   specific_report=True):
         move_line_obj = self.pool.get('account.move.line')
         period_obj = self.pool.get('account.period')
         periods = []
@@ -573,7 +573,7 @@ class CommonReportHeaderWebkit(common_report_header):
                            target_move, mode='include_opening',
                            operating_unit_ids=False,
                            analytic_account_ids=False,
-                           specific_report=False):
+                           specific_report=True):
         """Get account move lines base on form data"""
         if mode not in ('include_opening', 'exclude_opening'):
             raise osv.except_osv(
@@ -698,7 +698,7 @@ WHERE move_id in %s"""
         return res and dict(res) or {}
 
     def is_initial_balance_enabled(self, main_filter, start_period=False,
-                                   specific_report=False):
+                                   specific_report=True):
         if specific_report:
             # PABI2
             if main_filter not in ('filter_period'):
@@ -716,7 +716,7 @@ WHERE move_id in %s"""
                 return False
         return True
 
-    def _get_initial_balance_mode(self, start_period, specific_report=False):
+    def _get_initial_balance_mode(self, start_period, specific_report=True):
         opening_period_selected = self.get_included_opening_period(
             start_period, specific_report=specific_report)
         # Force period

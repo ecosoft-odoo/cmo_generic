@@ -17,7 +17,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
 
     def _get_account_details(self, account_ids, target_move, fiscalyear,
                              main_filter, start, stop, initial_balance_mode,
-                             specific_report=False, context=None):
+                             specific_report=True, context=None):
         """
         Get details of accounts to display on the report
         @param account_ids: ids of accounts to get details
@@ -103,7 +103,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
 
     def _get_comparison_details(self, data, account_ids, target_move,
                                 comparison_filter, index,
-                                specific_report=False):
+                                specific_report=True):
         """
 
         @param data: data of the wizard form
@@ -204,7 +204,7 @@ class CommonBalanceReportHeaderWebkit(CommonReportHeaderWebkit):
 
     def _get_start_stop_for_filter(self, main_filter, fiscalyear, start_date,
                                    stop_date, start_period, stop_period,
-                                   specific_report=False):
+                                   specific_report=True):
         if main_filter in ('filter_no', 'filter_year'):
             start_period = self.get_first_fiscalyear_period(
                 fiscalyear, specific_report=specific_report)
