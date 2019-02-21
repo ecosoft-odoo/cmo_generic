@@ -144,20 +144,21 @@ class AccountWhtCert(models.Model):
     x_sequence_display = fields.Char(compute='_compute_cert_fields')
     x_withholding = fields.Char(compute='_compute_cert_fields')
     x_paid_one_time = fields.Char(compute='_compute_cert_fields')
-    x_total_base = fields.Float(compute='_compute_cert_fields')
-    x_total_tax = fields.Float(compute='_compute_cert_fields')
-    x_type_1_base = fields.Float(compute='_compute_cert_fields')
-    x_type_1_tax = fields.Float(compute='_compute_cert_fields')
-    x_type_2_base = fields.Float(compute='_compute_cert_fields')
-    x_type_2_tax = fields.Float(compute='_compute_cert_fields')
-    x_type_3_base = fields.Float(compute='_compute_cert_fields')
-    x_type_3_tax = fields.Float(compute='_compute_cert_fields')
-    x_type_5_base = fields.Float(compute='_compute_cert_fields')
-    x_type_5_tax = fields.Float(compute='_compute_cert_fields')
+    x_total_base = fields.Char(compute='_compute_cert_fields')
+    x_total_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_1_base = fields.Char(compute='_compute_cert_fields')
+    x_type_1_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_2_base = fields.Char(compute='_compute_cert_fields')
+    x_type_2_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_3_base = fields.Char(compute='_compute_cert_fields')
+    x_type_3_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_5_base = fields.Char(compute='_compute_cert_fields')
+    x_type_5_tax = fields.Char(compute='_compute_cert_fields')
     x_type_5_desc = fields.Char(compute='_compute_cert_fields')
-    x_type_6_base = fields.Float(compute='_compute_cert_fields')
-    x_type_6_tax = fields.Float(compute='_compute_cert_fields')
+    x_type_6_base = fields.Char(compute='_compute_cert_fields')
+    x_type_6_tax = fields.Char(compute='_compute_cert_fields')
     x_type_6_desc = fields.Char(compute='_compute_cert_fields')
+    x_type_6_percent = fields.Char(compute='_compute_cert_fields')
     x_signature = fields.Char(compute='_compute_cert_fields')
 
     @api.multi
@@ -183,8 +184,8 @@ class AccountWhtCert(models.Model):
                 rec.tax_payer == 'withholding' and 'X' or ''
             rec.x_paid_one_time = \
                 rec.tax_payer == 'paid_one_time' and 'X' or ''
-            rec.x_total_base = rec._get_summary_by_type('base')
-            rec.x_total_tax = rec._get_summary_by_type('tax')
+            rec.x_total_base = rec._get_summary_by_type('total_base')
+            rec.x_total_tax = rec._get_summary_by_type('total_tax')
             rec.x_type_1_base = rec._get_summary_by_type('base', '1')
             rec.x_type_1_tax = rec._get_summary_by_type('tax', '1')
             rec.x_type_2_base = rec._get_summary_by_type('base', '2')
@@ -197,6 +198,7 @@ class AccountWhtCert(models.Model):
             rec.x_type_6_base = rec._get_summary_by_type('base', '6')
             rec.x_type_6_tax = rec._get_summary_by_type('tax', '6')
             rec.x_type_6_desc = rec._get_summary_by_type('desc', '6')
+            rec.x_type_6_percent = rec._get_summary_by_type('percent', '6')
             rec.x_signature = rec.create_uid.display_name
 
     @api.multi
@@ -338,14 +340,29 @@ class AccountWhtCert(models.Model):
             wht_lines = wht_lines.filtered(lambda l:
                                            l.wht_cert_income_type == ttype)
         if column == 'base':
-            return round(sum([x.base for x in wht_lines]), 2)
+            bases = ["{:,.2f}".format(x.base) for x in wht_lines]
+            bases = map(str, bases)
+            base = ';'.join(bases)
+            return base
         if column == 'tax':
-            return round(sum([x.amount for x in wht_lines]), 2)
+            taxes = ["{:,.2f}".format(x.amount) for x in wht_lines]
+            taxes = map(str, taxes)
+            tax = ';'.join(taxes)
+            return tax
         if column == 'desc':
             descs = [x.wht_cert_income_desc for x in wht_lines]
             descs = filter(lambda x: x and x != '', descs)
-            desc = ', '.join(descs)
+            desc = ','.join(descs)
             return desc
+        if column == 'percent':
+            percentage = [x.percent for x in wht_lines]
+            percentage = map(str, percentage)
+            percent = ';'.join(percentage)
+            return percent
+        if column == 'total_base':
+            return round(sum([x.base for x in wht_lines]), 2)
+        if column == 'total_tax':
+            return round(sum([x.amount for x in wht_lines]), 2)
 
     @api.model
     def _prepare_address(self, partner):
