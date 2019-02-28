@@ -48,7 +48,7 @@ def make_ranges(top, offset):
 
 
 # list of overdue ranges
-RANGES = make_ranges(120, 30)
+RANGES = make_ranges(360, 30)
 
 
 def make_ranges_titles():
