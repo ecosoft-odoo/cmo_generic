@@ -41,7 +41,7 @@ def make_ranges(top, offset):
                    (offset, n*offset), ... (top, 100000)]
     """
     # ranges = [(n, min(n + offset, top)) for n in xrange(0, top, offset)]
-    ranges = [(0, 30), (30, 90), (90, 180), (180, 360)]
+    ranges = [(0, 30), (30, 90), (90, 180), (180, top)]
     ranges.insert(0, (-100000000000, 0))
     ranges.append((top, 100000000000))
     return ranges
