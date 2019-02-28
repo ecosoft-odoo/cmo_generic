@@ -38,14 +38,15 @@ def make_ranges(top, offset):
               eg. [(-100000, 0), (0, offset),
                    (offset, n*offset), ... (top, 100000)]
     """
-    ranges = [(n, min(n + offset, top)) for n in xrange(0, top, offset)]
+    # ranges = [(n, min(n + offset, top)) for n in xrange(0, top, offset)]
+    ranges = [(0, 30), (30, 90), (90, 180), (180, top)]
     ranges.insert(0, (-100000000000, 0))
     ranges.append((top, 100000000000))
     return ranges
 
 
 # list of overdue ranges
-RANGES = make_ranges(120, 30)
+RANGES = make_ranges(360, 30)
 
 
 def make_ranges_titles():
@@ -319,12 +320,16 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         :returns: function bounded to :class:`.AccountAgedTrialBalanceWebkit`
 
         """
-        if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
-            return self.compute_delay_from_partial_rec
-        elif line['jtype'] in INV_TYPE and line.get('date_maturity'):
+        if line.get('date_maturity'):
             return self.compute_delay_from_maturity
         else:
             return self.compute_delay_from_date
+        # if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
+        #     return self.compute_delay_from_partial_rec
+        # elif line['jtype'] in INV_TYPE and line.get('date_maturity'):
+        #     return self.compute_delay_from_maturity
+        # else:
+        #     return self.compute_delay_from_date
 
     def line_is_valid(self, partner_id, line):
         """Predicate hook that allows to filter line to be treated
