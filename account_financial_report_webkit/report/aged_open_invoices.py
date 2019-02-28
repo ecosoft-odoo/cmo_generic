@@ -315,12 +315,16 @@ class AccountAgedOpenInvoicesWebkit(PartnersOpenInvoicesWebkit):
         :returns: function bounded to :class:`.AccountAgedOpenInvoicesWebkit`
 
         """
-        if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
-            return self.compute_delay_from_partial_rec
-        elif line['jtype'] in INV_TYPE and line.get('date_maturity'):
+        if line.get('date_maturity'):
             return self.compute_delay_from_maturity
         else:
             return self.compute_delay_from_date
+        # if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
+        #     return self.compute_delay_from_partial_rec
+        # elif line['jtype'] in INV_TYPE and line.get('date_maturity'):
+        #     return self.compute_delay_from_maturity
+        # else:
+        #     return self.compute_delay_from_date
 
     def line_is_valid(self, partner_id, line):
         """Predicate hook that allows to filter line to be treated
