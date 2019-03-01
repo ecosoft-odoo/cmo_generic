@@ -8,6 +8,7 @@ from openerp.osv import osv
 from openerp.tools.translate import _
 from openerp.addons.account.report.common_report_header \
     import common_report_header
+from openerp import SUPERUSER_ID
 
 _logger = logging.getLogger('financial.reports.webkit')
 
@@ -539,7 +540,7 @@ class CommonReportHeaderWebkit(common_report_header):
             search += [('analytic_account_id', 'in', analytic_account_ids)]
         # --
 
-        return move_line_obj.search(self.cursor, self.uid, search)
+        return move_line_obj.search(self.cursor, SUPERUSER_ID, search)
 
     def _get_move_ids_from_dates(self, account_id, date_start, date_stop,
                                  target_move,
@@ -567,7 +568,7 @@ class CommonReportHeaderWebkit(common_report_header):
             search_period += [('analytic_account_id', 'in',
                                analytic_account_ids)]
 
-        return move_line_obj.search(self.cursor, self.uid, search_period)
+        return move_line_obj.search(self.cursor, SUPERUSER_ID, search_period)
 
     def get_move_lines_ids(self, account_id, main_filter, start, stop,
                            target_move, mode='include_opening',
