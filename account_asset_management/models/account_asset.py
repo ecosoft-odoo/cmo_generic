@@ -24,6 +24,7 @@ class DummyFy(object):
 
 class AccountAsset(models.Model):
     _name = 'account.asset'
+    _inherit = 'mail.thread'
     _description = 'Asset'
     _order = 'date_start desc, name'
     _parent_store = True
@@ -105,6 +106,7 @@ class AccountAsset(models.Model):
             ('close', 'Close'),
             ('removed', 'Removed'),
         ], string='Status', required=True, default='draft', copy='draft',
+        track_visibility='onchange',
         help="When an asset is created, the status is 'Draft'.\n"
              "If the asset is confirmed, the status goes in 'Running' "
              "and the depreciation lines can be posted "
