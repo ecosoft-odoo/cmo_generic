@@ -117,7 +117,7 @@
                         ## operating unit
                         <div class="act_as_cell" style="width: 65px;">${_('OU Code')}</div>
                         ## project
-                        <div class="act_as_cell" style="width: 65px;">${_('Project Code')}</div>
+                        <div class="act_as_cell" style="width: 65px;">${_('Project')}</div>
                         ## partner
                         <div class="act_as_cell" style="width: 140px;">${_('Partner')}</div>
                         ## move reference
@@ -213,7 +213,7 @@
                           ## operating unit
                           <div class="act_as_cell">${line.get('operating_unit') or ''}</div>
                           ## project
-                          <div class="act_as_cell">${line.get('analytic') or ''}</div>
+                          <div class="act_as_cell">${line.get('analytic_display') or ''}</div>
                           ## partner
                           <div class="act_as_cell overflow_ellipsis">${line.get('partner_name') or ''}</div>
                           ## move reference
