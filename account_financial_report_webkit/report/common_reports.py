@@ -646,7 +646,9 @@ SELECT l.id AS id,
             l.date_maturity,
             ou.code AS operating_unit,
             aa.code AS analytic,
-            CONCAT(aa.code,' ',aa.name) AS analytic_display
+            (CASE WHEN aa.code IS NOT NULL
+            THEN CONCAT('[', aa.code, '] ',aa.name)
+            ELSE NULL END) AS analytic_display
 FROM account_move_line l
     JOIN account_move m on (l.move_id=m.id)
     LEFT JOIN res_currency c on (l.currency_id=c.id)
