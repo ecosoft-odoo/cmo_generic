@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_bank_account_transfer_form" model="ir.ui.view">
+            <field name="name">view.bank.account.transfer.form</field>
+            <field name="model">bank.account.transfer</field>
+            <field name="inherit_id" ref="bank_account_transfer.view_bank_account_transfer_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet//group[@name='right']//field[@name='move_id']" position="after">
+                    <field name="cancel_move_id" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
