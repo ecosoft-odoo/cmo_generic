@@ -1160,6 +1160,13 @@ class AccountAsset(models.Model):
     def _set_close_asset_zero_value(self):
         # we re-evaluate the assets to determine if we can close them
         for asset in self:
+            move_states = asset.depreciation_line_ids.\
+                mapped('move_id').mapped('state')
+            states = list(set(move_states))
             if asset.company_id.currency_id.is_zero(asset.value_residual):
-                asset.state = 'close'
+                move_states = asset.depreciation_line_ids.\
+                    mapped('move_id').mapped('state')
+                states = list(set(move_states))
+                if len(states) == 1 and states[0] == 'posted':
+                    asset.state = 'close'
         return True
