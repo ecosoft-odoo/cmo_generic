@@ -674,13 +674,9 @@ class AccountVoucher(common_voucher, models.Model):
                 move_dict = \
                     self.with_context(context).account_move_get(voucher.id)
                 journal = self.env.user.company_id.recognize_vat_journal_id
-                today = fields.Date.context_today(self)
-                period_id = self.env['account.period'].find(self.date)[:1]
                 move_dict.update({
                     'name': '/',
                     'journal_id': journal.id,
-                    'date': today,
-                    'period_id': period_id.id,
                 })
                 move = move_pool.with_context(context).\
                     create(move_dict)
@@ -690,14 +686,31 @@ class AccountVoucher(common_voucher, models.Model):
                 voucher.write({
                     'recognize_vat_move_id': move.id,
                 })
-                if journal.entry_posted:
+                if journal.entry_posted and move.state != 'posted':
                     move.post()
-            # Call just to by pass in hook, but still benefit from others
-            super(AccountVoucher,
-                  self.with_context(bypass=True)).action_move_line_create()
+                # Call just to by pass in hook, but still benefit from others
+                super(AccountVoucher, voucher.with_context(bypass=True)).\
+                    action_move_line_create()
+                # This seem not necessary, but just ensure the consistency
+                self._cr.execute("""
+                    update account_move_line ml set (date, period_id) = (
+                        select date, period_id from account_move
+                        where id = ml.move_id) where move_id = %s
+                """, (move.id, ))
+            # --
         else:
             super(AccountVoucher, self).action_move_line_create()
         return True
+
+    @api.model
+    def account_move_get(self, voucher_id):
+        move = super(AccountVoucher, self).account_move_get(voucher_id)
+        if self._context.get('recognize_vat', False):
+            date_clear_undue = self._context.get('date_clear_undue')
+            period = self.env['account.period'].find(date_clear_undue)[:1]
+            move.update({'date': date_clear_undue,
+                         'period_id': period.id})
+        return move
 
 
 class AccountVoucherLine(common_voucher, models.Model):
