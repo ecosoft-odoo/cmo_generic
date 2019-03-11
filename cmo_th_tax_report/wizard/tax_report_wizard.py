@@ -29,7 +29,8 @@ class AccountTaxReportWizard(models.TransientModel):
         string='Tax',
         required=True,
         domain=[('type_tax_use', '!=', 'all'),
-                ('is_wht', '=', False)],
+                ('is_wht', '=', False),
+                ('is_undue_tax', '=', False)],
     )
     print_format = fields.Selection(
         [('pdf', 'PDF'),
