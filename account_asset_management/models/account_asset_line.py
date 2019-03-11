@@ -255,8 +255,7 @@ class AccountAssetLine(models.Model):
         # we re-evaluate the assets to determine if we can close them
         for asset in self.env['account.asset'].browse(
                 list(set(asset_ids))):
-            if asset.company_id.currency_id.is_zero(asset.value_residual):
-                asset.state = 'close'
+            asset._set_close_asset_zero_value()
         return created_move_ids
 
     @api.multi
