@@ -37,6 +37,7 @@ To-Be:
         'account_voucher_cancel_hooks',
         'account_bank_receipt',
         'account_bank_payment',
+        'bank_account_transfer',
         'hr_salary',
     ],
     'demo': [],
@@ -45,6 +46,7 @@ To-Be:
         'views/account_invoice_view.xml',
         'views/account_bank_receipt_view.xml',
         'views/account_bank_payment_view.xml',
+        'views/bank_account_transfer_view.xml',
         'views/hr_salary_view.xml',
     ],
     'test': [
