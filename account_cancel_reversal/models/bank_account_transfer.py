@@ -20,13 +20,12 @@ class BankAccountTransfer(models.Model):
             if line.reconcile_id:
                 line.reconcile_id.unlink()
         move = self.move_id
-        period = self.env['account.period'].find()
         AccountMove = self.env['account.move']
         move_dict = move.copy_data({
             'name': move.name + '_VOID',
             'ref': move.ref,
-            'period_id': period.id,
-            'date': fields.Date.context_today(self), })[0]
+            'period_id': move.period_id.id,
+            'date': move.date, })[0]
         move_dict = AccountMove._switch_move_dict_dr_cr(move_dict)
         rev_move = AccountMove.create(move_dict)
         self.cancel_move_id = rev_move
