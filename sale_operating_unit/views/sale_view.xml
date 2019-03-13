@@ -41,7 +41,7 @@
             <field name="inherit_id" ref="sale.view_sales_order_filter"/>
             <field name="arch" type="xml">
                 <xpath expr="//filter[@string='Salesperson']" position="after">
-                    <filter string="Department" domain="[]" groups="operating_unit.group_multi_operating_unit" context="{'group_by':'operating_unit_id'}"/>
+                    <filter string="Operating Unit" domain="[]" groups="operating_unit.group_multi_operating_unit" context="{'group_by':'operating_unit_id'}"/>
                 </xpath>
                 <field name="partner_id" position="after">
                     <field name="operating_unit_id" groups="operating_unit.group_multi_operating_unit"/>
