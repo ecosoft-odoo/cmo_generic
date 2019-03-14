@@ -9,6 +9,8 @@
             <field name="arch" type="xml">
                 <field name="date_due" position="after">
                     <field name="origin_invoice_id" />
+                    <field name="origin_invoice_total" attrs="{'invisible': [('origin_invoice_id','!=',False)]}"/>
+                    <field name="origin_invoice_date" attrs="{'invisible': [('origin_invoice_id','!=',False)]}"/>
                 </field>
                 <page string="Payments" position="after" >
                     <page string="Refunds" attrs="{'invisible': [('refunded_amount','=',0)]}">

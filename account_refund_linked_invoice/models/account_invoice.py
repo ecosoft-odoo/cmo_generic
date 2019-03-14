@@ -25,6 +25,14 @@ class AccountInvoice(models.Model):
         readonly=True,
         copy=False,
         )
+    origin_invoice_total = fields.Float(
+        string='Origin invoice Total',
+        states={'draft': [('readonly', False)]},
+    )
+    origin_invoice_date = fields.Date(
+        string='Origin invoice Date',
+        states={'draft': [('readonly', False)]},
+    )
 
     @api.multi
     @api.depends('refund_invoice_ids.amount_untaxed')
