@@ -400,7 +400,7 @@ class CommonReportHeaderWebkit(common_report_header):
             if len(analytic_account_ids) > 1:
                 sql_where += " IN %s" % (str(tuple(analytic_account_ids)))
             else:
-                sql_where += " = %s" % (str(tuple(analytic_account_ids[0])))
+                sql_where += " = %s" % (str(analytic_account_ids[0]))
         return sql_where
 
     def _compute_init_balance(self, account_id=None, period_ids=None,
