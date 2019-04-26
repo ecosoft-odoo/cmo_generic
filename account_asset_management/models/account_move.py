@@ -11,7 +11,9 @@ _logger = logging.getLogger(__name__)
 
 # List of move's fields that can't be modified if move is linked
 # with a depreciation line
-FIELDS_AFFECTS_ASSET_MOVE = set(['period_id', 'journal_id', 'date'])
+# -- CMO want to adjust period and date as move is linked
+# -- so no affect asset for these field
+FIELDS_AFFECTS_ASSET_MOVE = set(['journal_id'])
 # List of move line's fields that can't be modified if move is linked
 # with a depreciation line
 FIELDS_AFFECTS_ASSET_MOVE_LINE = \
