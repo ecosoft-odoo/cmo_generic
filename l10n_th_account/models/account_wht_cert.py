@@ -418,7 +418,7 @@ class WhtCertTaxLine(models.Model):
         size=50,
         required=False,
     )
-    percent = fields.Integer(
+    percent = fields.Float(
         string='Percent',
         compute='_compute_percent',
         store=True,
@@ -437,7 +437,7 @@ class WhtCertTaxLine(models.Model):
     def _compute_percent(self):
         for rec in self:
             if rec.base:
-                rec.percent = int(round(rec.amount / rec.base * 100, 0))
+                rec.percent = rec.amount / rec.base * 100.00
             else:
                 rec.percent = 0
         return True
