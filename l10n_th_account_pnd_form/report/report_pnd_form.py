@@ -119,7 +119,7 @@ class ReportPNDForm(models.Model):
             pv.name as supplier_province,
             ts.zip as supplier_zip,
             co.name as supplier_country,
-            round(avg(ct.percent), 0) as percent,
+            round(avg(ct.percent)::numeric, 0) as percent,
             case when c.state != 'cancel'
                 then sum(ct.base) else 0.0 end as base_total,
             case when c.state != 'cancel'
