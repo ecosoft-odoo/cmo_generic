@@ -355,7 +355,7 @@ class AccountWhtCert(models.Model):
             desc = ','.join(descs)
             return desc
         if column == 'percent':
-            percentage = [x.percent for x in wht_lines]
+            percentage = [round(x.percent, 2) for x in wht_lines]
             percentage = map(str, percentage)
             percent = ';'.join(percentage)
             return percent
