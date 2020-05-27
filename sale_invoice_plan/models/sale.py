@@ -136,7 +136,8 @@ class sale_order(models.Model):
             # kittiu: problem with decimal, so we dicide to test with 0
             # obj_precision = self.env['decimal.precision']
             # prec = obj_precision.precision_get('Account')
-            prec = 0
+            # tharathipc: Change precision from 0 to 2
+            prec = 2
             # --
             for order_line in self.order_line:
                 subtotal = self.price_include and \
