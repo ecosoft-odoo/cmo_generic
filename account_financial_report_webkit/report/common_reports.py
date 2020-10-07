@@ -481,7 +481,7 @@ class CommonReportHeaderWebkit(common_report_header):
         # if opening entries were created by error on this account
         pnl_periods_ids = self._get_period_range_from_start_period(
             start_period, fiscalyear=fiscalyear, include_opening=True,
-            specific_report=specific_report)
+            stop_at_previous_opening=True, specific_report=specific_report)
         bs_period_ids = self._get_period_range_from_start_period(
             start_period, include_opening=True, stop_at_previous_opening=True,
             specific_report=specific_report)
