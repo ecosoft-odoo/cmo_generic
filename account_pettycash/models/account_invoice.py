@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
+from openerp.tools import float_compare
 
 
 class AccountInvoice(models.Model):
@@ -42,7 +43,9 @@ class AccountInvoice(models.Model):
             amount = sum([x.price_subtotal for x in inv_lines])
             company_currency = rec.company_id.currency_id
             amount_currency = rec.currency_id.compute(amount, company_currency)
-            if amount_currency > max_amount:
+            prec = rec.currency_id.rounding
+            if float_compare(
+                    amount_currency, max_amount, precision_rounding=prec) == 1:
                 raise ValidationError(
                     _('Petty Cash balance is %s %s.\n'
                       'Max amount to add is %s %s.') %
