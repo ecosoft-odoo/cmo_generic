@@ -11,7 +11,30 @@
                     <field name="account_id"/>
                     <field name="pettycash_limit" sum="Limit"/>
                     <field name="pettycash_balance" sum="Balance"/>
+                    <field name="active"/>
                 </tree>
+            </field>
+        </record>
+
+        <record id="view_account_pettycash_form" model="ir.ui.view">
+            <field name="name">view.account.pettycash.form</field>
+            <field name="model">account.pettycash</field>
+            <field name="arch" type="xml">
+                <form string="Petty Cash">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="account_id"/>
+                                <field name="pettycash_limit"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="pettycash_balance"/>
+                                <field name="partner_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
             </field>
         </record>
 

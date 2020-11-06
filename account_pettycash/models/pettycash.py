@@ -28,6 +28,9 @@ class AccountPettycash(models.Model):
                 ('user_type.report_type', '=', 'asset')],
         required=True,
     )
+    active = fields.Boolean(
+        default=True,
+    )
     _sql_constraints = [
         ('partner_uniq', 'unique(partner_id)',
          'Petty Cash Holder must be unique!'),
