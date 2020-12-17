@@ -54,6 +54,7 @@
                         <button name="action_billed" type="object"
                                 states="draft"
                                 string="Bill" class="oe_highlight" />
+                                
                         <button name="action_cancel" type="object"
                                 states="billed"
                                 string="Cancel"
@@ -85,7 +86,7 @@
                                     context="{'type': 'in_invoice', 'tree_view_ref':'account_supplier_billing.inherit_view_invoice_tree'}"
                                     domain="[
                                         ('partner_id', '=', partner_id),
-                                        ('state', '=', 'draft'),
+                                        ('state', 'in', ['draft','open']),
                                         ('supplier_billing_id', '=', False),
                                         '|',
                                         ('type', '=', 'in_invoice'),
