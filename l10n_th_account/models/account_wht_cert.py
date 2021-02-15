@@ -8,6 +8,48 @@ from openerp.addons.l10n_th_account.models.res_partner \
 WHT_CERT_INCOME_TYPE = [('1', '1.เงินเดือน ค่าจ้าง ฯลฯ 40(1)'),
                         ('2', '2.ค่าธรรมเนียม ค่านายหน้า ฯลฯ 40(2)'),
                         ('3', '3.ค่าแห่งลิขสิทธิ์ ฯลฯ 40(3)'),
+                        ('4A', '4. ดอกเบี้ย ฯลฯ 40(4)ก'),
+                        (
+                            '4B11',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (1.1) '
+                            'กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลร้อยละ 30 ของกำไรสุทธิ',
+                        ),
+                        (
+                            '4B12',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (1.2) '
+                            'กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลร้อยละ 25 ของกำไรสุทธิ',
+                        ),
+                        (
+                            '4B13',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (1.3) '
+                            'กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลร้อยละ 20 ของกำไรสุทธิ',
+                        ),
+                        (
+                            '4B14',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (1.4) '
+                            'กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลร้อยละ อื่นๆ (ระบุ) ของกำไรสุทธิ',
+                        ),
+                        (
+                            '4B21',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (2.1) '
+                            'กำไรสุทธิกิจการที่ได้รับยกเว้นภาษีเงินได้นิติบุคคล',
+                        ),
+                        (
+                            '4B22',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (2.2) '
+                            'ได้รับยกเว้นไม่ต้องนำมารวมคำนวณเป็นรายได้',
+                        ),
+                        (
+                            '4B23',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (2.3) '
+                            'กำไรสุทธิส่วนที่หักผลขาดทุนสุทธิยกมาไม่เกิน 5 ปี',
+                        ),
+                        (
+                            '4B24',
+                            '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (2.4) '
+                            'กำไรที่รับรู้ทางบัญชีโดยวิธีส่วนได้เสีย',
+                        ),
+                        ('4B25', '4. เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ 40(4)ข (2.5) อื่นๆ (ระบุ)'),
                         ('5', '5.ค่าจ้างทำของ ค่าบริการ ฯลฯ 3 เตรส'),
                         ('6', '6.อื่นๆ')]
 
@@ -152,6 +194,28 @@ class AccountWhtCert(models.Model):
     x_type_2_tax = fields.Char(compute='_compute_cert_fields')
     x_type_3_base = fields.Char(compute='_compute_cert_fields')
     x_type_3_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4a_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4a_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b11_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b11_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b12_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b12_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b13_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b13_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b14_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b14_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b14_desc = fields.Char(compute='_compute_cert_fields')
+    x_type_4b21_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b21_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b22_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b22_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b23_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b23_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b24_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b24_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b25_base = fields.Char(compute='_compute_cert_fields')
+    x_type_4b25_tax = fields.Char(compute='_compute_cert_fields')
+    x_type_4b25_desc = fields.Char(compute='_compute_cert_fields')
     x_type_5_base = fields.Char(compute='_compute_cert_fields')
     x_type_5_tax = fields.Char(compute='_compute_cert_fields')
     x_type_5_desc = fields.Char(compute='_compute_cert_fields')
@@ -192,6 +256,28 @@ class AccountWhtCert(models.Model):
             rec.x_type_2_tax = rec._get_summary_by_type('tax', '2')
             rec.x_type_3_base = rec._get_summary_by_type('base', '3')
             rec.x_type_3_tax = rec._get_summary_by_type('tax', '3')
+            rec.x_type_4a_base = rec._get_summary_by_type('base', '4A')
+            rec.x_type_4a_tax = rec._get_summary_by_type('tax', '4A')
+            rec.x_type_4b11_base = rec._get_summary_by_type('base', '4B11')
+            rec.x_type_4b11_tax = rec._get_summary_by_type('tax', '4B11')
+            rec.x_type_4b12_base = rec._get_summary_by_type('base', '4B12')
+            rec.x_type_4b12_tax = rec._get_summary_by_type('tax', '4B12')
+            rec.x_type_4b13_base = rec._get_summary_by_type('base', '4B13')
+            rec.x_type_4b13_tax = rec._get_summary_by_type('tax', '4B13')
+            rec.x_type_4b14_base = rec._get_summary_by_type('base', '4B14')
+            rec.x_type_4b14_tax = rec._get_summary_by_type('tax', '4B14')
+            rec.x_type_4b14_desc = rec._get_summary_by_type('desc', '4B14')
+            rec.x_type_4b21_base = rec._get_summary_by_type('base', '4B21')
+            rec.x_type_4b21_tax = rec._get_summary_by_type('tax', '4B21')
+            rec.x_type_4b22_base = rec._get_summary_by_type('base', '4B22')
+            rec.x_type_4b22_tax = rec._get_summary_by_type('tax', '4B22')
+            rec.x_type_4b23_base = rec._get_summary_by_type('base', '4B23')
+            rec.x_type_4b23_tax = rec._get_summary_by_type('tax', '4B23')
+            rec.x_type_4b24_base = rec._get_summary_by_type('base', '4B24')
+            rec.x_type_4b24_tax = rec._get_summary_by_type('tax', '4B24')
+            rec.x_type_4b25_base = rec._get_summary_by_type('base', '4B25')
+            rec.x_type_4b25_tax = rec._get_summary_by_type('tax', '4B25')
+            rec.x_type_4b25_desc = rec._get_summary_by_type('desc', '4B25')
             rec.x_type_5_base = rec._get_summary_by_type('base', '5')
             rec.x_type_5_tax = rec._get_summary_by_type('tax', '5')
             rec.x_type_5_desc = rec._get_summary_by_type('desc', '5')
